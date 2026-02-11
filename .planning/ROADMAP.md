@@ -62,10 +62,12 @@ Plans:
   6. User sees education section with university info, certifications, and achievements
   7. User sees contact section with email, phone, GitHub, and Velog links
   8. All sections display correct content when switching between Korean and English
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] TBD after planning
+- [ ] 03-01-PLAN.md — Hero, About, Contact sections + lucide-react icons + bilingual content
+- [ ] 03-02-PLAN.md — Skills and Projects sections with Card/Badge composition
+- [ ] 03-03-PLAN.md — Experience and Education timelines + main page composition
 
 ### Phase 4: Project Detail Pages
 **Goal**: Create detailed project case study pages with technical implementation focus
@@ -91,7 +93,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete ✓ | 2026-02-11 |
 | 2. Layout & Design System | 2/2 | Complete ✓ | 2026-02-11 |
-| 3. Main Page Sections | 0/TBD | Not started | - |
+| 3. Main Page Sections | 0/3 | Not started | - |
 | 4. Project Detail Pages | 0/TBD | Not started | - |
 
 ---
