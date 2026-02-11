@@ -2,6 +2,9 @@ import {NextIntlClientProvider} from 'next-intl';
 import {getMessages, setRequestLocale} from 'next-intl/server';
 import {routing} from '@/i18n/routing';
 import type {Metadata} from 'next';
+import ThemeProvider from '@/components/layout/ThemeProvider';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 import '../globals.css';
 
 export const metadata: Metadata = {
@@ -29,10 +32,14 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
-      <body className="font-sans bg-white text-neutral-900 antialiased">
+    <html lang={locale} suppressHydrationWarning>
+      <body className="font-sans bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 antialiased min-h-screen flex flex-col">
         <NextIntlClientProvider messages={messages}>
-          {children}
+          <ThemeProvider>
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </ThemeProvider>
         </NextIntlClientProvider>
       </body>
     </html>
