@@ -2,7 +2,8 @@
   "Home": {
     "title": "Hunil Park",
     "subtitle": "Frontend Developer",
-    "description": "Crafting clean and refined web experiences"
+    "description": "Crafting clean and refined web experiences",
+    "comingSoon": "More sections coming soon"
   },
   "Navigation": {
     "home": "Home",
