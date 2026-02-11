@@ -1,0 +1,20 @@
+{
+  "Home": {
+    "title": "박훈일",
+    "subtitle": "프론트엔드 개발자",
+    "description": "깔끔하고 정교한 웹 경험을 만듭니다"
+  },
+  "Navigation": {
+    "home": "홈",
+    "about": "소개",
+    "skills": "기술",
+    "projects": "프로젝트",
+    "experience": "경력",
+    "education": "학력",
+    "contact": "연락처"
+  },
+  "Common": {
+    "language": "EN",
+    "languageLabel": "English로 전환"
+  }
+}

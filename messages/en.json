@@ -1,0 +1,20 @@
+{
+  "Home": {
+    "title": "Hunil Park",
+    "subtitle": "Frontend Developer",
+    "description": "Crafting clean and refined web experiences"
+  },
+  "Navigation": {
+    "home": "Home",
+    "about": "About",
+    "skills": "Skills",
+    "projects": "Projects",
+    "experience": "Experience",
+    "education": "Education",
+    "contact": "Contact"
+  },
+  "Common": {
+    "language": "KO",
+    "languageLabel": "Switch to Korean"
+  }
+}
