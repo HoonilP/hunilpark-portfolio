@@ -23,5 +23,24 @@
     "github": "GitHub",
     "velog": "Velog",
     "copyright": "Hunil Park. All rights reserved."
+  },
+  "Hero": {
+    "name": "Hunil Park",
+    "title": "Frontend Developer",
+    "intro": "Crafting clean and refined web experiences",
+    "resumeLink": "View Resume"
+  },
+  "About": {
+    "sectionTitle": "About",
+    "paragraph1": "I'm a frontend developer who designs and implements user-centric web interfaces. With hands-on experience building dashboards and management systems using React, Next.js, and TypeScript, I focus on translating complex business logic into intuitive UIs.",
+    "paragraph2": "Having lived and worked in France, Myanmar, and Malaysia, I bring cross-cultural collaboration skills to every project. With strong English proficiency (TOEIC 930) and business-level French, I communicate effectively in global team settings."
+  },
+  "Contact": {
+    "sectionTitle": "Contact",
+    "description": "Interested in working together? Feel free to reach out.",
+    "email": "Email",
+    "phone": "Phone",
+    "github": "GitHub",
+    "velog": "Velog"
   }
 }
