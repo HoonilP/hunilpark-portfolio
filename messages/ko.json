@@ -68,5 +68,51 @@
       "description": "YOLO 기반 시각지능으로 매장 내 고객 동선을 트래킹하고 VanillaJS 대시보드로 분석 결과를 시각화했습니다.",
       "period": "2022.11 - 2023.04"
     }
+  },
+  "Experience": {
+    "sectionTitle": "경력",
+    "dyCms": {
+      "date": "2024.07 - 2025.06",
+      "title": "DY Microfinance — 고객 관리 시스템 개발",
+      "company": "DY Microfinance (미얀마)",
+      "description": "Next.js, NestJS, PostgreSQL 기반 프론트엔드·백엔드 분리형 아키텍처로 고객 관리 시스템을 개발했습니다. 관리자용 대시보드를 구현하고 회계 프로세스 약 90%를 자동화했습니다."
+    },
+    "paymentInApp": {
+      "date": "2022.05 - 2024.03",
+      "title": "주식회사 페이먼트인앱 — 사업기획 총괄",
+      "company": "주식회사 페이먼트인앱",
+      "description": "Joshua AI Agent(Electron/Angular), 제조 불량 인식 자동화(YOLO), 리테일 매장 고객 행동 분석(VanillaJS 대시보드), EMV 서울 교통 타당성 조사 등 다수 프로젝트를 기획·총괄했습니다."
+    },
+    "dyAccounting": {
+      "date": "2017.01 - 2018.12",
+      "title": "DY Microfinance — 회계·재무 운영",
+      "company": "DY Microfinance (미얀마)",
+      "description": "회계·재무 운영 및 프로세스 자동화를 담당했습니다. BS·PL 자동 생성 스프레드시트를 구축하여 업무 효율을 개선했습니다."
+    }
+  },
+  "Education": {
+    "sectionTitle": "학력",
+    "sangmyung": {
+      "date": "2024.03 - 2026.02",
+      "title": "상명대학교 빅데이터융합학과",
+      "description": "졸업 예정 | GPA 4.33 / 4.5"
+    },
+    "yangon": {
+      "date": "2017.01 - 2018.12",
+      "title": "양곤외국어대학교 미얀마어과",
+      "description": "중퇴"
+    },
+    "certificationsTitle": "자격증 · 수상",
+    "certifications": {
+      "computerSkills": "컴퓨터활용능력 1급 (2020.11)",
+      "accounting": "전산회계 1급 (2021.03)",
+      "fsi": "FSI AIxData Challenge 2024 우수상",
+      "toeic": "TOEIC 930 (2025.11)"
+    },
+    "activitiesTitle": "활동",
+    "activities": {
+      "bay": "연세대학교 블록체인 학회 BAY 17기",
+      "aiCourse": "영우글로벌러닝 AI S/W 전문가 양성과정 (2022.04)"
+    }
   }
 }
