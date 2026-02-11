@@ -43,10 +43,11 @@ Plans:
   2. User can switch language via header toggle button
   3. User sees footer with contact links on all pages
   4. Reusable UI components (Button, Card, Badge) exist and are styled consistently
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD after planning
+- [ ] 02-01-PLAN.md — Dark mode infrastructure, design tokens, UI components (Button, Card, Badge, Timeline)
+- [ ] 02-02-PLAN.md — Header, Footer, layout integration with ThemeProvider
 
 ### Phase 3: Main Page Sections
 **Goal**: Build all main page content sections with bilingual support
@@ -89,7 +90,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete ✓ | 2026-02-11 |
-| 2. Layout & Design System | 0/TBD | Not started | - |
+| 2. Layout & Design System | 0/2 | Not started | - |
 | 3. Main Page Sections | 0/TBD | Not started | - |
 | 4. Project Detail Pages | 0/TBD | Not started | - |
 
