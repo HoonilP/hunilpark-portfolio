@@ -17,5 +17,11 @@
   "Common": {
     "language": "KO",
     "languageLabel": "Switch to Korean"
+  },
+  "Footer": {
+    "email": "Email",
+    "github": "GitHub",
+    "velog": "Velog",
+    "copyright": "Hunil Park. All rights reserved."
   }
 }

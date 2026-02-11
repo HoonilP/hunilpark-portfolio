@@ -17,5 +17,11 @@
   "Common": {
     "language": "EN",
     "languageLabel": "English로 전환"
+  },
+  "Footer": {
+    "email": "이메일",
+    "github": "GitHub",
+    "velog": "Velog",
+    "copyright": "박훈일. All rights reserved."
   }
 }
