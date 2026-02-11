@@ -42,5 +42,31 @@
     "phone": "전화",
     "github": "GitHub",
     "velog": "Velog"
+  },
+  "Skills": {
+    "sectionTitle": "기술 스택",
+    "frontend": "프론트엔드",
+    "backend": "백엔드",
+    "devops": "DevOps",
+    "database": "데이터베이스"
+  },
+  "Projects": {
+    "sectionTitle": "프로젝트",
+    "viewDetails": "자세히 보기",
+    "joshua": {
+      "title": "Joshua AI Agent",
+      "description": "KoGPT-2 기반 카피라이팅 AI 에이전트. Electron과 Angular로 크로스플랫폼 데스크톱 앱을 구현하고 Stripe 결제를 연동했습니다.",
+      "period": "2022.06 - 2023.03"
+    },
+    "dyCms": {
+      "title": "DY Microfinance CMS",
+      "description": "Next.js와 NestJS 기반 고객 관리 시스템. 관리자 대시보드를 구현하고 회계 프로세스 약 90%를 자동화했습니다.",
+      "period": "2024.07 - 2025.06"
+    },
+    "retailAnalysis": {
+      "title": "리테일 매장 고객 행동 분석",
+      "description": "YOLO 기반 시각지능으로 매장 내 고객 동선을 트래킹하고 VanillaJS 대시보드로 분석 결과를 시각화했습니다.",
+      "period": "2022.11 - 2023.04"
+    }
   }
 }

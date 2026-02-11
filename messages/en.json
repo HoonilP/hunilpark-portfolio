@@ -42,5 +42,31 @@
     "phone": "Phone",
     "github": "GitHub",
     "velog": "Velog"
+  },
+  "Skills": {
+    "sectionTitle": "Tech Stack",
+    "frontend": "Frontend",
+    "backend": "Backend",
+    "devops": "DevOps",
+    "database": "Database"
+  },
+  "Projects": {
+    "sectionTitle": "Projects",
+    "viewDetails": "View Details",
+    "joshua": {
+      "title": "Joshua AI Agent",
+      "description": "AI copywriting agent powered by KoGPT-2. Built a cross-platform desktop app with Electron and Angular, integrated Stripe payments.",
+      "period": "Jun 2022 - Mar 2023"
+    },
+    "dyCms": {
+      "title": "DY Microfinance CMS",
+      "description": "Customer management system built with Next.js and NestJS. Implemented an admin dashboard and automated ~90% of accounting processes.",
+      "period": "Jul 2024 - Jun 2025"
+    },
+    "retailAnalysis": {
+      "title": "Retail Store Customer Analysis",
+      "description": "Visual intelligence system using YOLO for in-store customer tracking, with a VanillaJS dashboard for analytics visualization.",
+      "period": "Nov 2022 - Apr 2023"
+    }
   }
 }
