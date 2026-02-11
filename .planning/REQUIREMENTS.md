@@ -11,7 +11,7 @@
 - [x] **FOUND-02**: Tailwind CSS v4 설정 및 디자인 시스템 기초 (색상, 타이포그래피, 간격)
 - [x] **FOUND-03**: next-intl 기반 한국어/영어 전환 기능 (locale 라우팅, 미들웨어)
 - [x] **FOUND-04**: 반응형 레이아웃 (모바일 퍼스트, 데스크톱 대응)
-- [ ] **FOUND-05**: Header (네비게이션 + 언어 전환 버튼) 및 Footer 레이아웃
+- [x] **FOUND-05**: Header (네비게이션 + 언어 전환 버튼) 및 Footer 레이아웃
 
 ### Hero
 
@@ -93,7 +93,7 @@
 | FOUND-02 | Phase 1 | Complete |
 | FOUND-03 | Phase 1 | Complete |
 | FOUND-04 | Phase 1 | Complete |
-| FOUND-05 | Phase 2 | Pending |
+| FOUND-05 | Phase 2 | Complete |
 | HERO-01 | Phase 3 | Pending |
 | HERO-02 | Phase 3 | Pending |
 | HERO-03 | Phase 3 | Pending |
