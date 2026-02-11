@@ -5,33 +5,33 @@
 See: .planning/PROJECT.md (updated 2026-02-11)
 
 **Core value:** 프론트엔드 개발 역량을 깔끔하고 정교한 디자인으로 보여주는 포트폴리오 사이트 — 채용 담당자가 빠르게 핵심 역량과 프로젝트를 파악할 수 있어야 한다.
-**Current focus:** Phase 1 - Foundation
+**Current focus:** Phase 1 complete, ready for Phase 2
 
 ## Current Position
 
-Phase: 1 of 4 (Foundation)
-Plan: 1 of TBD in current phase
-Status: In progress
-Last activity: 2026-02-11 — Completed 01-01-PLAN.md (Foundation Infrastructure)
+Phase: 1 of 4 (Foundation) — COMPLETE
+Plan: 2 of 2 in current phase
+Status: Phase complete, verified ✓
+Last activity: 2026-02-11 — Phase 1 execution complete, all 4 success criteria verified
 
-Progress: [█░░░░░░░░░] ~10%
+Progress: [██░░░░░░░░] 25%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1
-- Average duration: 6 min
-- Total execution time: 0.1 hours
+- Total plans completed: 2
+- Average duration: 7 min
+- Total execution time: 0.2 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-foundation | 1 | 6 min | 6 min |
+| 01-foundation | 2 | 14 min | 7 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (6 min)
-- Trend: Just starting
+- Last 5 plans: 01-01 (6 min), 01-02 (8 min)
+- Trend: Consistent
 
 *Updated after each plan completion*
 
@@ -49,6 +49,8 @@ Recent decisions affecting current work:
 - Tailwind v4 CSS-first configuration — 01-01: Use @theme blocks instead of JS config for v4
 - Use @tailwindcss/postcss plugin — 01-01: Required for Tailwind v4 PostCSS integration
 - getTranslations for async components — 01-01: Next.js 16 async components cannot use hooks
+- proxy.ts in src/ directory — 01-02: Next.js 16 with src/ layout requires proxy.ts inside src/
+- LanguageToggle as client component — 01-02: Uses hooks (useRouter, useLocale) requiring client rendering
 
 ### Pending Todos
 
@@ -56,10 +58,10 @@ None yet.
 
 ### Blockers/Concerns
 
-None yet.
+None.
 
 ## Session Continuity
 
-Last session: 2026-02-11 17:54
-Stopped at: Completed 01-01-PLAN.md (Foundation Infrastructure)
+Last session: 2026-02-11
+Stopped at: Phase 1 execution complete, ready for Phase 2 planning
 Resume file: None

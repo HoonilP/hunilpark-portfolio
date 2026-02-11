@@ -12,7 +12,7 @@ This portfolio website showcases frontend development skills through a clean, pe
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - Next.js setup, i18n infrastructure, Tailwind, responsive base
+- [x] **Phase 1: Foundation** - Next.js setup, i18n infrastructure, Tailwind, responsive base
 - [ ] **Phase 2: Layout & Design System** - Header/Footer, UI components, data layer
 - [ ] **Phase 3: Main Page Sections** - Hero, About, Skills, Projects cards, Experience, Education, Contact
 - [ ] **Phase 4: Project Detail Pages** - Individual project case studies with technical depth
@@ -31,8 +31,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 2 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Scaffold Next.js, Tailwind v4 design tokens, next-intl i18n infrastructure
-- [ ] 01-02-PLAN.md — Responsive bilingual home page with language toggle
+- [x] 01-01-PLAN.md — Scaffold Next.js, Tailwind v4 design tokens, next-intl i18n infrastructure
+- [x] 01-02-PLAN.md — Responsive bilingual home page with language toggle
 
 ### Phase 2: Layout & Design System
 **Goal**: Create reusable UI components and site-wide layout structure (header, footer, navigation)
@@ -88,7 +88,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/2 | Planning complete | - |
+| 1. Foundation | 2/2 | Complete ✓ | 2026-02-11 |
 | 2. Layout & Design System | 0/TBD | Not started | - |
 | 3. Main Page Sections | 0/TBD | Not started | - |
 | 4. Project Detail Pages | 0/TBD | Not started | - |
