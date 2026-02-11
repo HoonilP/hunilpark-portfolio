@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-11)
 
 **Core value:** 프론트엔드 개발 역량을 깔끔하고 정교한 디자인으로 보여주는 포트폴리오 사이트 — 채용 담당자가 빠르게 핵심 역량과 프로젝트를 파악할 수 있어야 한다.
-**Current focus:** Phase 2 complete, ready for Phase 3
+**Current focus:** Phase 3 in progress - Main page sections
 
 ## Current Position
 
-Phase: 2 of 4 (Layout & Design System) — COMPLETE
-Plan: 2 of 2 in current phase
-Status: Phase complete, pending verification
-Last activity: 2026-02-11 — Completed 02-02-PLAN.md (Header/Footer layout integration)
+Phase: 3 of 4 (Main Page Sections)
+Plan: 1 of 1 in current phase
+Status: Phase complete
+Last activity: 2026-02-11 — Completed 03-01-PLAN.md (Hero/About/Contact sections)
 
-Progress: [█████░░░░░] 50%
+Progress: [██████░░░░] 55%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: 5 min
-- Total execution time: 0.4 hours
+- Total plans completed: 5
+- Average duration: 4 min
+- Total execution time: 0.5 hours
 
 **By Phase:**
 
@@ -29,9 +29,10 @@ Progress: [█████░░░░░] 50%
 |-------|-------|-------|----------|
 | 01-foundation | 2 | 14 min | 7 min |
 | 02-layout-design-system | 2 | 6 min | 3 min |
+| 03-main-page-sections | 1 | 2 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (6 min), 01-02 (8 min), 02-01 (3 min), 02-02 (3 min)
+- Last 5 plans: 01-02 (8 min), 02-01 (3 min), 02-02 (3 min), 03-01 (2 min)
 - Trend: Improving (faster execution)
 
 *Updated after each plan completion*
@@ -59,6 +60,9 @@ Recent decisions affecting current work:
 - Header/Footer as client components — 02-02: Both use useTranslations hook for bilingual text
 - suppressHydrationWarning on html — 02-02: Required for next-themes SSR compatibility
 - flex-col + flex-1 layout — 02-02: Ensures footer sticks to bottom on short pages
+- lucide-react for icons — 03-01: Lightweight, tree-shakeable, React-native icon library
+- Hero section layout — 03-01: Centered on mobile, left-aligned on desktop (text-center md:text-left)
+- Contact card grid pattern — 03-01: 2x2 responsive grid with border-only hover states
 
 ### Pending Todos
 
@@ -70,6 +74,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-11
-Stopped at: Phase 2 execution complete, ready for Phase 3 planning
+Last session: 2026-02-11T15:31:49Z
+Stopped at: Completed 03-01-PLAN.md
 Resume file: None
