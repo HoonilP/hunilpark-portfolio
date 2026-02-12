@@ -15,26 +15,26 @@
 
 ### Hero
 
-- [ ] **HERO-01**: 이름(박훈일), 직무 타이틀(프론트엔드 개발자), 한줄 소개 표시
-- [ ] **HERO-02**: 연락처 링크 표시 (이메일, GitHub, Velog)
-- [ ] **HERO-03**: 한/영 전환 시 콘텐츠 변경
+- [x] **HERO-01**: 이름(박훈일), 직무 타이틀(프론트엔드 개발자), 한줄 소개 표시
+- [x] **HERO-02**: 연락처 링크 표시 (이메일, GitHub, Velog)
+- [x] **HERO-03**: 한/영 전환 시 콘텐츠 변경
 
 ### About
 
-- [ ] **ABOUT-01**: 프론트엔드 관점으로 재구성한 자기소개 표시
-- [ ] **ABOUT-02**: 해외 경험(프랑스, 미얀마, 말레이시아) 및 다국어 역량 언급
-- [ ] **ABOUT-03**: 한/영 전환 시 콘텐츠 변경
+- [x] **ABOUT-01**: 프론트엔드 관점으로 재구성한 자기소개 표시
+- [x] **ABOUT-02**: 해외 경험(프랑스, 미얀마, 말레이시아) 및 다국어 역량 언급
+- [x] **ABOUT-03**: 한/영 전환 시 콘텐츠 변경
 
 ### Skills
 
-- [ ] **SKILL-01**: 기술 스택을 카테고리별로 표시 (Frontend, Backend, DevOps, DB 등)
-- [ ] **SKILL-02**: 각 스킬이 어떤 프로젝트에서 사용되었는지 연결 표시
-- [ ] **SKILL-03**: 기술 스택: TypeScript, Python, React, Next.js, Angular, NestJS, FastAPI, Electron, AWS, Docker, Kubernetes, MySQL, PostgreSQL, VanillaJS
+- [x] **SKILL-01**: 기술 스택을 카테고리별로 표시 (Frontend, Backend, DevOps, DB 등)
+- [x] **SKILL-02**: 각 스킬이 어떤 프로젝트에서 사용되었는지 연결 표시
+- [x] **SKILL-03**: 기술 스택: TypeScript, Python, React, Next.js, Angular, NestJS, FastAPI, Electron, AWS, Docker, Kubernetes, MySQL, PostgreSQL, VanillaJS
 
 ### Projects
 
-- [ ] **PROJ-01**: 메인 페이지에 3개 프로젝트 카드 표시 (Joshua AI Agent, DY Microfinance CMS, 리테일 매장 분석)
-- [ ] **PROJ-02**: 각 프로젝트 카드에 제목, 한줄 설명, 기술 스택 배지, 썸네일 표시
+- [x] **PROJ-01**: 메인 페이지에 3개 프로젝트 카드 표시 (Joshua AI Agent, DY Microfinance CMS, 리테일 매장 분석)
+- [x] **PROJ-02**: 각 프로젝트 카드에 제목, 한줄 설명, 기술 스택 배지, 썸네일 표시
 - [ ] **PROJ-03**: 프로젝트 카드 클릭 시 상세 페이지(/projects/[slug])로 이동
 - [ ] **PROJ-04**: 프로젝트 상세 페이지 — 프론트엔드 관점 기술 구현 설명 (PDF 사실 기반)
 - [ ] **PROJ-05**: 프로젝트 상세 페이지 — 기술 스택, 참여 인원, 기간, 역할 표시
@@ -43,24 +43,24 @@
 
 ### Experience
 
-- [ ] **EXP-01**: 경력 타임라인 형태로 표시
-- [ ] **EXP-02**: DY Microfinance — 회계·재무 운영 (2017-2018) + 고객 관리 시스템 개발 (2024-2025) 통합 표시
-- [ ] **EXP-03**: 주식회사 페이먼트인앱 — 사업기획 총괄 (2022-2024) 표시, 주요 프로젝트 나열
-- [ ] **EXP-04**: 한/영 전환 시 콘텐츠 변경
+- [x] **EXP-01**: 경력 타임라인 형태로 표시
+- [x] **EXP-02**: DY Microfinance — 회계·재무 운영 (2017-2018) + 고객 관리 시스템 개발 (2024-2025) 통합 표시
+- [x] **EXP-03**: 주식회사 페이먼트인앱 — 사업기획 총괄 (2022-2024) 표시, 주요 프로젝트 나열
+- [x] **EXP-04**: 한/영 전환 시 콘텐츠 변경
 
 ### Education
 
-- [ ] **EDU-01**: 학력 타임라인 형태로 표시
-- [ ] **EDU-02**: 상명대학교 빅데이터융합학과 (졸업 예정, GPA 4.33/4.5) 표시
-- [ ] **EDU-03**: 양곤외국어대학교 미얀마어과 표시
-- [ ] **EDU-04**: 자격증/수상 표시 (컴퓨터활용능력1급, 전산회계1급, FSI AIxData Challenge 우수상, TOEIC 930)
-- [ ] **EDU-05**: 한/영 전환 시 콘텐츠 변경
+- [x] **EDU-01**: 학력 타임라인 형태로 표시
+- [x] **EDU-02**: 상명대학교 빅데이터융합학과 (졸업 예정, GPA 4.33/4.5) 표시
+- [x] **EDU-03**: 양곤외국어대학교 미얀마어과 표시
+- [x] **EDU-04**: 자격증/수상 표시 (컴퓨터활용능력1급, 전산회계1급, FSI AIxData Challenge 우수상, TOEIC 930)
+- [x] **EDU-05**: 한/영 전환 시 콘텐츠 변경
 
 ### Contact
 
-- [ ] **CONT-01**: 이메일(phoonil0927@gmail.com), GitHub, Velog 링크 표시
-- [ ] **CONT-02**: 전화번호(010-5557-6835) 표시
-- [ ] **CONT-03**: 한/영 전환 시 콘텐츠 변경
+- [x] **CONT-01**: 이메일(phoonil0927@gmail.com), GitHub, Velog 링크 표시
+- [x] **CONT-02**: 전화번호(010-5557-6835) 표시
+- [x] **CONT-03**: 한/영 전환 시 콘텐츠 변경
 
 ## v2 Requirements
 
@@ -94,34 +94,34 @@
 | FOUND-03 | Phase 1 | Complete |
 | FOUND-04 | Phase 1 | Complete |
 | FOUND-05 | Phase 2 | Complete |
-| HERO-01 | Phase 3 | Pending |
-| HERO-02 | Phase 3 | Pending |
-| HERO-03 | Phase 3 | Pending |
-| ABOUT-01 | Phase 3 | Pending |
-| ABOUT-02 | Phase 3 | Pending |
-| ABOUT-03 | Phase 3 | Pending |
-| SKILL-01 | Phase 3 | Pending |
-| SKILL-02 | Phase 3 | Pending |
-| SKILL-03 | Phase 3 | Pending |
-| PROJ-01 | Phase 3 | Pending |
-| PROJ-02 | Phase 3 | Pending |
+| HERO-01 | Phase 3 | Complete |
+| HERO-02 | Phase 3 | Complete |
+| HERO-03 | Phase 3 | Complete |
+| ABOUT-01 | Phase 3 | Complete |
+| ABOUT-02 | Phase 3 | Complete |
+| ABOUT-03 | Phase 3 | Complete |
+| SKILL-01 | Phase 3 | Complete |
+| SKILL-02 | Phase 3 | Complete |
+| SKILL-03 | Phase 3 | Complete |
+| PROJ-01 | Phase 3 | Complete |
+| PROJ-02 | Phase 3 | Complete |
 | PROJ-03 | Phase 4 | Pending |
 | PROJ-04 | Phase 4 | Pending |
 | PROJ-05 | Phase 4 | Pending |
 | PROJ-06 | Phase 4 | Pending |
 | PROJ-07 | Phase 4 | Pending |
-| EXP-01 | Phase 3 | Pending |
-| EXP-02 | Phase 3 | Pending |
-| EXP-03 | Phase 3 | Pending |
-| EXP-04 | Phase 3 | Pending |
-| EDU-01 | Phase 3 | Pending |
-| EDU-02 | Phase 3 | Pending |
-| EDU-03 | Phase 3 | Pending |
-| EDU-04 | Phase 3 | Pending |
-| EDU-05 | Phase 3 | Pending |
-| CONT-01 | Phase 3 | Pending |
-| CONT-02 | Phase 3 | Pending |
-| CONT-03 | Phase 3 | Pending |
+| EXP-01 | Phase 3 | Complete |
+| EXP-02 | Phase 3 | Complete |
+| EXP-03 | Phase 3 | Complete |
+| EXP-04 | Phase 3 | Complete |
+| EDU-01 | Phase 3 | Complete |
+| EDU-02 | Phase 3 | Complete |
+| EDU-03 | Phase 3 | Complete |
+| EDU-04 | Phase 3 | Complete |
+| EDU-05 | Phase 3 | Complete |
+| CONT-01 | Phase 3 | Complete |
+| CONT-02 | Phase 3 | Complete |
+| CONT-03 | Phase 3 | Complete |
 
 **Coverage:**
 - v1 requirements: 33 total
