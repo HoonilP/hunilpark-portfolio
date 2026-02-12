@@ -2,7 +2,7 @@
 
 ## What This Is
 
-한국 대기업 IT 프론트엔드 직무 취업을 위한 개인 포트폴리오 웹사이트. Next.js 16 + Tailwind v4 + next-intl 기반으로 제작된 정적 사이트로, 7개 섹션의 메인 페이지와 3개 프로젝트 상세 페이지를 한국어/영어 양언어로 제공한다.
+한국 대기업 IT 프론트엔드 직무 취업을 위한 개인 포트폴리오 웹사이트. Next.js 16 + Tailwind v4 + next-intl 기반으로 제작된 정적 사이트로, 7개 섹션의 메인 페이지와 5개 프로젝트 상세 페이지를 한국어/영어 양언어로 제공한다. 패럴랙스 스크롤, 모션 그래픽스, 3D 요소, 마이크로 인터랙션 등 인터랙티브 디자인 요소로 프론트엔드 역량을 직접 체감할 수 있는 사이트.
 
 ## Core Value
 
@@ -26,12 +26,13 @@
 
 ### Active
 
-- [ ] SEO 최적화 (메타데이터, OG 태그, sitemap)
-- [ ] 프로젝트별 성과 지표 시각화
-- [ ] 프로젝트 스크린샷/데모 GIF 추가
-- [ ] WCAG 2.1 AA 접근성 강화
-- [ ] 나머지 2개 프로젝트 추가 (제조 불량 인식, EMV 타당성 조사)
+- [ ] 2개 프로젝트 추가 (Scholarly Chain, Dino Go) — 프론트엔드 관점 선정
+- [ ] 전체 프로젝트 실제 이미지 추가 (Notion 자료 기반, placeholder 교체)
 - [ ] 프로젝트 카드 썸네일 추가
+- [ ] 패럴랙스 스크롤링 효과
+- [ ] 모션 그래픽스 / 스크롤 애니메이션
+- [ ] 3D 요소 (Three.js / CSS 3D)
+- [ ] 마이크로 인터랙션 (호버, 클릭, 전환 효과)
 
 ### Out of Scope
 
@@ -40,7 +41,7 @@
 - 백엔드/DB 연동 — 정적 사이트로 제작
 - Contact form (서버) — 이메일 직접 링크로 충분
 - 스킬 퍼센트 바 — 의미 없는 주관적 지표, 안티패턴
-- 3D/복잡한 애니메이션 — 미니멀 디자인 방향, 성능 저하 우려
+- ~~3D/복잡한 애니메이션~~ — v2에서 추가 결정 (사용자 요청)
 
 ## Context
 
@@ -51,6 +52,40 @@
 - **Pages**: 2 main + 6 project detail (3 projects × 2 locales) + 2 not-found = 10 static pages
 - **Content**: ~15,000 words bilingual content (Korean + English)
 - **Known Tech Debt**: Header logo plain `<a>`, project screenshot placeholders, unused Button component
+
+### v2 추가 프로젝트 콘텐츠 소스
+
+**4. Scholarly Chain (캡스톤 디자인)**
+- 기간: 2025.03 - 2025.06
+- 팀: 4인 (프론트엔드 100% 담당)
+- GitHub: https://github.com/Capstone-scholarly-chain
+- Hyperledger Fabric 블록체인 기반 학생회비 투명 관리 시스템
+- Next.js, React, TypeScript, Tailwind CSS, shadcn/ui, Firebase Cloud Messaging, JWT
+- JWT 자동 갱신 미들웨어, FCM 역할별 푸시, 역할 기반 UI (학생/위원/관리자)
+- API Route 프록시, 15+ 페이지, 30+ 재사용 컴포넌트
+- Vercel 배포
+- 이미지: AWS EKS 아키텍처 다이어그램 (자료/노션포트폴리오html)
+
+**5. Dino Go (위치 기반 NFT 게임)**
+- 기간: 2025.09.19 - 2025.09.21 (해커톤)
+- 웹사이트: https://dinogo.vercel.app/
+- GitHub: https://github.com/Dino-Go
+- Sui 블록체인 위치 기반 NFT 수집 게임
+- Next.js, TypeScript, Three.js, Tailwind CSS, Move (Smart Contract)
+- Google Maps + Three.js 3D 맵, NFT Studio, Marketplace UI
+- Walrus 분산 스토리지, Seal 임계값 암호화, Kiosk SDK
+- 10+ 페이지, 4 Move 모듈, 3 커스텀 Web3 클라이언트 라이브러리
+- 이미지: 픽셀아트 마스코트 아이콘 (자료/노션포트폴리오html)
+
+### 프로젝트별 이미지 매핑
+
+| 프로젝트 | 이미지 | 용도 |
+|---------|--------|------|
+| Joshua | 앱 홈 스크린샷, Stripe 결제, 로고 배너, 4-tone 모델 다이어그램, 서비스 설계도, GPU 서버 | hero, architecture, features |
+| DY CMS | 아키텍처 다이어그램 (Vercel/NestJS/Docker), 로고 | architecture, thumbnail |
+| Retail Analysis | Parkson 외관, In/Out 카운터, 히트맵 2종, 고객 트래킹, 동선 분석 | hero, 5 feature screenshots |
+| Scholarly Chain | AWS EKS 아키텍처 다이어그램 | architecture |
+| Dino Go | 픽셀아트 마스코트 | thumbnail (UI는 placeholder) |
 
 ### 콘텐츠 소스 (PDF 기반, 임의 내용 생성 금지)
 
@@ -113,13 +148,14 @@
 
 ### 디자인 방향
 
-프론트엔드 개발자 포트폴리오 사이트 레퍼런스를 참고하여 깔끔하고 정교하게 제작. 미니멀하지만 디테일이 살아있는 디자인.
+v1: 미니멀, 깔끔한 디자인.
+v2: 인터랙티브 디자인으로 전환. 패럴랙스 스크롤링, 모션 그래픽스, 3D 요소, 마이크로 인터랙션을 적극 활용하여 프론트엔드 역량을 사이트 자체로 증명. 성능과 접근성은 유지하되 시각적 임팩트를 대폭 강화.
 
 ## Constraints
 
 - **Tech Stack**: Next.js 16 (App Router), TypeScript, Tailwind CSS v4
 - **Content**: 이력서/포트폴리오 PDF 데이터만 사용, 임의 내용 생성 금지
-- **Design**: 미니멀, 불필요한 애니메이션 배제
+- **Design**: 인터랙티브 디자인 (패럴랙스, 모션, 3D, 마이크로 인터랙션) — 성능 유지 필수
 - **Language**: 한국어 기본 + 영어 전환 지원
 
 ## Key Decisions
@@ -136,6 +172,20 @@
 | Border-only 카드 (그림자 없음) | 미니멀 디자인 | ✓ Good — 깔끔한 미관 |
 | Korean big tech 포트폴리오 포맷 | 문제→해결→결과 구조 | ✓ Good — 기술 면접 대비 |
 | 3개 프로젝트 우선 선정 | Joshua, DY CMS, Retail Analysis | ✓ Good — 다양한 프론트엔드 스펙트럼 |
+| v2 프로젝트로 Scholarly Chain, Dino Go 선정 | 프론트엔드 역량 중심 선정 (Next.js, Three.js, shadcn/ui) | — Pending |
+| v2 디자인 방향 전환 | 미니멀 → 인터랙티브 (패럴랙스, 모션, 3D, 마이크로 인터랙션) | — Pending |
+| 제조 불량 인식/EMV/금융AI 제외 | 프론트엔드 작업 없음, CV/AI/컨설팅 프로젝트 | — Pending |
+
+## Current Milestone: v2.0 Design Overhaul + Content Expansion
+
+**Goal:** 인터랙티브 디자인 요소와 2개 신규 프로젝트를 추가하여 프론트엔드 역량을 사이트 자체로 증명하는 포트폴리오로 업그레이드
+
+**Target features:**
+- 2개 프로젝트 추가 (Scholarly Chain, Dino Go) + 전체 프로젝트 실제 이미지
+- 패럴랙스 스크롤링, 모션 그래픽스/스크롤 애니메이션
+- 3D 요소 (Three.js / CSS 3D transforms)
+- 마이크로 인터랙션 (호버, 클릭, 전환 효과)
+- 프로젝트 카드 썸네일
 
 ---
-*Last updated: 2026-02-12 after v1 milestone*
+*Last updated: 2026-02-12 after v2.0 milestone start*
