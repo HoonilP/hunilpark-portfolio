@@ -2,7 +2,7 @@
 
 ## What This Is
 
-한국 대기업 IT 프론트엔드 직무 취업을 위한 개인 포트폴리오 웹사이트. Next.js 16 + Tailwind v4 + next-intl 기반으로 제작된 정적 사이트로, 7개 섹션의 메인 페이지와 5개 프로젝트 상세 페이지를 한국어/영어 양언어로 제공한다. 패럴랙스 스크롤, 모션 그래픽스, 3D 요소, 마이크로 인터랙션 등 인터랙티브 디자인 요소로 프론트엔드 역량을 직접 체감할 수 있는 사이트.
+한국 대기업 IT 프론트엔드 직무 취업을 위한 개인 포트폴리오 웹사이트. Next.js 16 + Tailwind v4 + next-intl 기반으로 제작된 정적 사이트로, 7개 섹션의 메인 페이지와 5개 프로젝트 상세 페이지를 한국어/영어 양언어로 제공한다. 5개 프로젝트 모두 실제 이미지와 최적화된 WebP 썸네일을 포함한 완성된 포트폴리오.
 
 ## Core Value
 
@@ -23,16 +23,13 @@
 - ✓ Education 섹션 — 학력 — v1
 - ✓ Contact 섹션 — 연락 수단 — v1
 - ✓ 반응형 디자인 (데스크톱/모바일) — v1
+- ✓ 2개 프로젝트 추가 (Scholarly Chain, Dino Go) — v2.0
+- ✓ 전체 프로젝트 실제 이미지 추가 (placeholder 교체) — v2.0
+- ✓ 프로젝트 카드 썸네일 이미지 추가 — v2.0
 
 ### Active
 
-- [ ] 2개 프로젝트 추가 (Scholarly Chain, Dino Go) — 프론트엔드 관점 선정
-- [ ] 전체 프로젝트 실제 이미지 추가 (Notion 자료 기반, placeholder 교체)
-- [ ] 프로젝트 카드 썸네일 추가
-- [ ] 패럴랙스 스크롤링 효과
-- [ ] 모션 그래픽스 / 스크롤 애니메이션
-- [ ] 3D 요소 (Three.js / CSS 3D)
-- [ ] 마이크로 인터랙션 (호버, 클릭, 전환 효과)
+(None — next milestone not yet defined)
 
 ### Out of Scope
 
@@ -41,17 +38,18 @@
 - 백엔드/DB 연동 — 정적 사이트로 제작
 - Contact form (서버) — 이메일 직접 링크로 충분
 - 스킬 퍼센트 바 — 의미 없는 주관적 지표, 안티패턴
-- ~~3D/복잡한 애니메이션~~ — v2에서 추가 결정 (사용자 요청)
+- ~~3D/복잡한 애니메이션~~ — 사용자가 추후 별도 마일스톤으로 요청 예정
 
 ## Context
 
-### Current State (v1 shipped 2026-02-12)
+### Current State (v2.0 shipped 2026-02-13)
 
-- **Tech Stack**: Next.js 16 (App Router), TypeScript, Tailwind CSS v4, next-intl, next-themes, lucide-react
-- **LOC**: ~2,006 lines (TypeScript/TSX/CSS/JSON)
-- **Pages**: 2 main + 6 project detail (3 projects × 2 locales) + 2 not-found = 10 static pages
-- **Content**: ~15,000 words bilingual content (Korean + English)
-- **Known Tech Debt**: Header logo plain `<a>`, project screenshot placeholders, unused Button component
+- **Tech Stack**: Next.js 16 (App Router), TypeScript, Tailwind CSS v4, next-intl, next-themes, lucide-react, next/image
+- **LOC**: ~9,274 lines (TypeScript/TSX/CSS/JSON)
+- **Pages**: 2 main + 10 project detail (5 projects × 2 locales) + 2 not-found = 14 static pages
+- **Content**: ~20,000+ words bilingual content (Korean + English, 5 projects)
+- **Images**: 13 optimized WebP images (hero, architecture, thumbnail per project)
+- **Known Tech Debt**: Header logo plain `<a>`, hero.webp reused as architecture placeholder, unused Button component
 
 ### v2 추가 프로젝트 콘텐츠 소스
 
@@ -155,7 +153,7 @@ v2: 인터랙티브 디자인으로 전환. 패럴랙스 스크롤링, 모션 �
 
 - **Tech Stack**: Next.js 16 (App Router), TypeScript, Tailwind CSS v4
 - **Content**: 이력서/포트폴리오 PDF 데이터만 사용, 임의 내용 생성 금지
-- **Design**: 인터랙티브 디자인 (패럴랙스, 모션, 3D, 마이크로 인터랙션) — 성능 유지 필수
+- **Design**: 미니멀 + 깔끔한 디자인 (추후 인터랙티브 요소 추가 가능)
 - **Language**: 한국어 기본 + 영어 전환 지원
 
 ## Key Decisions
@@ -172,20 +170,17 @@ v2: 인터랙티브 디자인으로 전환. 패럴랙스 스크롤링, 모션 �
 | Border-only 카드 (그림자 없음) | 미니멀 디자인 | ✓ Good — 깔끔한 미관 |
 | Korean big tech 포트폴리오 포맷 | 문제→해결→결과 구조 | ✓ Good — 기술 면접 대비 |
 | 3개 프로젝트 우선 선정 | Joshua, DY CMS, Retail Analysis | ✓ Good — 다양한 프론트엔드 스펙트럼 |
-| v2 프로젝트로 Scholarly Chain, Dino Go 선정 | 프론트엔드 역량 중심 선정 (Next.js, Three.js, shadcn/ui) | — Pending |
-| v2 디자인 방향 전환 | 미니멀 → 인터랙티브 (패럴랙스, 모션, 3D, 마이크로 인터랙션) | — Pending |
-| 제조 불량 인식/EMV/금융AI 제외 | 프론트엔드 작업 없음, CV/AI/컨설팅 프로젝트 | — Pending |
+| v2 프로젝트로 Scholarly Chain, Dino Go 선정 | 프론트엔드 역량 중심 선정 (Next.js, Three.js, shadcn/ui) | ✓ Good — 5개 프로젝트로 확장 |
+| WebP 이미지 최적화 파이프라인 | 용도별 품질 단계 (hero 90, arch 75, thumb 60) | ✓ Good — 모든 이미지 200KB 이하 |
+| 제조 불량 인식/EMV/금융AI 제외 | 프론트엔드 작업 없음, CV/AI/컨설팅 프로젝트 | ✓ Good |
+| v2 디자인 방향 전환 scope 축소 | 애니메이션/3D/마이크로 인터랙션 추후 마일스톤으로 분리 | — Deferred |
 
-## Current Milestone: v2.0 Design Overhaul + Content Expansion
+## Milestone History
 
-**Goal:** 인터랙티브 디자인 요소와 2개 신규 프로젝트를 추가하여 프론트엔드 역량을 사이트 자체로 증명하는 포트폴리오로 업그레이드
+- **v1.0 Portfolio MVP** — shipped 2026-02-12 (Phases 1-4)
+- **v2.0 Content Expansion** — shipped 2026-02-13 (Phase 5)
 
-**Target features:**
-- 2개 프로젝트 추가 (Scholarly Chain, Dino Go) + 전체 프로젝트 실제 이미지
-- 패럴랙스 스크롤링, 모션 그래픽스/스크롤 애니메이션
-- 3D 요소 (Three.js / CSS 3D transforms)
-- 마이크로 인터랙션 (호버, 클릭, 전환 효과)
-- 프로젝트 카드 썸네일
+See `.planning/MILESTONES.md` for full details.
 
 ---
-*Last updated: 2026-02-12 after v2.0 milestone start*
+*Last updated: 2026-02-13 after v2.0 milestone completion*
