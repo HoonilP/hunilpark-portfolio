@@ -50,24 +50,24 @@
 
 | REQ-ID | Phase | Status |
 |--------|-------|--------|
-| CONT-01 | — | Pending |
-| CONT-02 | — | Pending |
-| CONT-03 | — | Pending |
-| CONT-04 | — | Pending |
-| ANIM-01 | — | Pending |
-| ANIM-02 | — | Pending |
-| ANIM-03 | — | Pending |
-| ANIM-04 | — | Pending |
-| SCROLL-01 | — | Pending |
-| SCROLL-02 | — | Pending |
-| SCROLL-03 | — | Pending |
-| SCROLL-04 | — | Pending |
-| 3D-01 | — | Pending |
-| MICRO-01 | — | Pending |
-| MICRO-02 | — | Pending |
-| MICRO-03 | — | Pending |
-| MICRO-04 | — | Pending |
-| MICRO-05 | — | Pending |
+| CONT-01 | Phase 5 | Pending |
+| CONT-02 | Phase 5 | Pending |
+| CONT-03 | Phase 5 | Pending |
+| CONT-04 | Phase 5 | Pending |
+| ANIM-01 | Phase 6 | Pending |
+| ANIM-02 | Phase 6 | Pending |
+| ANIM-03 | Phase 6 | Pending |
+| ANIM-04 | Phase 6 | Pending |
+| SCROLL-01 | Phase 6 | Pending |
+| SCROLL-02 | Phase 6 | Pending |
+| SCROLL-03 | Phase 6 | Pending |
+| SCROLL-04 | Phase 6 | Pending |
+| 3D-01 | Phase 7 | Pending |
+| MICRO-01 | Phase 7 | Pending |
+| MICRO-02 | Phase 7 | Pending |
+| MICRO-03 | Phase 7 | Pending |
+| MICRO-04 | Phase 7 | Pending |
+| MICRO-05 | Phase 7 | Pending |
 
 ---
 *18 requirements across 5 categories*
