@@ -35,11 +35,11 @@
 
 - [x] **PROJ-01**: 메인 페이지에 3개 프로젝트 카드 표시 (Joshua AI Agent, DY Microfinance CMS, 리테일 매장 분석)
 - [x] **PROJ-02**: 각 프로젝트 카드에 제목, 한줄 설명, 기술 스택 배지, 썸네일 표시
-- [ ] **PROJ-03**: 프로젝트 카드 클릭 시 상세 페이지(/projects/[slug])로 이동
-- [ ] **PROJ-04**: 프로젝트 상세 페이지 — 프론트엔드 관점 기술 구현 설명 (PDF 사실 기반)
-- [ ] **PROJ-05**: 프로젝트 상세 페이지 — 기술 스택, 참여 인원, 기간, 역할 표시
-- [ ] **PROJ-06**: 프로젝트 상세 페이지 — GitHub/외부 링크 연결 (있는 경우)
-- [ ] **PROJ-07**: 한/영 전환 시 프로젝트 콘텐츠 변경
+- [x] **PROJ-03**: 프로젝트 카드 클릭 시 상세 페이지(/projects/[slug])로 이동
+- [x] **PROJ-04**: 프로젝트 상세 페이지 — 프론트엔드 관점 기술 구현 설명 (PDF 사실 기반)
+- [x] **PROJ-05**: 프로젝트 상세 페이지 — 기술 스택, 참여 인원, 기간, 역할 표시
+- [x] **PROJ-06**: 프로젝트 상세 페이지 — GitHub/외부 링크 연결 (있는 경우)
+- [x] **PROJ-07**: 한/영 전환 시 프로젝트 콘텐츠 변경
 
 ### Experience
 
@@ -105,11 +105,11 @@
 | SKILL-03 | Phase 3 | Complete |
 | PROJ-01 | Phase 3 | Complete |
 | PROJ-02 | Phase 3 | Complete |
-| PROJ-03 | Phase 4 | Pending |
-| PROJ-04 | Phase 4 | Pending |
-| PROJ-05 | Phase 4 | Pending |
-| PROJ-06 | Phase 4 | Pending |
-| PROJ-07 | Phase 4 | Pending |
+| PROJ-03 | Phase 4 | Complete |
+| PROJ-04 | Phase 4 | Complete |
+| PROJ-05 | Phase 4 | Complete |
+| PROJ-06 | Phase 4 | Complete |
+| PROJ-07 | Phase 4 | Complete |
 | EXP-01 | Phase 3 | Complete |
 | EXP-02 | Phase 3 | Complete |
 | EXP-03 | Phase 3 | Complete |

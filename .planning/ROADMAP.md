@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Foundation** - Next.js setup, i18n infrastructure, Tailwind, responsive base
 - [x] **Phase 2: Layout & Design System** - Header/Footer, UI components, data layer
 - [x] **Phase 3: Main Page Sections** - Hero, About, Skills, Projects cards, Experience, Education, Contact
-- [ ] **Phase 4: Project Detail Pages** - Individual project case studies with technical depth
+- [x] **Phase 4: Project Detail Pages** - Individual project case studies with technical depth
 
 ## Phase Details
 
@@ -82,8 +82,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Project detail route, components (hero, sidebar, content, breadcrumbs, navigation), card linking
-- [ ] 04-02-PLAN.md — Full bilingual project narrative content (Korean portfolio standards)
+- [x] 04-01-PLAN.md — Project detail route, components (hero, sidebar, content, breadcrumbs, navigation), card linking
+- [x] 04-02-PLAN.md — Full bilingual project narrative content (Korean portfolio standards)
 
 ## Progress
 
@@ -95,7 +95,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Foundation | 2/2 | Complete ✓ | 2026-02-11 |
 | 2. Layout & Design System | 2/2 | Complete ✓ | 2026-02-11 |
 | 3. Main Page Sections | 3/3 | Complete ✓ | 2026-02-12 |
-| 4. Project Detail Pages | 0/2 | Not started | - |
+| 4. Project Detail Pages | 2/2 | Complete ✓ | 2026-02-12 |
 
 ---
 *Roadmap created: 2026-02-11*
