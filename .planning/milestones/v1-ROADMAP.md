@@ -1,29 +1,20 @@
-# Roadmap: 박훈일 프론트엔드 포트폴리오
+# Milestone v1: Portfolio MVP
+
+**Status:** SHIPPED 2026-02-12
+**Phases:** 1-4
+**Total Plans:** 9
 
 ## Overview
 
-This portfolio website showcases frontend development skills through a clean, performant Next.js application. The journey progresses from foundation (Next.js + i18n + Tailwind setup) through design system and layout components, to main page sections (hero, about, skills, project cards, experience, education, contact), and finally detailed project case study pages. Each phase delivers observable user-facing capabilities while demonstrating technical proficiency for Korean big tech hiring.
+This portfolio website showcases frontend development skills through a clean, performant Next.js application. The journey progressed from foundation (Next.js + i18n + Tailwind setup) through design system and layout components, to main page sections (hero, about, skills, project cards, experience, education, contact), and finally detailed project case study pages. Each phase delivered observable user-facing capabilities while demonstrating technical proficiency for Korean big tech hiring.
 
 ## Phases
-
-**Phase Numbering:**
-- Integer phases (1, 2, 3, 4): Planned milestone work
-- Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
-
-Decimal phases appear between their surrounding integers in numeric order.
-
-- [x] **Phase 1: Foundation** - Next.js setup, i18n infrastructure, Tailwind, responsive base
-- [x] **Phase 2: Layout & Design System** - Header/Footer, UI components, data layer
-- [x] **Phase 3: Main Page Sections** - Hero, About, Skills, Projects cards, Experience, Education, Contact
-- [x] **Phase 4: Project Detail Pages** - Individual project case studies with technical depth
-
-## Phase Details
 
 ### Phase 1: Foundation
 **Goal**: Establish technical foundation with Next.js, internationalization, and responsive layout infrastructure
 **Depends on**: Nothing (first phase)
 **Requirements**: FOUND-01, FOUND-02, FOUND-03, FOUND-04
-**Success Criteria** (what must be TRUE):
+**Success Criteria:**
   1. User can view the site in both Korean and English (language toggle present)
   2. Site displays correctly on mobile and desktop viewports
   3. Tailwind CSS design system (colors, typography, spacing) is configured
@@ -38,7 +29,7 @@ Plans:
 **Goal**: Create reusable UI components and site-wide layout structure (header, footer, navigation)
 **Depends on**: Phase 1
 **Requirements**: FOUND-05
-**Success Criteria** (what must be TRUE):
+**Success Criteria:**
   1. User sees consistent header with navigation on all pages
   2. User can switch language via header toggle button
   3. User sees footer with contact links on all pages
@@ -52,12 +43,12 @@ Plans:
 ### Phase 3: Main Page Sections
 **Goal**: Build all main page content sections with bilingual support
 **Depends on**: Phase 2
-**Requirements**: HERO-01, HERO-02, HERO-03, ABOUT-01, ABOUT-02, ABOUT-03, SKILL-01, SKILL-02, SKILL-03, PROJ-01, PROJ-02, EXP-01, EXP-02, EXP-03, EXP-04, EDU-01, EDU-02, EDU-03, EDU-04, EDU-05, CONT-01, CONT-02, CONT-03
-**Success Criteria** (what must be TRUE):
+**Requirements**: HERO-01 through HERO-03, ABOUT-01 through ABOUT-03, SKILL-01 through SKILL-03, PROJ-01, PROJ-02, EXP-01 through EXP-04, EDU-01 through EDU-05, CONT-01 through CONT-03
+**Success Criteria:**
   1. User sees hero section with name, title, one-line intro, and contact links
   2. User sees about section with frontend-focused self-introduction
-  3. User sees skills section with categorized tech stack (Frontend, Backend, DevOps, DB)
-  4. User sees 3 project cards with title, description, tech badges, and thumbnails
+  3. User sees skills section with categorized tech stack
+  4. User sees 3 project cards with title, description, tech badges
   5. User sees experience timeline with DY Microfinance and Payment In-App roles
   6. User sees education section with university info, certifications, and achievements
   7. User sees contact section with email, phone, GitHub, and Velog links
@@ -72,8 +63,8 @@ Plans:
 ### Phase 4: Project Detail Pages
 **Goal**: Create detailed project case study pages with technical implementation focus
 **Depends on**: Phase 3
-**Requirements**: PROJ-03, PROJ-04, PROJ-05, PROJ-06, PROJ-07
-**Success Criteria** (what must be TRUE):
+**Requirements**: PROJ-03 through PROJ-07
+**Success Criteria:**
   1. User can click project card and navigate to dedicated detail page
   2. Project detail page shows frontend-focused technical implementation description
   3. Project detail page displays tech stack, team size, duration, and role information
@@ -87,15 +78,41 @@ Plans:
 
 ## Progress
 
-**Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4
-
 | Phase | Plans Complete | Status | Completed |
-|-------|----------------|--------|-----------|
-| 1. Foundation | 2/2 | Complete ✓ | 2026-02-11 |
-| 2. Layout & Design System | 2/2 | Complete ✓ | 2026-02-11 |
-| 3. Main Page Sections | 3/3 | Complete ✓ | 2026-02-12 |
-| 4. Project Detail Pages | 2/2 | Complete ✓ | 2026-02-12 |
+|-------|---------------|--------|-----------|
+| 1. Foundation | 2/2 | Complete | 2026-02-11 |
+| 2. Layout & Design System | 2/2 | Complete | 2026-02-11 |
+| 3. Main Page Sections | 3/3 | Complete | 2026-02-12 |
+| 4. Project Detail Pages | 2/2 | Complete | 2026-02-12 |
 
 ---
-*Roadmap created: 2026-02-11*
+
+## Milestone Summary
+
+**Key Decisions:**
+- Next.js 16 App Router with Tailwind v4 CSS-first configuration
+- next-intl for bilingual routing (Korean default + English)
+- next-themes for dark mode with data-theme attribute
+- Border-only cards without shadows for minimal aesthetic
+- Pretendard Variable font via CDN for Korean typography
+- Korean big tech portfolio standards (Problem → Solution → Result)
+- 3 featured projects: Joshua AI Agent, DY CMS, Retail Analysis
+
+**Issues Resolved:**
+- proxy.ts must be in src/ for Next.js 16 src directory layout
+- @tailwindcss/postcss required for Tailwind v4 PostCSS integration
+- getTranslations (not useTranslations) for async server components
+- CSS @import order must precede @theme blocks
+
+**Issues Deferred:**
+- Project card thumbnails (intentional design decision)
+- Project screenshot/diagram images (placeholder divs)
+- Button component unused (design system reserve)
+
+**Technical Debt Incurred:**
+- Header logo uses plain `<a>` instead of locale-aware Link (works via middleware redirect)
+- Project screenshots and architecture diagrams are placeholder divs
+
+---
+
+_For current project status, see .planning/ROADMAP.md_

@@ -1,3 +1,13 @@
+# Requirements Archive: v1 Portfolio MVP
+
+**Archived:** 2026-02-12
+**Status:** SHIPPED
+
+This is the archived requirements specification for v1.
+For current requirements, see `.planning/REQUIREMENTS.md` (created for next milestone).
+
+---
+
 # Requirements: 박훈일 프론트엔드 포트폴리오
 
 **Defined:** 2026-02-11
@@ -34,7 +44,7 @@
 ### Projects
 
 - [x] **PROJ-01**: 메인 페이지에 3개 프로젝트 카드 표시 (Joshua AI Agent, DY Microfinance CMS, 리테일 매장 분석)
-- [x] **PROJ-02**: 각 프로젝트 카드에 제목, 한줄 설명, 기술 스택 배지, 썸네일 표시
+- [x] **PROJ-02**: 각 프로젝트 카드에 제목, 한줄 설명, 기술 스택 배지 표시 *(thumbnails deferred — cards functional without)*
 - [x] **PROJ-03**: 프로젝트 카드 클릭 시 상세 페이지(/projects/[slug])로 이동
 - [x] **PROJ-04**: 프로젝트 상세 페이지 — 프론트엔드 관점 기술 구현 설명 (PDF 사실 기반)
 - [x] **PROJ-05**: 프로젝트 상세 페이지 — 기술 스택, 참여 인원, 기간, 역할 표시
@@ -62,16 +72,14 @@
 - [x] **CONT-02**: 전화번호(010-5557-6835) 표시
 - [x] **CONT-03**: 한/영 전환 시 콘텐츠 변경
 
-## v2 Requirements
+## v2 Requirements (Deferred)
 
-### 차별화 요소
-
-- **DIFF-01**: 프로젝트별 성과 지표 시각화 (Lighthouse 점수, 자동화율 등)
+- **DIFF-01**: 프로젝트별 성과 지표 시각화
 - **DIFF-02**: 프로젝트 데모 GIF/영상 추가
 - **DIFF-03**: SEO 최적화 (메타데이터, OG 태그, sitemap)
 - **DIFF-04**: WCAG 2.1 AA 접근성 강화
-- **DIFF-05**: 나머지 2개 프로젝트 추가 (제조 불량 인식, EMV 타당성 조사)
-- **DIFF-06**: 다크모드 지원
+- **DIFF-05**: 나머지 2개 프로젝트 추가
+- **DIFF-06**: 다크모드 지원 (polish)
 
 ## Out of Scope
 
@@ -104,7 +112,7 @@
 | SKILL-02 | Phase 3 | Complete |
 | SKILL-03 | Phase 3 | Complete |
 | PROJ-01 | Phase 3 | Complete |
-| PROJ-02 | Phase 3 | Complete |
+| PROJ-02 | Phase 3 | Complete (thumbnails deferred) |
 | PROJ-03 | Phase 4 | Complete |
 | PROJ-04 | Phase 4 | Complete |
 | PROJ-05 | Phase 4 | Complete |
@@ -125,9 +133,16 @@
 
 **Coverage:**
 - v1 requirements: 33 total
-- Mapped to phases: 33
-- Unmapped: 0 ✓
+- Shipped: 33 (32 fully, 1 partial — PROJ-02 thumbnails deferred)
+- Dropped: 0
 
 ---
-*Requirements defined: 2026-02-11*
-*Last updated: 2026-02-11 after roadmap creation*
+
+## Milestone Summary
+
+**Shipped:** 33 of 33 v1 requirements
+**Adjusted:** PROJ-02 thumbnails deferred as intentional design decision (cards clean without thumbnails)
+**Dropped:** None
+
+---
+*Archived: 2026-02-12 as part of v1 milestone completion*
