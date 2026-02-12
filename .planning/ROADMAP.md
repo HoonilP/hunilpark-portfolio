@@ -42,11 +42,11 @@
   3. All 5 projects display real screenshots instead of placeholders
   4. Project cards on main page show thumbnail images for quick visual reference
   5. All project images are optimized and load with proper sizing
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 05-01: TBD
-- [ ] 05-02: TBD
+- [ ] 05-01-PLAN.md — Add Scholarly Chain + Dino Go bilingual content and extend project configs to 5 projects
+- [ ] 05-02-PLAN.md — Process source images to WebP, replace all placeholders with real images, add thumbnails to project cards
 
 #### Phase 6: Animation Foundation + Scroll Effects
 **Goal**: Portfolio feels smooth and intentional, with accessibility-aware motion
