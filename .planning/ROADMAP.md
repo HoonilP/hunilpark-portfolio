@@ -45,8 +45,8 @@
 **Plans**: 2 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — Add Scholarly Chain + Dino Go bilingual content and extend project configs to 5 projects
-- [ ] 05-02-PLAN.md — Process source images to WebP, replace all placeholders with real images, add thumbnails to project cards
+- [x] 05-01-PLAN.md — Add Scholarly Chain + Dino Go bilingual content and extend project configs to 5 projects
+- [x] 05-02-PLAN.md — Process source images to WebP, replace all placeholders with real images, add thumbnails to project cards
 
 #### Phase 6: Animation Foundation + Scroll Effects
 **Goal**: Portfolio feels smooth and intentional, with accessibility-aware motion
@@ -96,6 +96,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 2. Design System & Data Layer | v1.0 | Complete | Complete | 2026-02-12 |
 | 3. Layout & Core Components | v1.0 | Complete | Complete | 2026-02-12 |
 | 4. Main Page Sections + Project Details | v1.0 | Complete | Complete | 2026-02-12 |
-| 5. Content Expansion | v2.0 | 0/2 | Not started | - |
+| 5. Content Expansion | v2.0 | 2/2 | Complete | 2026-02-12 |
 | 6. Animation Foundation + Scroll Effects | v2.0 | 0/3 | Not started | - |
 | 7. 3D + Micro-Interactions | v2.0 | 0/2 | Not started | - |

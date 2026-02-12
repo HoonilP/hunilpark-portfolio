@@ -3,10 +3,10 @@
 ## v2.0 Requirements
 
 ### 콘텐츠 확장
-- [ ] **CONT-01**: Scholarly Chain 프로젝트 상세 페이지 및 카드 추가 (캡스톤 디자인, Next.js/React/TypeScript/Tailwind/shadcn/ui)
-- [ ] **CONT-02**: Dino Go 프로젝트 상세 페이지 및 카드 추가 (해커톤, Next.js/Three.js/TypeScript/Web3)
-- [ ] **CONT-03**: 전체 프로젝트 placeholder를 실제 이미지로 교체 (Notion 자료/노션포트폴리오html 기반)
-- [ ] **CONT-04**: 프로젝트 카드에 썸네일 이미지 추가
+- [x] **CONT-01**: Scholarly Chain 프로젝트 상세 페이지 및 카드 추가 (캡스톤 디자인, Next.js/React/TypeScript/Tailwind/shadcn/ui)
+- [x] **CONT-02**: Dino Go 프로젝트 상세 페이지 및 카드 추가 (해커톤, Next.js/Three.js/TypeScript/Web3)
+- [x] **CONT-03**: 전체 프로젝트 placeholder를 실제 이미지로 교체 (Notion 자료/노션포트폴리오html 기반)
+- [x] **CONT-04**: 프로젝트 카드에 썸네일 이미지 추가
 
 ### 애니메이션 기반
 - [ ] **ANIM-01**: Lenis 스무스 스크롤 적용
@@ -50,10 +50,10 @@
 
 | REQ-ID | Phase | Status |
 |--------|-------|--------|
-| CONT-01 | Phase 5 | Pending |
-| CONT-02 | Phase 5 | Pending |
-| CONT-03 | Phase 5 | Pending |
-| CONT-04 | Phase 5 | Pending |
+| CONT-01 | Phase 5 | Complete |
+| CONT-02 | Phase 5 | Complete |
+| CONT-03 | Phase 5 | Complete |
+| CONT-04 | Phase 5 | Complete |
 | ANIM-01 | Phase 6 | Pending |
 | ANIM-02 | Phase 6 | Pending |
 | ANIM-03 | Phase 6 | Pending |
