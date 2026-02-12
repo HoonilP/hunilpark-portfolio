@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import Card from '@/components/ui/Card';
@@ -51,6 +52,17 @@ export default async function ProjectsSection() {
           {projects.map((project) => (
             <Link key={project.id} href={`/projects/${project.id}`} className="group">
               <Card>
+                <div className="w-full aspect-video relative overflow-hidden rounded-t-lg -mx-6 -mt-6 mb-4">
+                  <Image
+                    src={`/projects/${project.id}/thumbnail.webp`}
+                    alt={t(`${project.translationKey}.title`)}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    quality={60}
+                    loading="lazy"
+                    className="object-cover"
+                  />
+                </div>
                 <h3 className="text-xl font-semibold mb-2 text-neutral-900 dark:text-neutral-100">
                   {t(`${project.translationKey}.title`)}
                 </h3>

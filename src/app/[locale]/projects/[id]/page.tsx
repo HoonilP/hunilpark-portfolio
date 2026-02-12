@@ -86,6 +86,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
           title={t(`${translationKey}.title`)}
           subtitle={t(`${translationKey}.subtitle`)}
           techStack={techStack}
+          projectId={id}
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8 mt-12">
@@ -97,7 +98,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
               liveUrl,
             }}
           />
-          <ProjectContent translationKey={translationKey} />
+          <ProjectContent translationKey={translationKey} projectId={id} />
         </div>
 
         <ProjectNavigation currentId={id} />

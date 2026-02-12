@@ -1,10 +1,12 @@
+import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
 
 interface ProjectContentProps {
   translationKey: string;
+  projectId: string;
 }
 
-export default async function ProjectContent({ translationKey }: ProjectContentProps) {
+export default async function ProjectContent({ translationKey, projectId }: ProjectContentProps) {
   const t = await getTranslations('ProjectDetail');
 
   // Feature keys to check for implementation section
@@ -32,9 +34,17 @@ export default async function ProjectContent({ translationKey }: ProjectContentP
         </section>
       )}
 
-      {/* Architecture Diagram Placeholder */}
-      <div className="w-full h-[200px] bg-neutral-100 dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 flex items-center justify-center">
-        <span className="text-neutral-400 dark:text-neutral-500">Architecture Diagram</span>
+      {/* Architecture/Content Image */}
+      <div className="w-full aspect-video relative overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-800">
+        <Image
+          src={`/projects/${projectId}/hero.webp`}
+          alt={`${t(`${translationKey}.title`)} architecture`}
+          fill
+          sizes="(max-width: 768px) 100vw, 1024px"
+          quality={75}
+          className="object-contain"
+          loading="lazy"
+        />
       </div>
 
       {/* Implementation Section */}

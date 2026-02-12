@@ -1,12 +1,14 @@
+import Image from 'next/image';
 import Badge from '@/components/ui/Badge';
 
 interface ProjectHeroProps {
   title: string;
   subtitle: string;
   techStack: string[];
+  projectId: string;
 }
 
-export default function ProjectHero({ title, subtitle, techStack }: ProjectHeroProps) {
+export default function ProjectHero({ title, subtitle, techStack, projectId }: ProjectHeroProps) {
   return (
     <div className="mb-12">
       <h1 className="text-3xl md:text-4xl font-bold mb-3 text-neutral-900 dark:text-neutral-100">
@@ -20,8 +22,16 @@ export default function ProjectHero({ title, subtitle, techStack }: ProjectHeroP
           <Badge key={tech}>{tech}</Badge>
         ))}
       </div>
-      <div className="w-full h-[300px] md:h-[400px] bg-neutral-100 dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 flex items-center justify-center">
-        <span className="text-neutral-400 dark:text-neutral-500">Project Screenshot</span>
+      <div className="w-full aspect-video relative overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-800">
+        <Image
+          src={`/projects/${projectId}/hero.webp`}
+          alt={title}
+          fill
+          sizes="(max-width: 768px) 100vw, 1024px"
+          quality={90}
+          className="object-cover"
+          priority
+        />
       </div>
     </div>
   );
