@@ -114,5 +114,83 @@
       "bay": "Yonsei University Blockchain Society BAY, 17th Cohort",
       "aiCourse": "Youngwoo Global Learning AI S/W Expert Training (Apr 2022)"
     }
+  },
+  "ProjectDetail": {
+    "sidebar": {
+      "role": "Role",
+      "teamSize": "Team Size",
+      "duration": "Duration",
+      "techStack": "Tech Stack",
+      "links": "Links"
+    },
+    "joshua": {
+      "title": "Joshua AI Agent",
+      "subtitle": "AI Copywriting Agent powered by KoGPT-2",
+      "role": "Frontend Development",
+      "teamSize": "4 members",
+      "duration": "Jun 2022 - Mar 2023",
+      "overview": {
+        "title": "Project Overview",
+        "background": "Cross-platform desktop app development using Electron and Angular.",
+        "contribution": "Integrated AI agent powered by KoGPT-2 with Stripe payment system."
+      },
+      "implementation": {
+        "title": "Technical Implementation"
+      },
+      "troubleshooting": {
+        "title": "Troubleshooting"
+      },
+      "retrospective": {
+        "title": "Retrospective",
+        "growth": "Gained experience in cross-platform desktop app development and AI model integration.",
+        "improvement": "Would like to enhance performance optimization and user feedback loops in future projects."
+      }
+    },
+    "dyCms": {
+      "title": "DY Microfinance CMS",
+      "subtitle": "Customer Management System",
+      "role": "Full-stack Development",
+      "teamSize": "1 member (Solo)",
+      "duration": "Jul 2024 - Jun 2025",
+      "overview": {
+        "title": "Project Overview",
+        "background": "Customer management system built with separated frontend-backend architecture using Next.js and NestJS.",
+        "contribution": "Implemented admin dashboard and automated ~90% of accounting processes."
+      },
+      "implementation": {
+        "title": "Technical Implementation"
+      },
+      "troubleshooting": {
+        "title": "Troubleshooting"
+      },
+      "retrospective": {
+        "title": "Retrospective",
+        "growth": "Secured full-stack development experience and business process automation capabilities.",
+        "improvement": "Would like to increase test coverage and improve CI/CD pipeline."
+      }
+    },
+    "retailAnalysis": {
+      "title": "Retail Store Customer Analysis",
+      "subtitle": "Visual Intelligence-based Customer Tracking System",
+      "role": "Data Visualization Development",
+      "teamSize": "3 members",
+      "duration": "Nov 2022 - Apr 2023",
+      "overview": {
+        "title": "Project Overview",
+        "background": "Real-time customer tracking system in retail stores using YOLO-based visual intelligence.",
+        "contribution": "Built dashboard with VanillaJS to visualize analysis results."
+      },
+      "implementation": {
+        "title": "Technical Implementation"
+      },
+      "troubleshooting": {
+        "title": "Troubleshooting"
+      },
+      "retrospective": {
+        "title": "Retrospective",
+        "growth": "Learned real-time data processing and visualization techniques.",
+        "improvement": "Would like to leverage modern frameworks like React or Vue to improve component reusability."
+      }
+    }
   }
 }

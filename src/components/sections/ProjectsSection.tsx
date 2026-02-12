@@ -1,4 +1,5 @@
 import { getTranslations } from 'next-intl/server';
+import { Link } from '@/i18n/navigation';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 
@@ -13,17 +14,17 @@ export default async function ProjectsSection() {
 
   const projects: Project[] = [
     {
-      id: 'joshua',
+      id: '1',
       translationKey: 'joshua',
       techStack: ['Electron', 'Angular', 'FastAPI', 'PostgreSQL', 'KoGPT-2', 'Stripe'],
     },
     {
-      id: 'dyCms',
+      id: '2',
       translationKey: 'dyCms',
       techStack: ['Next.js', 'NestJS', 'PostgreSQL', 'TypeScript'],
     },
     {
-      id: 'retailAnalysis',
+      id: '3',
       translationKey: 'retailAnalysis',
       techStack: ['Pytorch', 'YOLO', 'VanillaJS'],
     },
@@ -38,22 +39,27 @@ export default async function ProjectsSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project) => (
-            <Card key={project.id} hover>
-              <h3 className="text-xl font-semibold mb-2 text-neutral-900 dark:text-neutral-100">
-                {t(`${project.translationKey}.title`)}
-              </h3>
-              <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-3">
-                {t(`${project.translationKey}.period`)}
-              </p>
-              <p className="text-neutral-700 dark:text-neutral-300 mb-4 text-sm leading-relaxed">
-                {t(`${project.translationKey}.description`)}
-              </p>
-              <div className="flex flex-wrap gap-2 mt-auto">
-                {project.techStack.map((tech) => (
-                  <Badge key={tech}>{tech}</Badge>
-                ))}
-              </div>
-            </Card>
+            <Link key={project.id} href={`/projects/${project.id}`} className="group">
+              <Card>
+                <h3 className="text-xl font-semibold mb-2 text-neutral-900 dark:text-neutral-100">
+                  {t(`${project.translationKey}.title`)}
+                </h3>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-3">
+                  {t(`${project.translationKey}.period`)}
+                </p>
+                <p className="text-neutral-700 dark:text-neutral-300 mb-4 text-sm leading-relaxed">
+                  {t(`${project.translationKey}.description`)}
+                </p>
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {project.techStack.map((tech) => (
+                    <Badge key={tech}>{tech}</Badge>
+                  ))}
+                </div>
+                <span className="text-sm text-primary-500 dark:text-primary-400 mt-3 inline-block">
+                  {t('viewDetails')}
+                </span>
+              </Card>
+            </Link>
           ))}
         </div>
       </div>
