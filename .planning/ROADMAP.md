@@ -79,10 +79,11 @@ Plans:
   3. Project detail page displays tech stack, team size, duration, and role information
   4. Project detail page includes GitHub/external links where applicable
   5. Project detail pages display correct content when switching between Korean and English
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD after planning
+- [ ] 04-01-PLAN.md — Project detail route, components (hero, sidebar, content, breadcrumbs, navigation), card linking
+- [ ] 04-02-PLAN.md — Full bilingual project narrative content (Korean portfolio standards)
 
 ## Progress
 
@@ -94,7 +95,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Foundation | 2/2 | Complete ✓ | 2026-02-11 |
 | 2. Layout & Design System | 2/2 | Complete ✓ | 2026-02-11 |
 | 3. Main Page Sections | 3/3 | Complete ✓ | 2026-02-12 |
-| 4. Project Detail Pages | 0/TBD | Not started | - |
+| 4. Project Detail Pages | 0/2 | Not started | - |
 
 ---
 *Roadmap created: 2026-02-11*
