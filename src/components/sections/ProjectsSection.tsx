@@ -28,6 +28,16 @@ export default async function ProjectsSection() {
       translationKey: 'retailAnalysis',
       techStack: ['Pytorch', 'YOLO', 'VanillaJS'],
     },
+    {
+      id: '4',
+      translationKey: 'scholarlyChain',
+      techStack: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'shadcn/ui', 'Firebase'],
+    },
+    {
+      id: '5',
+      translationKey: 'dinoGo',
+      techStack: ['Next.js', 'TypeScript', 'Three.js', 'Tailwind CSS', 'Move', 'Sui SDK'],
+    },
   ];
 
   return (

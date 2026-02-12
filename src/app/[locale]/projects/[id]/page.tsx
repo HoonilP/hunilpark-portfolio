@@ -8,7 +8,7 @@ import ProjectSidebar from '@/components/projects/ProjectSidebar';
 import ProjectContent from '@/components/projects/ProjectContent';
 import ProjectNavigation from '@/components/projects/ProjectNavigation';
 
-const PROJECT_IDS = ['1', '2', '3'] as const;
+const PROJECT_IDS = ['1', '2', '3', '4', '5'] as const;
 type ProjectId = typeof PROJECT_IDS[number];
 
 function isValidProjectId(id: string): id is ProjectId {
@@ -34,6 +34,17 @@ const PROJECT_META: Record<ProjectId, ProjectMeta> = {
   '3': {
     translationKey: 'retailAnalysis',
     techStack: ['Pytorch', 'YOLO', 'VanillaJS'],
+  },
+  '4': {
+    translationKey: 'scholarlyChain',
+    techStack: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'shadcn/ui', 'Firebase'],
+    githubUrl: 'https://github.com/Capstone-scholarly-chain',
+  },
+  '5': {
+    translationKey: 'dinoGo',
+    techStack: ['Next.js', 'TypeScript', 'Three.js', 'Tailwind CSS', 'Move', 'Sui SDK'],
+    githubUrl: 'https://github.com/Dino-Go',
+    liveUrl: 'https://dinogo.vercel.app/',
   },
 };
 

@@ -4,12 +4,14 @@ import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-const PROJECT_ORDER = ['1', '2', '3'] as const;
+const PROJECT_ORDER = ['1', '2', '3', '4', '5'] as const;
 
 const PROJECT_KEYS: Record<string, string> = {
   '1': 'joshua',
   '2': 'dyCms',
   '3': 'retailAnalysis',
+  '4': 'scholarlyChain',
+  '5': 'dinoGo',
 };
 
 interface ProjectNavigationProps {
