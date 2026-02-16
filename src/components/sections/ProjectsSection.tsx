@@ -39,6 +39,11 @@ export default async function ProjectsSection() {
       translationKey: 'dinoGo',
       techStack: ['Next.js', 'TypeScript', 'Three.js', 'Tailwind CSS', 'Move', 'Sui SDK'],
     },
+    {
+      id: '6',
+      translationKey: 'artWar',
+      techStack: ['Next.js', 'NestJS', 'Solidity', 'OpenClaw', 'Monad', 'Supabase'],
+    },
   ];
 
   const numCards = projects.length;

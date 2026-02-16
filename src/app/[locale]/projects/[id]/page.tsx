@@ -8,7 +8,7 @@ import ProjectSidebar from '@/components/projects/ProjectSidebar';
 import ProjectContent from '@/components/projects/ProjectContent';
 import ProjectNavigation from '@/components/projects/ProjectNavigation';
 
-const PROJECT_IDS = ['1', '2', '3', '4', '5'] as const;
+const PROJECT_IDS = ['1', '2', '3', '4', '5', '6'] as const;
 type ProjectId = typeof PROJECT_IDS[number];
 
 function isValidProjectId(id: string): id is ProjectId {
@@ -45,6 +45,11 @@ const PROJECT_META: Record<ProjectId, ProjectMeta> = {
     techStack: ['Next.js', 'TypeScript', 'Three.js', 'Tailwind CSS', 'Move', 'Sui SDK'],
     githubUrl: 'https://github.com/Dino-Go',
     liveUrl: 'https://dinogo.vercel.app/',
+  },
+  '6': {
+    translationKey: 'artWar',
+    techStack: ['Next.js', 'NestJS', 'Solidity', 'OpenClaw', 'Monad', 'Supabase'],
+    githubUrl: 'https://github.com/Moltiverse-MonArt',
   },
 };
 

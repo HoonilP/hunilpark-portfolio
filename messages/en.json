@@ -76,6 +76,11 @@
       "title": "Dino Go",
       "description": "Sui blockchain location-based NFT collection game. Built 3D maps with Next.js and Three.js, integrating Walrus decentralized storage and Seal encryption.",
       "period": "Sep 19-21, 2025"
+    },
+    "artWar": {
+      "title": "Ministry of Truth (ArtWar)",
+      "description": "AI agent autonomous art tournament platform. OpenClaw-based agents run autonomously on AWS EC2, with a betting system built on nad.fun tokens on the Monad blockchain.",
+      "period": "Feb 9-16, 2026"
     }
   },
   "Experience": {
@@ -383,6 +388,59 @@
         "title": "Retrospective",
         "growth": "Developing the entire frontend under extreme time constraints of a 3-day hackathon made me experience the importance of quick decision-making and priority setting. Through 3D graphics implementation using Three.js and Google Maps API integration experience, I could handle a unique tech stack combining WebGL rendering with map services, and gained blockchain frontend development capabilities by utilizing Web3 tech stacks (Sui SDK, Move, Walrus, Seal) in practice. Particularly while designing and implementing custom Web3 client libraries, I developed architecture design capabilities to create frontend developer-friendly interfaces by abstracting complex external SDKs. Through solving synchronization problems between two rendering systems during Google Maps and Three.js integration, I gained low-level rendering optimization and performance tuning experience. Completing features and demoing within hackathon's fast development pace was thanks to clear priority setting and smooth team collaboration.",
         "improvement": "Limited 3-day time forced compromising code quality. No test code was written at all, and error handling was implemented minimally leaving high bug possibility in edge cases. If developing into a production environment, thorough refactoring and securing test coverage are essential. Mobile optimization was also insufficient. Three.js rendering consumed much battery on mobile causing heating issues, but fundamental optimization wasn't done due to time shortage. Future work needs optimization like reducing WebGL rendering frequency or scaling back 3D effects on mobile. Much room for Three.js performance optimization remains. Applying advanced optimization techniques like model compression, texture atlases, and instancing could further improve performance. Hackathon experience made me clearly understand the difference between 'quickly making prototypes' and 'writing stable production code,' and in future projects I want to invest more time in initial design to build solid foundations."
+      }
+    },
+    "artWar": {
+      "title": "Ministry of Truth (ArtWar)",
+      "subtitle": "AI Autonomous Agent Art Tournament",
+      "role": "Full-stack Development",
+      "teamSize": "4 members (2 Planning, 2 Development)",
+      "duration": "Feb 9-16, 2026 (Hackathon)",
+      "overview": {
+        "title": "Project Overview",
+        "background": "Ministry of Truth (ArtWar) is a project conducted over one week during the Moltiverse Hackathon's Agent+Token Track—an AI art tournament platform where AI agents participate autonomously. An MC (host) agent runs the tournament, AI artists submit artwork matching given topics, two AI judges score submissions, and spectators (users) bet on winners using $MOT tokens via nad.fun on the Monad blockchain. The tournament follows a bracket structure (quarterfinals→semifinals→finals), with all state transitions performed autonomously by agents. The backend uses NestJS + TypeORM + Supabase PostgreSQL, frontend uses Next.js, and agents run on the OpenClaw framework deployed on AWS EC2.",
+        "contribution": "As one of two developers in a 4-member team, I handled full-stack development. This included designing and implementing the NestJS backend API (tournament state machine, betting system, judging system), building 5 Next.js frontend pages (Home, Chamber, Betting, Leaderboard, Admin), developing the Solidity smart contract (MOTBetting.sol) and deploying it to Monad mainnet, and designing behavior rules for 3 OpenClaw agents (MC, Judge A, Judge B) along with their EC2 deployment and operations."
+      },
+      "implementation": {
+        "title": "Technical Implementation",
+        "feature1": {
+          "title": "Autonomous Agent Orchestration (OpenClaw + EC2 + Polling)",
+          "problem": "Three types of AI agents (MC host, Judge A for aesthetics, Judge B for logic) needed to operate the tournament autonomously without human intervention. Rather than using cron jobs, agents themselves had to recognize states and choose appropriate actions, with crash recovery capability. The key challenge was integrating OpenClaw framework's heartbeat-based operation with the tournament state machine.",
+          "solution": "Each agent was configured with AGENTS.md (behavior rules), SOUL.md (persona), HEARTBEAT.md (health check), and skill.md (API reference) registered in OpenClaw. The MC agent wakes up every 2 minutes via heartbeat, queries current round state through the API, and performs state transitions (created→submission→betting→judging→results→completed→advance) based on deadlines. Judges A/B activate only during judging state to call the scoring API, with idempotent processing to prevent duplicate scoring. All agents run on AWS EC2, designed to resume from their last state after crashes.",
+          "result": "The entire tournament flow from quarterfinals to finals ran automatically with AI agents alone, without human intervention. The MC agent's polling-based state transitions operated stably, and thanks to judges' idempotent processing, scoring completed without duplicates even after agent restarts. We were able to demonstrate the tournament running in real-time during the hackathon demo."
+        },
+        "feature2": {
+          "title": "Tournament State Machine (6-Stage Round Lifecycle)",
+          "problem": "Tournament rounds follow a 6-stage lifecycle: created→submission→betting→judging→results→completed, with different allowed actions and transition conditions at each stage. Only artists can submit work during submission, only users can bet during betting, and only judges can score during judging. We needed to block actions in invalid states, validate state transitions, and manage brackets progressing from quarterfinals→semifinals→finals.",
+          "solution": "Round states are managed as enums in the NestJS backend, with guards verifying current state on each API endpoint. The state transition API (/rounds/:id/transition) uses role-based authentication allowing only the MC agent to call it, rejecting invalid transitions (e.g., jumping from created directly to judging). Brackets are automatically generated at season start by seeding 8 artists, with logic to advance winners to the next round when a round completes. Data is managed across 12 tables in Supabase PostgreSQL including rounds, matches, tournament_brackets, submissions, and judge_results.",
+          "result": "The 6-stage state machine operated stably, blocking API calls in invalid states to ensure data integrity. Brackets were automatically managed from quarterfinals to finals—the MC agent only needed to issue advance commands for the next round to be ready. The frontend Chamber page provided real-time visual confirmation of brackets and current round status."
+        },
+        "feature3": {
+          "title": "Monad Blockchain Betting System (Solidity + nad.fun)",
+          "problem": "A system was needed for users to predict tournament match winners and bet with MON (Monad native token). Monad is an EVM-compatible chain but as a new L1, documentation and references were scarce. Integration with the nad.fun token ecosystem was also a first. We needed to implement the complete flow: managing betting pools in smart contracts, distributing winnings based on results, and creating bet transactions after wallet connection on the frontend.",
+          "solution": "We wrote the MOTBetting.sol smart contract in Solidity and deployed it to Monad mainnet (Chain ID 143). The contract includes match-specific betting pool management, bet acceptance/closing, and payout calculation and distribution based on results. The frontend Betting page implements UI for users to connect wallets, select winners per match, and bet MON. The backend synchronizes with the smart contract when round results are finalized to trigger payout distribution. We issued the $MOT token on the nad.fun platform to establish the project's token economy.",
+          "result": "A functioning betting system using real MON on Monad mainnet was built. Transparent betting pool management via smart contracts secured user trust, while the frontend delivered a one-click betting experience. The $MOT token issued on nad.fun enabled building a token economy for the tournament ecosystem."
+        }
+      },
+      "troubleshooting": {
+        "title": "Troubleshooting",
+        "issue1": {
+          "title": "Understanding the Monad/nad.fun Ecosystem — Lack of References for a New Chain",
+          "problem": "Monad is a new EVM-compatible L1 blockchain that supports the same Solidity but has chain-specific characteristics different from Ethereum, including RPC endpoints, gas model, and block generation speed. With insufficient official documentation and virtually no integration examples with the nad.fun token platform, we experienced significant trial and error during early development. Deploying contracts to Monad mainnet via Hardhat was particularly challenging due to network configuration and gas parameter tuning.",
+          "solution": "We verified the latest RPC URL (https://rpc.monad.xyz) and Chain ID (143) through Monad's official Discord and GitHub. We added the Monad mainnet to Hardhat's network configuration and tested gas parameters by sending actual transactions to find optimal values. We analyzed the nad.fun API directly to understand the token issuance flow, and implemented MetaMask custom network addition on the frontend so users could easily connect to the Monad network.",
+          "result": "We successfully adapted to the new blockchain ecosystem, deploying smart contracts to Monad mainnet and building a token economy integrated with nad.fun. Even in an environment lacking documentation, we gained experience solving problems through community engagement and direct testing."
+        },
+        "issue2": {
+          "title": "OpenClaw Agent Operations — Managing Multiple Agents on EC2",
+          "problem": "Three OpenClaw agents (MC, Judge A, Judge B) needed to run simultaneously on a single EC2 instance. Each agent operates on independent heartbeat cycles with different API keys and roles. Isolation was needed to prevent one agent's unexpected crash or excessive memory usage from affecting others. We also needed methods to monitor agent logs and check status in real-time.",
+          "solution": "Each agent was run as a separate process and registered as systemd services for automatic restart. Agent-specific logs were separated for easier debugging, and a /agents/health API was implemented in the backend to monitor each agent's last heartbeat time and status. The Admin page provides a management interface for real-time agent status monitoring and manual round control when needed. Error recovery procedures were specified in agent behavior rules (AGENTS.md), designed for safe resumption from the last state after crash restarts.",
+          "result": "Three agents operated stably and concurrently on a single EC2 instance, with systemd automatically restarting on crashes to minimize downtime. Real-time agent status monitoring on the Admin page enabled quick response to issues during the hackathon period."
+        }
+      },
+      "retrospective": {
+        "title": "Retrospective",
+        "growth": "Building an on-chain tournament platform operated by autonomous AI agents from scratch during a one-week hackathon significantly developed my full-stack architecture design capabilities spanning multiple domains. Designing AI agent behavior rules with the OpenClaw framework and enabling autonomous operation was a completely different paradigm from conventional web development, teaching me the perspective of designing 'systems where agents judge and act on their own.' Deploying smart contracts on Monad, a new blockchain ecosystem, and integrating with nad.fun tokens developed my ability to adapt quickly in environments lacking documentation. Integrating NestJS backend, Next.js frontend, Solidity smart contracts, and OpenClaw agents into a single system improved my interface design and data flow management capabilities across technology stacks.",
+        "improvement": "Limited one-week time resulted in insufficient test code and inadequate edge case handling for agent behavior. The recovery logic for unexpected API responses was incomplete, leading to situations requiring manual intervention during the hackathon. Additionally, insufficient time invested in frontend UI/UX left the design polish lacking. In future similar projects, I want to design agent error recovery scenarios more thoroughly and write integration tests for both frontend and agent systems to improve stability."
       }
     }
   }
