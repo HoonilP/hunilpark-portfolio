@@ -12,11 +12,17 @@
     "projects": "Projects",
     "experience": "Experience",
     "education": "Education",
-    "contact": "Contact"
+    "contact": "Contact",
+    "lab": "Lab"
   },
   "Common": {
     "language": "KO",
     "languageLabel": "Switch to Korean"
+  },
+  "Lab": {
+    "backToHome": "Home",
+    "loading": "Loading...",
+    "scrollHint": "Click objects to explore"
   },
   "Footer": {
     "email": "Email",

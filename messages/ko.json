@@ -12,11 +12,17 @@
     "projects": "프로젝트",
     "experience": "경력",
     "education": "학력",
-    "contact": "연락처"
+    "contact": "연락처",
+    "lab": "Lab"
   },
   "Common": {
     "language": "EN",
     "languageLabel": "English로 전환"
+  },
+  "Lab": {
+    "backToHome": "홈으로",
+    "loading": "로딩 중...",
+    "scrollHint": "오브젝트를 클릭하여 둘러보기"
   },
   "Footer": {
     "email": "이메일",
