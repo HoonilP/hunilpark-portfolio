@@ -43,6 +43,98 @@
   --animate-reveal-line: reveal-line 0.8s ease-out forwards;
 }
 
+/* ===== Hero Staggered Slide-Up (Modo Museum style) ===== */
+/* Clip-mask reveal: child slides up from 100% inside overflow-hidden parent */
+@keyframes hero-reveal {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.hero-reveal-wrap {
+  overflow: hidden;
+}
+
+.hero-reveal {
+  opacity: 0;
+  transform: translate3d(0, 100%, 0);
+  animation: hero-reveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-reveal-delay-1 { animation-delay: 0.1s; }
+.hero-reveal-delay-2 { animation-delay: 0.25s; }
+.hero-reveal-delay-3 { animation-delay: 0.45s; }
+.hero-reveal-delay-4 { animation-delay: 0.65s; }
+
+/* Hero image reveal */
+@keyframes hero-image-reveal {
+  from {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.hero-image-reveal {
+  opacity: 0;
+  animation: hero-image-reveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+}
+
+/* ===== Scroll Reveal ===== */
+@keyframes scroll-reveal-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 40px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes scroll-reveal-line {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.scroll-reveal {
+  opacity: 0;
+  transform: translate3d(0, 40px, 0);
+}
+
+.scroll-reveal.is-visible {
+  animation: scroll-reveal-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.scroll-reveal-line {
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.scroll-reveal-line.is-visible {
+  animation: scroll-reveal-line 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Stagger delays for scroll-reveal children */
+.scroll-stagger-1 { animation-delay: 0.1s; }
+.scroll-stagger-2 { animation-delay: 0.2s; }
+.scroll-stagger-3 { animation-delay: 0.3s; }
+.scroll-stagger-4 { animation-delay: 0.4s; }
+.scroll-stagger-5 { animation-delay: 0.5s; }
+
+/* ===== Legacy Animations ===== */
 @keyframes fade-in-up {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -74,17 +166,24 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .hero-reveal,
+  .hero-image-reveal,
+  .scroll-reveal,
+  .scroll-reveal.is-visible,
   .animate-fade-in-up,
   .animate-fade-in,
   .animate-slide-in-left,
   .animate-slide-in-right,
   .animate-scale-in {
-    animation: none;
-    opacity: 1;
-    transform: none;
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
+  .scroll-reveal-line,
+  .scroll-reveal-line.is-visible,
   .animate-reveal-line {
-    animation: none;
+    animation: none !important;
+    transform: scaleX(1) !important;
     width: 100%;
   }
 }

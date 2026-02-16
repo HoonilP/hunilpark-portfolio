@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+import ScrollReveal from '@/components/ScrollReveal';
 
 interface SectionWrapperProps {
   id: string;
@@ -23,23 +24,31 @@ export default function SectionWrapper({
     <section id={id} className={cn('py-24 lg:py-32', className)}>
       <div className={cn(maxWidth, 'mx-auto px-6')}>
         {/* Divider */}
-        <div className="section-divider mb-12 text-neutral-900 dark:text-neutral-100" />
+        <ScrollReveal line>
+          <div className="section-divider mb-12 text-neutral-900 dark:text-neutral-100" />
+        </ScrollReveal>
 
         {/* Label */}
         {label && (
-          <p className={cn('label-museum text-neutral-500 dark:text-neutral-400 mb-4', centered && 'text-center')}>
-            {label}
-          </p>
+          <ScrollReveal delay={0.1}>
+            <p className={cn('label-museum text-neutral-500 dark:text-neutral-400 mb-4', centered && 'text-center')}>
+              {label}
+            </p>
+          </ScrollReveal>
         )}
 
         {/* Heading */}
         {heading && (
-          <h2 className={cn('heading-section text-neutral-900 dark:text-neutral-100 mb-12', centered && 'text-center')}>
-            {heading}
-          </h2>
+          <ScrollReveal delay={0.2}>
+            <h2 className={cn('heading-section text-neutral-900 dark:text-neutral-100 mb-12', centered && 'text-center')}>
+              {heading}
+            </h2>
+          </ScrollReveal>
         )}
 
-        {children}
+        <ScrollReveal delay={0.3}>
+          {children}
+        </ScrollReveal>
       </div>
     </section>
   );

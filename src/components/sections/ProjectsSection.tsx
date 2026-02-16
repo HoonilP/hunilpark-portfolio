@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import Badge from '@/components/ui/Badge';
+import ScrollReveal from '@/components/ScrollReveal';
 
 interface Project {
   id: string;
@@ -44,13 +45,19 @@ export default async function ProjectsSection() {
     <section id="projects" className="py-24 lg:py-32">
       {/* Section Header */}
       <div className="max-w-5xl mx-auto px-6 mb-16">
-        <div className="section-divider mb-12 text-neutral-900 dark:text-neutral-100" />
-        <p className="label-museum text-neutral-500 dark:text-neutral-400 mb-4">
-          Collections
-        </p>
-        <h2 className="heading-section text-neutral-900 dark:text-neutral-100">
-          {t('sectionTitle')}
-        </h2>
+        <ScrollReveal line>
+          <div className="section-divider mb-12 text-neutral-900 dark:text-neutral-100" />
+        </ScrollReveal>
+        <ScrollReveal delay={0.1}>
+          <p className="label-museum text-neutral-500 dark:text-neutral-400 mb-4">
+            Collections
+          </p>
+        </ScrollReveal>
+        <ScrollReveal delay={0.2}>
+          <h2 className="heading-section text-neutral-900 dark:text-neutral-100">
+            {t('sectionTitle')}
+          </h2>
+        </ScrollReveal>
       </div>
 
       {/* Project Blocks */}
