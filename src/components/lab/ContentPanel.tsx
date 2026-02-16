@@ -3,11 +3,10 @@
 import {useTranslations} from 'next-intl';
 import {Link} from '@/i18n/navigation';
 import Image from 'next/image';
-import {X, Mail, Phone, Github, ExternalLink} from 'lucide-react';
+import {Mail, Phone, Github, ExternalLink} from 'lucide-react';
 
 interface ContentPanelProps {
   activeSection: string | null;
-  onClose: () => void;
 }
 
 const PROJECTS = [
@@ -26,7 +25,7 @@ const SKILLS = [
   {category: 'Database', items: ['MySQL', 'PostgreSQL'], color: '#8b5cf6'},
 ];
 
-export default function ContentPanel({activeSection, onClose}: ContentPanelProps) {
+export default function ContentPanel({activeSection}: ContentPanelProps) {
   const t = useTranslations();
 
   if (!activeSection) return null;
@@ -34,14 +33,10 @@ export default function ContentPanel({activeSection, onClose}: ContentPanelProps
   return (
     <div className="fixed inset-y-0 right-0 z-[80] w-full max-w-md pointer-events-none">
       <div className="h-full flex items-center p-4 pointer-events-none">
-        <div className="pointer-events-auto relative w-full max-h-[85vh] overflow-y-auto rounded-2xl bg-black/75 backdrop-blur-xl border border-white/10 p-6 animate-slide-in scrollbar-thin">
-          <button
-            onClick={onClose}
-            className="sticky top-0 float-right z-10 w-7 h-7 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white/60 hover:text-white transition-colors"
-          >
-            <X className="w-4 h-4" />
-          </button>
-
+        <div
+          className="pointer-events-auto relative w-full max-h-[85vh] overflow-y-auto rounded-2xl bg-black/75 backdrop-blur-xl border border-white/10 p-6 animate-slide-in scrollbar-thin"
+          style={{overscrollBehavior: 'contain'}}
+        >
           {activeSection === 'about' && <AboutContent t={t} />}
           {activeSection === 'projects' && <ProjectsContent t={t} />}
           {activeSection === 'skills' && <SkillsContent t={t} />}
