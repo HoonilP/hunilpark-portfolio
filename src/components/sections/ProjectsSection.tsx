@@ -41,6 +41,8 @@ export default async function ProjectsSection() {
     },
   ];
 
+  const numCards = projects.length;
+
   return (
     <section id="projects" className="py-24 lg:py-32">
       {/* Section Header */}
@@ -60,66 +62,75 @@ export default async function ProjectsSection() {
         </ScrollReveal>
       </div>
 
-      {/* Project Blocks */}
-      <div className="space-y-0">
+      {/* Project Sticky Stack */}
+      <div
+        className="stack-cards"
+        style={{ '--numcards': numCards } as React.CSSProperties}
+      >
         {projects.map((project, index) => {
           const isEven = index % 2 === 0;
           return (
-            <Link
+            <div
               key={project.id}
-              href={`/projects/${project.id}`}
-              className="group block"
+              className="stack-card"
+              style={{
+                top: `calc(5rem + ${index * 0.5}rem)`,
+                zIndex: index + 1,
+              }}
             >
-              <div className="relative min-h-[60vh] md:min-h-[70vh] lg:min-h-[80vh] overflow-hidden flex items-center">
-                {/* Background Image */}
-                <Image
-                  src={`/projects/${project.id}/hero.webp`}
-                  alt={t(`${project.translationKey}.title`)}
-                  fill
-                  sizes="100vw"
-                  quality={60}
-                  loading="lazy"
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                />
+              <Link
+                href={`/projects/${project.id}`}
+                className="group block"
+              >
+                <div className="relative min-h-[60vh] md:min-h-[70vh] lg:min-h-[80vh] overflow-hidden flex items-center rounded-t-2xl shadow-2xl">
+                  {/* Background Image */}
+                  <Image
+                    src={`/projects/${project.id}/hero.webp`}
+                    alt={t(`${project.translationKey}.title`)}
+                    fill
+                    sizes="100vw"
+                    quality={60}
+                    loading="lazy"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
 
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-300" />
+                  {/* Overlay */}
+                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-300" />
 
-                {/* Card */}
-                <div className="relative z-10 w-full max-w-6xl mx-auto px-6">
-                  <div
-                    className={`max-w-md ${
-                      isEven
-                        ? 'mr-auto'
-                        : 'ml-auto'
-                    }`}
-                  >
-                    <div className="bg-white/90 dark:bg-neutral-900/90 backdrop-blur-sm rounded-xl p-8 shadow-lg transition-all duration-300 group-hover:shadow-2xl group-hover:-translate-y-1">
-                      <span className="label-museum text-neutral-400 dark:text-neutral-500">
-                        {String(index + 1).padStart(2, '0')}
-                      </span>
-                      <h3 className="text-2xl font-bold mt-2 mb-2 text-neutral-900 dark:text-neutral-100">
-                        {t(`${project.translationKey}.title`)}
-                      </h3>
-                      <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-3">
-                        {t(`${project.translationKey}.period`)}
-                      </p>
-                      <p className="text-neutral-700 dark:text-neutral-300 text-sm leading-relaxed mb-5">
-                        {t(`${project.translationKey}.description`)}
-                      </p>
-                      <div className="flex flex-wrap gap-1.5 mb-5">
-                        {project.techStack.map((tech) => (
-                          <Badge key={tech}>{tech}</Badge>
-                        ))}
+                  {/* Card */}
+                  <div className="relative z-10 w-full max-w-6xl mx-auto px-6">
+                    <div
+                      className={`max-w-md ${
+                        isEven ? 'mr-auto' : 'ml-auto'
+                      }`}
+                    >
+                      <div className="bg-white/90 dark:bg-neutral-900/90 backdrop-blur-sm rounded-xl p-8 shadow-lg transition-all duration-300 group-hover:shadow-2xl group-hover:-translate-y-1">
+                        <span className="label-museum text-neutral-400 dark:text-neutral-500">
+                          {String(index + 1).padStart(2, '0')}
+                        </span>
+                        <h3 className="text-2xl font-bold mt-2 mb-2 text-neutral-900 dark:text-neutral-100">
+                          {t(`${project.translationKey}.title`)}
+                        </h3>
+                        <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-3">
+                          {t(`${project.translationKey}.period`)}
+                        </p>
+                        <p className="text-neutral-700 dark:text-neutral-300 text-sm leading-relaxed mb-5">
+                          {t(`${project.translationKey}.description`)}
+                        </p>
+                        <div className="flex flex-wrap gap-1.5 mb-5">
+                          {project.techStack.map((tech) => (
+                            <Badge key={tech}>{tech}</Badge>
+                          ))}
+                        </div>
+                        <span className="label-museum text-primary-500 dark:text-primary-400 group-hover:tracking-[0.15em] transition-all">
+                          {t('viewDetails')} →
+                        </span>
                       </div>
-                      <span className="label-museum text-primary-500 dark:text-primary-400 group-hover:tracking-[0.15em] transition-all">
-                        {t('viewDetails')} →
-                      </span>
                     </div>
                   </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            </div>
           );
         })}
       </div>

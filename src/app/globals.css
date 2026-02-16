@@ -44,7 +44,6 @@
 }
 
 /* ===== Hero Staggered Slide-Up (Modo Museum style) ===== */
-/* Clip-mask reveal: child slides up from 100% inside overflow-hidden parent */
 @keyframes hero-reveal {
   from {
     opacity: 0;
@@ -71,7 +70,6 @@
 .hero-reveal-delay-3 { animation-delay: 0.45s; }
 .hero-reveal-delay-4 { animation-delay: 0.65s; }
 
-/* Hero image reveal */
 @keyframes hero-image-reveal {
   from {
     opacity: 0;
@@ -101,12 +99,8 @@
 }
 
 @keyframes scroll-reveal-line {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }
 
 .scroll-reveal {
@@ -127,12 +121,49 @@
   animation: scroll-reveal-line 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Stagger delays for scroll-reveal children */
 .scroll-stagger-1 { animation-delay: 0.1s; }
 .scroll-stagger-2 { animation-delay: 0.2s; }
 .scroll-stagger-3 { animation-delay: 0.3s; }
 .scroll-stagger-4 { animation-delay: 0.4s; }
 .scroll-stagger-5 { animation-delay: 0.5s; }
+
+/* ===== Marquee ===== */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-100% - var(--marquee-gap))); }
+}
+
+.marquee {
+  --marquee-gap: 3rem;
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  gap: var(--marquee-gap);
+}
+
+.marquee__track {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  min-width: 100%;
+  gap: var(--marquee-gap);
+  animation: marquee 25s linear infinite;
+}
+
+/* ===== Sticky Stacking Cards ===== */
+.stack-cards {
+  /* wrapper: no special styles needed, just contains sticky children */
+}
+
+.stack-card {
+  position: sticky;
+  top: 5rem; /* below the header */
+}
+
+.stack-card:nth-child(2) { top: 5.5rem; }
+.stack-card:nth-child(3) { top: 6rem; }
+.stack-card:nth-child(4) { top: 6.5rem; }
+.stack-card:nth-child(5) { top: 7rem; }
 
 /* ===== Legacy Animations ===== */
 @keyframes fade-in-up {
@@ -185,6 +216,9 @@
     animation: none !important;
     transform: scaleX(1) !important;
     width: 100%;
+  }
+  .marquee__track {
+    animation: none !important;
   }
 }
 

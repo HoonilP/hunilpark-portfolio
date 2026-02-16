@@ -27,19 +27,34 @@ export default async function ContactSection() {
     },
   ];
 
+  const marqueeText = 'Frontend Developer — React — Next.js — TypeScript — UI/UX';
+
   return (
     <section
       id="contact"
-      className="bg-neutral-900 dark:bg-neutral-950 text-white py-24 lg:py-32"
+      className="bg-neutral-900 dark:bg-neutral-950 text-white"
     >
-      <div className="max-w-6xl mx-auto px-6">
-        {/* Big heading */}
-        <ScrollReveal>
-          <h2 className="heading-display text-white mb-16 lg:mb-24">
-            {t('description')}
-          </h2>
-        </ScrollReveal>
+      {/* Marquee Band */}
+      <div className="border-b border-neutral-800 py-5 overflow-hidden">
+        <div className="marquee">
+          {[0, 1].map((i) => (
+            <div key={i} className="marquee__track" aria-hidden={i === 1}>
+              {Array.from({ length: 4 }).map((_, j) => (
+                <span
+                  key={j}
+                  className="whitespace-nowrap text-sm tracking-[0.15em] uppercase text-neutral-500 flex items-center gap-12"
+                >
+                  {marqueeText}
+                  <span className="text-neutral-700">●</span>
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
 
+      {/* Content */}
+      <div className="max-w-6xl mx-auto px-6 py-24 lg:py-32">
         {/* Two-column layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24">
           {/* Left: Navigation */}
@@ -65,7 +80,6 @@ export default async function ContactSection() {
             <div>
               <p className="label-museum text-neutral-500 mb-6">{t('sectionTitle')}</p>
               <div className="space-y-6">
-                {/* Email */}
                 <a
                   href="mailto:phoonil0927@gmail.com"
                   className="flex items-center gap-3 text-lg text-neutral-300 hover:text-white transition-colors group"
@@ -74,7 +88,6 @@ export default async function ContactSection() {
                   phoonil0927@gmail.com
                 </a>
 
-                {/* Phone */}
                 <a
                   href="tel:010-5557-6835"
                   className="flex items-center gap-3 text-lg text-neutral-300 hover:text-white transition-colors group"
