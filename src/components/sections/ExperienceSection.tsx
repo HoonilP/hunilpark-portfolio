@@ -8,11 +8,6 @@ export default async function ExperienceSection() {
 
   const experiences: TimelineItem[] = [
     {
-      date: t('dyCms.date'),
-      title: t('dyCms.title'),
-      description: t('dyCms.description'),
-    },
-    {
       date: t('paymentInApp.date'),
       title: t('paymentInApp.title'),
       description: t('paymentInApp.description'),

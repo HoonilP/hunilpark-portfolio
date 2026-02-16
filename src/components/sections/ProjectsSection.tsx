@@ -15,6 +15,11 @@ export default async function ProjectsSection() {
 
   const projects: Project[] = [
     {
+      id: '6',
+      translationKey: 'artWar',
+      techStack: ['Next.js', 'NestJS', 'Solidity', 'OpenClaw', 'Monad', 'Supabase'],
+    },
+    {
       id: '2',
       translationKey: 'dyCms',
       techStack: ['Next.js', 'NestJS', 'PostgreSQL', 'TypeScript'],
@@ -38,11 +43,6 @@ export default async function ProjectsSection() {
       id: '5',
       translationKey: 'dinoGo',
       techStack: ['Next.js', 'TypeScript', 'Three.js', 'Tailwind CSS', 'Move', 'Sui SDK'],
-    },
-    {
-      id: '6',
-      translationKey: 'artWar',
-      techStack: ['Next.js', 'NestJS', 'Solidity', 'OpenClaw', 'Monad', 'Supabase'],
     },
   ];
 

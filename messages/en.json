@@ -85,12 +85,6 @@
   },
   "Experience": {
     "sectionTitle": "Experience",
-    "dyCms": {
-      "date": "Jul 2024 - Jun 2025",
-      "title": "DY Microfinance — CMS Development",
-      "company": "DY Microfinance (Myanmar)",
-      "description": "Developed a customer management system with a separated frontend-backend architecture using Next.js, NestJS, and PostgreSQL. Built an admin dashboard and automated ~90% of accounting processes."
-    },
     "paymentInApp": {
       "date": "May 2022 - Mar 2024",
       "title": "Payment In-App Inc. — Business Planning Lead",
@@ -98,10 +92,10 @@
       "description": "Led planning and execution of multiple projects including Joshua AI Agent (Electron/Angular), manufacturing defect detection (YOLO), retail customer behavior analysis (VanillaJS dashboard), and EMV Seoul transit feasibility study."
     },
     "dyAccounting": {
-      "date": "Jan 2017 - Dec 2018",
-      "title": "DY Microfinance — Accounting & Finance Operations",
+      "date": "Jan 2017 - Dec 2018 / Jul 2024 - Jun 2025",
+      "title": "DY Microfinance — Accounting & Finance Operations / CMS Development",
       "company": "DY Microfinance (Myanmar)",
-      "description": "Managed accounting and finance operations with process automation. Built automated BS/PL generation spreadsheets to improve operational efficiency."
+      "description": "1st period (2017-2018): Managed accounting and finance operations, built automated BS/PL generation spreadsheets. 2nd period (2024-2025): Developed a customer management system using Next.js, NestJS, and PostgreSQL, built an admin dashboard, and automated ~90% of accounting processes."
     }
   },
   "Education": {

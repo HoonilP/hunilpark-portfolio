@@ -85,12 +85,6 @@
   },
   "Experience": {
     "sectionTitle": "경력",
-    "dyCms": {
-      "date": "2024.07 - 2025.06",
-      "title": "DY Microfinance — 고객 관리 시스템 개발",
-      "company": "DY Microfinance (미얀마)",
-      "description": "Next.js, NestJS, PostgreSQL 기반 프론트엔드·백엔드 분리형 아키텍처로 고객 관리 시스템을 개발했습니다. 관리자용 대시보드를 구현하고 회계 프로세스 약 90%를 자동화했습니다."
-    },
     "paymentInApp": {
       "date": "2022.05 - 2024.03",
       "title": "주식회사 페이먼트인앱 — 사업기획 총괄",
@@ -98,10 +92,10 @@
       "description": "Joshua AI Agent(Electron/Angular), 제조 불량 인식 자동화(YOLO), 리테일 매장 고객 행동 분석(VanillaJS 대시보드), EMV 서울 교통 타당성 조사 등 다수 프로젝트를 기획·총괄했습니다."
     },
     "dyAccounting": {
-      "date": "2017.01 - 2018.12",
-      "title": "DY Microfinance — 회계·재무 운영",
+      "date": "2017.01 - 2018.12 / 2024.07 - 2025.06",
+      "title": "DY Microfinance — 회계·재무 운영 및 CMS 개발",
       "company": "DY Microfinance (미얀마)",
-      "description": "회계·재무 운영 및 프로세스 자동화를 담당했습니다. BS·PL 자동 생성 스프레드시트를 구축하여 업무 효율을 개선했습니다."
+      "description": "1차(2017-2018): 회계·재무 운영 및 BS·PL 자동 생성 스프레드시트 구축. 2차(2024-2025): Next.js, NestJS, PostgreSQL 기반 고객 관리 시스템을 개발하고 관리자 대시보드 구현 및 회계 프로세스 약 90%를 자동화했습니다."
     }
   },
   "Education": {
