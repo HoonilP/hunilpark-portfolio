@@ -20,7 +20,7 @@ export default function LanguageToggle() {
     <button
       onClick={handleToggle}
       aria-label={t('languageLabel')}
-      className="border border-neutral-300 rounded-md px-3 py-1.5 text-sm font-medium text-neutral-700 hover:bg-neutral-100 transition-colors"
+      className="text-xs font-medium tracking-[0.08em] uppercase text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors px-2 py-1.5"
     >
       {displayText}
     </button>

@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import Timeline from '@/components/ui/Timeline';
+import SectionWrapper from '@/components/ui/SectionWrapper';
 import type { TimelineItem } from '@/components/ui/Timeline';
 
 export default async function ExperienceSection() {
@@ -24,13 +25,8 @@ export default async function ExperienceSection() {
   ];
 
   return (
-    <section id="experience" className="py-20">
-      <div className="max-w-4xl mx-auto px-4">
-        <h2 className="text-3xl font-bold md:text-4xl mb-8 text-neutral-900 dark:text-neutral-100">
-          {t('sectionTitle')}
-        </h2>
-        <Timeline items={experiences} />
-      </div>
-    </section>
+    <SectionWrapper id="experience" label="Experience" heading={t('sectionTitle')}>
+      <Timeline items={experiences} />
+    </SectionWrapper>
   );
 }

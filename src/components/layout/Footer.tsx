@@ -24,29 +24,36 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="border-t border-neutral-200 dark:border-neutral-800">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-        {/* Contact links */}
-        <div className="flex flex-wrap gap-4 sm:gap-6 justify-center">
-          {contactLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              {...(link.external && {
-                target: '_blank',
-                rel: 'noopener noreferrer',
-              })}
-              className="text-sm text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
-            >
-              {link.label}
-            </a>
-          ))}
-        </div>
+    <footer className="border-t border-neutral-200/50 dark:border-neutral-800/50">
+      <div className="max-w-6xl mx-auto px-6 py-12 lg:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+          {/* Name */}
+          <p className="text-sm font-semibold tracking-[0.15em] uppercase text-neutral-900 dark:text-neutral-100 md:text-left text-center">
+            HUNIL PARK
+          </p>
 
-        {/* Copyright */}
-        <p className="mt-6 text-center text-xs text-neutral-400 dark:text-neutral-500">
-          © 2026 {t('copyright')}
-        </p>
+          {/* Links */}
+          <div className="flex gap-6 justify-center">
+            {contactLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                {...(link.external && {
+                  target: '_blank',
+                  rel: 'noopener noreferrer',
+                })}
+                className="text-xs uppercase tracking-[0.08em] text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+
+          {/* Copyright */}
+          <p className="text-xs text-neutral-400 dark:text-neutral-500 md:text-right text-center">
+            © 2026 {t('copyright')}
+          </p>
+        </div>
       </div>
     </footer>
   );

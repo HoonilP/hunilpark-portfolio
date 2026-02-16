@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import Timeline from '@/components/ui/Timeline';
+import SectionWrapper from '@/components/ui/SectionWrapper';
 import type { TimelineItem } from '@/components/ui/Timeline';
 
 export default async function EducationSection() {
@@ -18,40 +19,60 @@ export default async function EducationSection() {
     },
   ];
 
+  const certifications = [
+    t('certifications.computerSkills'),
+    t('certifications.accounting'),
+    t('certifications.fsi'),
+    t('certifications.toeic'),
+  ];
+
+  const activities = [
+    t('activities.bay'),
+    t('activities.aiCourse'),
+  ];
+
   return (
-    <section id="education" className="py-20">
-      <div className="max-w-4xl mx-auto px-4">
-        <h2 className="text-3xl font-bold md:text-4xl mb-8 text-neutral-900 dark:text-neutral-100">
-          {t('sectionTitle')}
-        </h2>
+    <SectionWrapper id="education" label="Education" heading={t('sectionTitle')}>
+      {/* Education Timeline */}
+      <Timeline items={education} />
 
-        {/* Education Timeline */}
-        <Timeline items={education} />
-
-        {/* Certifications & Awards */}
-        <div className="mt-12">
-          <h3 className="text-xl font-semibold mb-4 text-neutral-900 dark:text-neutral-100">
-            {t('certificationsTitle')}
-          </h3>
-          <ul className="space-y-2 text-neutral-600 dark:text-neutral-400">
-            <li>{t('certifications.computerSkills')}</li>
-            <li>{t('certifications.accounting')}</li>
-            <li>{t('certifications.fsi')}</li>
-            <li>{t('certifications.toeic')}</li>
-          </ul>
-        </div>
-
-        {/* Activities */}
-        <div className="mt-12">
-          <h3 className="text-xl font-semibold mb-4 text-neutral-900 dark:text-neutral-100">
-            {t('activitiesTitle')}
-          </h3>
-          <ul className="space-y-2 text-neutral-600 dark:text-neutral-400">
-            <li>{t('activities.bay')}</li>
-            <li>{t('activities.aiCourse')}</li>
-          </ul>
+      {/* Certifications & Awards */}
+      <div className="mt-16">
+        <h3 className="text-xl font-semibold mb-6 text-neutral-900 dark:text-neutral-100">
+          {t('certificationsTitle')}
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {certifications.map((cert, index) => (
+            <div
+              key={index}
+              className="rounded-xl border border-neutral-200 dark:border-neutral-800 p-5 transition-all hover:shadow-sm hover:-translate-y-0.5"
+            >
+              <p className="text-neutral-700 dark:text-neutral-300 text-sm">
+                {cert}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
-    </section>
+
+      {/* Activities */}
+      <div className="mt-16">
+        <h3 className="text-xl font-semibold mb-6 text-neutral-900 dark:text-neutral-100">
+          {t('activitiesTitle')}
+        </h3>
+        <div className="space-y-3">
+          {activities.map((activity, index) => (
+            <div
+              key={index}
+              className="border-l-2 border-primary-500 pl-5 py-2"
+            >
+              <p className="text-neutral-700 dark:text-neutral-300 text-sm">
+                {activity}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </SectionWrapper>
   );
 }

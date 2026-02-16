@@ -9,7 +9,7 @@ export default function Badge({ children, className }: BadgeProps) {
   return (
     <span
       className={cn(
-        'inline-flex items-center text-xs font-medium px-2.5 py-0.5 rounded-md',
+        'inline-flex items-center text-xs font-medium px-3 py-1 rounded-full tracking-wide',
         'bg-neutral-100 text-neutral-700 border border-neutral-200',
         'dark:bg-neutral-800 dark:text-neutral-300 dark:border-neutral-700',
         className

@@ -25,6 +25,22 @@
   --color-primary-500: oklch(0.55 0.15 250);
   --color-primary-600: oklch(0.48 0.16 250);
   --color-primary-700: oklch(0.42 0.16 250);
+
+  /* Museum Surface Colors */
+  --color-surface-light: #f7f5f2;
+  --color-surface-dark: #0f0f0f;
+
+  /* Accent Gold */
+  --color-accent-gold: #b8960c;
+  --color-accent-gold-light: #d4af37;
+
+  /* Animations */
+  --animate-fade-in-up: fade-in-up 0.5s ease-out forwards;
+  --animate-fade-in: fade-in 0.3s ease-out forwards;
+  --animate-slide-in-left: slide-in-left 0.6s ease-out forwards;
+  --animate-slide-in-right: slide-in-right 0.6s ease-out forwards;
+  --animate-scale-in: scale-in 0.5s ease-out forwards;
+  --animate-reveal-line: reveal-line 0.8s ease-out forwards;
 }
 
 @keyframes fade-in-up {
@@ -32,29 +48,74 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-.animate-fade-in-up {
-  animation: fade-in-up 0.5s ease-out forwards;
-}
-
 @keyframes fade-in {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
-.animate-fade-in {
-  animation: fade-in 0.3s ease-out forwards;
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes reveal-line {
+  from { width: 0; }
+  to { width: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-fade-in-up {
+  .animate-fade-in-up,
+  .animate-fade-in,
+  .animate-slide-in-left,
+  .animate-slide-in-right,
+  .animate-scale-in {
     animation: none;
     opacity: 1;
     transform: none;
   }
-  .animate-fade-in {
+  .animate-reveal-line {
     animation: none;
-    opacity: 1;
+    width: 100%;
   }
+}
+
+/* Typography Utilities */
+.heading-display {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.heading-section {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.label-museum {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Section Divider */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, currentColor 20%, currentColor 80%, transparent);
+  opacity: 0.15;
 }
 
 * {

@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
-import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 
 interface Project {
@@ -15,14 +14,14 @@ export default async function ProjectsSection() {
 
   const projects: Project[] = [
     {
-      id: '1',
-      translationKey: 'joshua',
-      techStack: ['Electron', 'Angular', 'FastAPI', 'PostgreSQL', 'KoGPT-2', 'Stripe'],
-    },
-    {
       id: '2',
       translationKey: 'dyCms',
       techStack: ['Next.js', 'NestJS', 'PostgreSQL', 'TypeScript'],
+    },
+    {
+      id: '1',
+      translationKey: 'joshua',
+      techStack: ['Electron', 'Angular', 'FastAPI', 'PostgreSQL', 'KoGPT-2', 'Stripe'],
     },
     {
       id: '3',
@@ -42,48 +41,80 @@ export default async function ProjectsSection() {
   ];
 
   return (
-    <section id="projects" className="py-20">
-      <div className="max-w-5xl mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold mb-8 text-neutral-900 dark:text-neutral-100">
+    <section id="projects" className="py-24 lg:py-32">
+      {/* Section Header */}
+      <div className="max-w-5xl mx-auto px-6 mb-16">
+        <div className="section-divider mb-12 text-neutral-900 dark:text-neutral-100" />
+        <p className="label-museum text-neutral-500 dark:text-neutral-400 mb-4">
+          Collections
+        </p>
+        <h2 className="heading-section text-neutral-900 dark:text-neutral-100">
           {t('sectionTitle')}
         </h2>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project) => (
-            <Link key={project.id} href={`/projects/${project.id}`} className="group">
-              <Card>
-                <div className="w-full aspect-video relative overflow-hidden rounded-t-lg -mx-6 -mt-6 mb-4">
-                  <Image
-                    src={`/projects/${project.id}/thumbnail.webp`}
-                    alt={t(`${project.translationKey}.title`)}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    quality={60}
-                    loading="lazy"
-                    className="object-cover"
-                  />
+      {/* Project Blocks */}
+      <div className="space-y-0">
+        {projects.map((project, index) => {
+          const isEven = index % 2 === 0;
+          return (
+            <Link
+              key={project.id}
+              href={`/projects/${project.id}`}
+              className="group block"
+            >
+              <div className="relative min-h-[60vh] md:min-h-[70vh] lg:min-h-[80vh] overflow-hidden flex items-center">
+                {/* Background Image */}
+                <Image
+                  src={`/projects/${project.id}/hero.webp`}
+                  alt={t(`${project.translationKey}.title`)}
+                  fill
+                  sizes="100vw"
+                  quality={60}
+                  loading="lazy"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+
+                {/* Overlay */}
+                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-300" />
+
+                {/* Card */}
+                <div className="relative z-10 w-full max-w-6xl mx-auto px-6">
+                  <div
+                    className={`max-w-md ${
+                      isEven
+                        ? 'mr-auto'
+                        : 'ml-auto'
+                    }`}
+                  >
+                    <div className="bg-white/90 dark:bg-neutral-900/90 backdrop-blur-sm rounded-xl p-8 shadow-lg transition-all duration-300 group-hover:shadow-2xl group-hover:-translate-y-1">
+                      <span className="label-museum text-neutral-400 dark:text-neutral-500">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                      <h3 className="text-2xl font-bold mt-2 mb-2 text-neutral-900 dark:text-neutral-100">
+                        {t(`${project.translationKey}.title`)}
+                      </h3>
+                      <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-3">
+                        {t(`${project.translationKey}.period`)}
+                      </p>
+                      <p className="text-neutral-700 dark:text-neutral-300 text-sm leading-relaxed mb-5">
+                        {t(`${project.translationKey}.description`)}
+                      </p>
+                      <div className="flex flex-wrap gap-1.5 mb-5">
+                        {project.techStack.map((tech) => (
+                          <Badge key={tech}>{tech}</Badge>
+                        ))}
+                      </div>
+                      <span className="label-museum text-primary-500 dark:text-primary-400 group-hover:tracking-[0.15em] transition-all">
+                        {t('viewDetails')} →
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-xl font-semibold mb-2 text-neutral-900 dark:text-neutral-100">
-                  {t(`${project.translationKey}.title`)}
-                </h3>
-                <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-3">
-                  {t(`${project.translationKey}.period`)}
-                </p>
-                <p className="text-neutral-700 dark:text-neutral-300 mb-4 text-sm leading-relaxed">
-                  {t(`${project.translationKey}.description`)}
-                </p>
-                <div className="flex flex-wrap gap-2 mb-3">
-                  {project.techStack.map((tech) => (
-                    <Badge key={tech}>{tech}</Badge>
-                  ))}
-                </div>
-                <span className="text-sm text-primary-500 dark:text-primary-400 mt-3 inline-block">
-                  {t('viewDetails')}
-                </span>
-              </Card>
+              </div>
             </Link>
-          ))}
-        </div>
+          );
+        })}
       </div>
     </section>
   );

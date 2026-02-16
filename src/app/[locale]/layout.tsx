@@ -33,7 +33,7 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className="font-sans bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 antialiased min-h-screen flex flex-col">
+      <body className="font-sans bg-surface-light dark:bg-surface-dark text-neutral-900 dark:text-neutral-100 antialiased min-h-screen flex flex-col">
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider>
             <Header />

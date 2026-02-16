@@ -23,23 +23,23 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-sm border-b border-neutral-200 dark:border-neutral-800">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <header className="sticky top-0 z-50 bg-white/60 dark:bg-neutral-950/60 backdrop-blur-md">
+      <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
         {/* Logo */}
         <a
           href="/"
-          className="font-bold text-lg text-neutral-900 dark:text-neutral-100 hover:text-neutral-600 dark:hover:text-neutral-400 transition-colors"
+          className="text-sm font-semibold tracking-[0.15em] uppercase text-neutral-900 dark:text-neutral-100 hover:text-neutral-500 dark:hover:text-neutral-400 transition-colors"
         >
-          HI.
+          HUNIL PARK
         </a>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+              className="relative text-xs uppercase tracking-[0.08em] text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors after:absolute after:bottom-[-2px] after:left-0 after:w-0 after:h-px after:bg-current after:transition-all hover:after:w-full"
             >
               {link.label}
             </a>
@@ -47,19 +47,18 @@ export default function Header() {
         </nav>
 
         {/* Actions */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <ThemeToggle />
           <LanguageToggle />
 
           {/* Mobile hamburger */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden rounded-md p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            className="md:hidden rounded-lg p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
             aria-label="Toggle menu"
             aria-expanded={isMenuOpen}
           >
             {isMenuOpen ? (
-              // X icon
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -67,7 +66,7 @@ export default function Header() {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="2"
+                strokeWidth="1.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
@@ -75,7 +74,6 @@ export default function Header() {
                 <line x1="6" y1="6" x2="18" y2="18" />
               </svg>
             ) : (
-              // Hamburger icon
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -83,7 +81,7 @@ export default function Header() {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="2"
+                strokeWidth="1.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
@@ -98,17 +96,19 @@ export default function Header() {
 
       {/* Mobile menu */}
       {isMenuOpen && (
-        <nav className="md:hidden border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 px-4 py-4">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={handleLinkClick}
-              className="block py-2 text-base text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
-            >
-              {link.label}
-            </a>
-          ))}
+        <nav className="md:hidden bg-white/95 dark:bg-neutral-950/95 backdrop-blur-md px-6 py-6">
+          <div className="space-y-1">
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={handleLinkClick}
+                className="block py-3 text-xs uppercase tracking-[0.08em] text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors border-b border-neutral-100 dark:border-neutral-800/50 last:border-0"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
         </nav>
       )}
     </header>
