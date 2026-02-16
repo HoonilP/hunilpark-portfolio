@@ -78,8 +78,8 @@
       "period": "Sep 19-21, 2025"
     },
     "artWar": {
-      "title": "Ministry of Truth (ArtWar)",
-      "description": "AI agent autonomous art tournament platform. OpenClaw-based agents run autonomously on AWS EC2, with a betting system built on nad.fun tokens on the Monad blockchain.",
+      "title": "Ministry of Truth",
+      "description": "AI agent autonomous art tournament platform. OpenClaw-based agents run autonomously on AWS EC2, with the $MOT token launched directly on nad.fun and a betting system on the Monad blockchain.",
       "period": "Feb 9-16, 2026"
     }
   },
@@ -391,15 +391,15 @@
       }
     },
     "artWar": {
-      "title": "Ministry of Truth (ArtWar)",
+      "title": "Ministry of Truth",
       "subtitle": "AI Autonomous Agent Art Tournament",
       "role": "Full-stack Development",
       "teamSize": "4 members (2 Planning, 2 Development)",
       "duration": "Feb 9-16, 2026 (Hackathon)",
       "overview": {
         "title": "Project Overview",
-        "background": "Ministry of Truth (ArtWar) is a project conducted over one week during the Moltiverse Hackathon's Agent+Token Track—an AI art tournament platform where AI agents participate autonomously. An MC (host) agent runs the tournament, AI artists submit artwork matching given topics, two AI judges score submissions, and spectators (users) bet on winners using $MOT tokens via nad.fun on the Monad blockchain. The tournament follows a bracket structure (quarterfinals→semifinals→finals), with all state transitions performed autonomously by agents. The backend uses NestJS + TypeORM + Supabase PostgreSQL, frontend uses Next.js, and agents run on the OpenClaw framework deployed on AWS EC2.",
-        "contribution": "As one of two developers in a 4-member team, I handled full-stack development. This included designing and implementing the NestJS backend API (tournament state machine, betting system, judging system), building 5 Next.js frontend pages (Home, Chamber, Betting, Leaderboard, Admin), developing the Solidity smart contract (MOTBetting.sol) and deploying it to Monad mainnet, and designing behavior rules for 3 OpenClaw agents (MC, Judge A, Judge B) along with their EC2 deployment and operations."
+        "background": "Ministry of Truth is a project conducted over one week during the Moltiverse Hackathon's Agent+Token Track—an AI art tournament platform where AI agents participate autonomously. An MC (host) agent runs the tournament, AI artists submit artwork matching given topics, two AI judges score submissions, and spectators (users) bet on winners on the Monad blockchain. We launched the $MOT token directly on nad.fun to establish the project's token economy. The tournament follows a bracket structure (quarterfinals→semifinals→finals), with all state transitions performed autonomously by agents. The backend uses NestJS + TypeORM + Supabase PostgreSQL, frontend uses Next.js, and agents run on the OpenClaw framework deployed on AWS EC2.",
+        "contribution": "As one of two developers in a 4-member team, I handled full-stack development. This included designing and implementing the NestJS backend API (tournament state machine, betting system, judging system), building 5 Next.js frontend pages (Home, Chamber, Betting, Leaderboard, Admin), developing the Solidity smart contract (MOTBetting.sol) and deploying it to Monad mainnet, launching the $MOT token directly on nad.fun, and designing behavior rules for 3 OpenClaw agents (MC, Judge A, Judge B) along with their EC2 deployment and operations."
       },
       "implementation": {
         "title": "Technical Implementation",
@@ -418,8 +418,8 @@
         "feature3": {
           "title": "Monad Blockchain Betting System (Solidity + nad.fun)",
           "problem": "A system was needed for users to predict tournament match winners and bet with MON (Monad native token). Monad is an EVM-compatible chain but as a new L1, documentation and references were scarce. Integration with the nad.fun token ecosystem was also a first. We needed to implement the complete flow: managing betting pools in smart contracts, distributing winnings based on results, and creating bet transactions after wallet connection on the frontend.",
-          "solution": "We wrote the MOTBetting.sol smart contract in Solidity and deployed it to Monad mainnet (Chain ID 143). The contract includes match-specific betting pool management, bet acceptance/closing, and payout calculation and distribution based on results. The frontend Betting page implements UI for users to connect wallets, select winners per match, and bet MON. The backend synchronizes with the smart contract when round results are finalized to trigger payout distribution. We issued the $MOT token on the nad.fun platform to establish the project's token economy.",
-          "result": "A functioning betting system using real MON on Monad mainnet was built. Transparent betting pool management via smart contracts secured user trust, while the frontend delivered a one-click betting experience. The $MOT token issued on nad.fun enabled building a token economy for the tournament ecosystem."
+          "solution": "We wrote the MOTBetting.sol smart contract in Solidity and deployed it to Monad mainnet (Chain ID 143). The contract includes match-specific betting pool management, bet acceptance/closing, and payout calculation and distribution based on results. The frontend Betting page implements UI for users to connect wallets, select winners per match, and bet MON. The backend synchronizes with the smart contract when round results are finalized to trigger payout distribution. We directly launched the $MOT token on nad.fun to establish the project's token economy.",
+          "result": "A functioning betting system using real MON on Monad mainnet was built. Transparent betting pool management via smart contracts secured user trust, while the frontend delivered a one-click betting experience. The $MOT token directly launched on nad.fun enabled building a token economy for the tournament ecosystem."
         }
       },
       "troubleshooting": {
