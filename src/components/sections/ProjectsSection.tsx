@@ -82,7 +82,7 @@ export default async function ProjectsSection() {
                 href={`/projects/${project.id}`}
                 className="group block"
               >
-                <div className="relative min-h-[60vh] md:min-h-[70vh] lg:min-h-[80vh] overflow-hidden flex items-center rounded-t-2xl shadow-2xl">
+                <div className="relative min-h-[60vh] md:min-h-[70vh] lg:min-h-[80vh] overflow-hidden flex items-center rounded-t-2xl shadow-2xl border border-neutral-200/30 dark:border-neutral-700/30">
                   {/* Background Image */}
                   <Image
                     src={`/projects/${project.id}/hero.webp`}
@@ -91,11 +91,11 @@ export default async function ProjectsSection() {
                     sizes="100vw"
                     quality={60}
                     loading="lazy"
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="object-cover"
                   />
 
                   {/* Overlay */}
-                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-300" />
+                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/45 transition-colors duration-300" />
 
                   {/* Card */}
                   <div className="relative z-10 w-full max-w-6xl mx-auto px-6">
