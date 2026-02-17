@@ -8,7 +8,7 @@ export default async function HeroSection() {
   return (
     <section
       id="hero"
-      className="min-h-[90vh] flex flex-col lg:flex-row"
+      className="min-h-[90vh] lg:h-screen flex flex-col lg:flex-row"
     >
       {/* Left: Profile Photo */}
       <div className="relative w-full lg:w-1/2 min-h-[50vh] lg:min-h-[90vh] bg-[#c0c0c0] dark:bg-neutral-800 flex items-end justify-center overflow-hidden">
