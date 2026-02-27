@@ -110,4 +110,4 @@ Requirements for /lab2 media-art 3D interactive portfolio. Each maps to roadmap 
 
 ---
 *Requirements defined: 2026-02-28*
-*Last updated: 2026-02-28 after initial definition*
+*Last updated: 2026-02-28 — traceability confirmed after ROADMAP.md creation*
