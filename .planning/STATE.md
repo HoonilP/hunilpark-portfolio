@@ -23,9 +23,9 @@ See: .planning/PROJECT.md (updated 2026-02-28)
 ## Current Position
 
 Phase: 6 of 11 (Foundation)
-Plan: 1 complete
+Plan: 2 complete
 Status: In progress
-Last activity: 2026-02-28 — Phase 6 Plan 01 complete: /lab2 route with R3F canvas, loading screen, viewport gate
+Last activity: 2026-02-28 — Phase 6 Plan 02 complete: /lab2 Studio header link added, Three.js bundle isolation confirmed, WebGL lifecycle human-verified
 
 Progress: [█░░░░░░░░░] ~4% (v3.0)
 
@@ -75,5 +75,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-28
-Stopped at: Completed 06-01-PLAN.md — /lab2 route infrastructure complete
+Stopped at: Completed 06-02-PLAN.md — /lab2 header navigation + WebGL lifecycle verification complete
 Resume file: None
