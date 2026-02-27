@@ -9,10 +9,10 @@ Requirements for /lab2 media-art 3D interactive portfolio. Each maps to roadmap 
 
 ### Foundation
 
-- [ ] **FOUND-01**: /lab2 라우트가 Next.js App Router에서 한국어/영어 양 로케일로 접근 가능하다
-- [ ] **FOUND-02**: Three.js/R3F 컴포넌트가 SSR 없이 클라이언트에서만 렌더링된다 (dynamic import)
-- [ ] **FOUND-03**: 로딩 화면이 에셋 로드 진행률을 표시하고, 셰이더 사전 컴파일 후 씬을 보여준다
-- [ ] **FOUND-04**: 뷰포트 1024px 미만에서 "데스크톱에서 보세요" 메시지를 표시한다
+- [x] **FOUND-01**: /lab2 라우트가 Next.js App Router에서 한국어/영어 양 로케일로 접근 가능하다
+- [x] **FOUND-02**: Three.js/R3F 컴포넌트가 SSR 없이 클라이언트에서만 렌더링된다 (dynamic import)
+- [x] **FOUND-03**: 로딩 화면이 에셋 로드 진행률을 표시하고, 셰이더 사전 컴파일 후 씬을 보여준다
+- [x] **FOUND-04**: 뷰포트 1024px 미만에서 "데스크톱에서 보세요" 메시지를 표시한다
 - [ ] **FOUND-05**: /lab2 ↔ 메인 사이트 간 반복 이동 시 WebGL 컨텍스트 누수가 없다
 
 ### Scroll & Camera
@@ -74,10 +74,10 @@ Requirements for /lab2 media-art 3D interactive portfolio. Each maps to roadmap 
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FOUND-01 | Phase 6 | Pending |
-| FOUND-02 | Phase 6 | Pending |
-| FOUND-03 | Phase 6 | Pending |
-| FOUND-04 | Phase 6 | Pending |
+| FOUND-01 | Phase 6 | Complete |
+| FOUND-02 | Phase 6 | Complete |
+| FOUND-03 | Phase 6 | Complete |
+| FOUND-04 | Phase 6 | Complete |
 | FOUND-05 | Phase 6 | Pending |
 | SCRL-01 | Phase 7 | Pending |
 | SCRL-02 | Phase 7 | Pending |

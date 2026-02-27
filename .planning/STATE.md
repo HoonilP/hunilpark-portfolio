@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-28)
 ## Current Position
 
 Phase: 6 of 11 (Foundation)
-Plan: — (not yet planned)
-Status: Ready to plan
-Last activity: 2026-02-28 — v3.0 roadmap created (phases 6-11, 28 requirements mapped)
+Plan: 1 complete
+Status: In progress
+Last activity: 2026-02-28 — Phase 6 Plan 01 complete: /lab2 route with R3F canvas, loading screen, viewport gate
 
-Progress: [░░░░░░░░░░] 0% (v3.0)
+Progress: [█░░░░░░░░░] ~4% (v3.0)
 
 ## Performance Metrics
 
@@ -43,6 +43,10 @@ Recent decisions affecting current work:
 - [v3.0 init]: 단일 Canvas 생존 패턴 — 절대 조건부 렌더링 금지, route exit 시 dispose
 - [v3.0 init]: 스크롤 권한 단일화 — Lenis 단독 사용, GSAP ScrollControls 혼용 금지
 - [v3.0 init]: 애니메이션 값은 useRef, 이산 이벤트만 useState
+- [06-01]: useProgress (drei) for loading screen — avoids fake timer, shows real progress percentage
+- [06-01]: useViewportWidth returns null on server — prevents hydration mismatch on viewport gate
+- [06-01]: 800ms minimum loading screen display — ensures percentage briefly visible with empty scene
+- [06-01]: LoadingScreen shows number only, no label text — minimal aesthetic per plan
 
 ### Pending Todos
 
@@ -56,5 +60,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-28
-Stopped at: v3.0 roadmap created, ready to plan Phase 6
+Stopped at: Completed 06-01-PLAN.md — /lab2 route infrastructure complete
 Resume file: None
