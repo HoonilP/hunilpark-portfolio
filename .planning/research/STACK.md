@@ -1,388 +1,273 @@
-# Technology Stack
+# Stack Research
 
-**Project:** Frontend Developer Portfolio Website
-**Researched:** 2026-02-11
-**Target:** Korean big tech companies (clean, precise, skill-showcase focus)
+**Domain:** Media-art style 3D interactive portfolio (/lab2 milestone)
+**Researched:** 2026-02-28
+**Confidence:** HIGH (versions npm-verified; integration patterns confirmed via official sources)
 
-## Recommended Stack
+---
 
-### Core Framework
-| Technology | Version | Purpose | Why | Confidence |
-|------------|---------|---------|-----|------------|
-| Next.js | 15.5+ (stable) | React framework with App Router | Industry standard for production apps in 2026. App Router is the default, provides Server Components for zero-bundle-size benefits (20%+ bundle reduction), automatic code splitting, and best-in-class TypeScript support. Next.js 16 is available but 15.5 is latest stable with Turbopack in beta. | HIGH |
-| React | 19.2.4 | UI library | React 19 stable since Dec 2024, required for Next.js 15+. Server Components are production-ready and dramatically reduce client-side JavaScript. | HIGH |
-| TypeScript | 5.9.3 | Type safety | Latest stable version. Next.js 15.5 brings major TS improvements including typed routes (stable), route export validation, and automatic PageProps/LayoutProps generation. Essential for enterprise-quality code. | HIGH |
+## Scope
 
-**Rationale:** Next.js 15 with App Router is the 2026 standard for production React apps. Server Components reduce bundle size by 20-30%, automatic code splitting improves performance, and the framework is battle-tested (powers vercel.com, v0.app, nextjs.org with 1.2B+ requests). For a portfolio targeting Korean big tech, this demonstrates knowledge of current best practices.
+This document covers only the **new additions** needed for v3.0 `/lab2`. The following are already
+installed and validated — do not re-research or reinstall:
 
-**Version note:** Next.js 15.5 is recommended over 16.x (released Oct 2025) as 15.5 is the latest stable with production-proven Turbopack support. Version 16 is available but may have fewer battle-tested production deployments.
+| Already Installed | Version |
+|---|---|
+| `three` | ^0.182.0 |
+| `@react-three/fiber` (R3F) | ^9.5.0 |
+| `@react-three/drei` | ^10.7.7 |
+| `gsap` | ^3.14.2 |
+| `@gsap/react` | ^2.1.2 |
+| `@types/three` | ^0.182.0 |
 
-### Styling
-| Technology | Version | Purpose | Why | Confidence |
-|------------|---------|---------|-----|------------|
-| Tailwind CSS | 4.1.18 | Utility-first CSS framework | v4.0 released early 2025 with 5x faster full builds, 100x faster incremental builds. Config moved from JS to CSS (modern approach). Requires Safari 16.4+, Chrome 111+, Firefox 128+ (acceptable for 2026). | HIGH |
-| clsx | 2.x | Conditional class utility | Tiny (239B), faster than classnames. Standard utility for conditional styling. | HIGH |
-| tailwind-merge | 2.x | Tailwind class conflict resolver | Automatically handles overlapping Tailwind classes. Essential for component libraries. Combine with clsx in `cn()` utility. | HIGH |
+---
 
-**PostCSS setup:** Tailwind v4 requires `@tailwindcss/postcss` package (PostCSS plugin moved to separate package). Configure via `postcss.config.mjs`.
+## Recommended Stack — New Additions
 
-**Why NOT Tailwind v3:** Version 4 provides 5-100x faster builds and modern CSS-based configuration. Performance gains are significant for development velocity.
+### Core: Scroll & Motion Layer
 
-**Styling philosophy for portfolio:**
-- Use Tailwind for utility classes and responsive design
-- Leverage CSS variables for theme customization (Tailwind v4's native approach)
-- Minimal custom CSS (demonstrates Tailwind mastery)
-- Focus on typography, spacing, layout precision (not flashy animations)
+| Technology | Version (verified) | Purpose | Why Recommended |
+|---|---|---|---|
+| `motion` (formerly framer-motion) | ^12.34.3 | DOM micro-interactions, scroll-linked UI animations, page entrance sequences | The package was rebranded to `motion` at v12; imports from `motion/react`. Fully React 19 compatible at this version. Provides `useScroll`, `useTransform`, `useMotionValue` for scroll-driven DOM animations — the right tool for 2D overlay UI, project card reveals, and text animations layered on top of the 3D canvas. |
+| `lenis` | ^1.3.17 | Smooth scroll normalization | Replaces browser native scroll with eased, physics-based scroll that feeds consistently into both GSAP ScrollTrigger and R3F scroll progress. The `@studio-freight/lenis` package is deprecated — the canonical package is now just `lenis`. Use `lenis/react` sub-path for the `ReactLenis` wrapper. |
 
-### Animation (Minimal)
-| Technology | Version | Purpose | When to Use | Confidence |
-|------------|---------|---------|-------------|------------|
-| CSS Animations | Native | Simple transitions, hover effects, fades | Default choice. Faster load, smaller bundle, smoother performance. Use for 90% of effects. | HIGH |
-| Framer Motion | 11.x (if needed) | Complex gesture-based or physics animations | ONLY if you need spring physics, gesture handlers, or complex state-driven motion. For portfolio: likely unnecessary. | MEDIUM |
+**Why GSAP ScrollTrigger (already installed) over CSS Scroll-Driven Animations API:** GSAP ScrollTrigger
+has broad browser support and integrates directly with both the R3F render loop and Lenis. The native
+CSS Scroll-Driven Animations API lacks sufficient browser coverage as of early 2026 and cannot drive
+Three.js scene state. Continue using GSAP 3 (already installed) — no version change needed.
 
-**Rationale:** For a portfolio emphasizing "clean, precise" design over "flashy animations," CSS animations are superior:
-- Zero bundle size (Framer Motion adds ~50kb)
-- Better performance (native browser APIs)
-- Simpler to maintain
-- Demonstrates CSS mastery
+**Why `motion` for DOM and GSAP for 3D/scroll pin:** They solve different problems and compose well.
+`motion` handles 2D DOM elements (text reveals, card fades, overlay transitions) with a declarative
+React API. GSAP ScrollTrigger handles scroll-pinning, scene sequencing, and Three.js uniform
+animation with timeline control. Mixing them is the de-facto pattern in 3D portfolio sites (confirmed
+by multiple community examples and official Motion docs).
 
-**When to add Framer Motion:** Only if you need layout animations, drag interactions, or complex spring physics. For simple entrance animations, fades, and hover effects, pure CSS is faster and lighter.
+---
 
-### Internationalization (i18n)
-| Technology | Version | Purpose | Why | Confidence |
-|------------|---------|---------|-----|------------|
-| next-intl | 4.8.2 | i18n for Next.js App Router | Built specifically for App Router (react-i18next is Pages Router legacy). Industry standard for Next.js i18n in 2026. Simple setup, automatic route discovery, Server Component support. Used by Node.js official website. | HIGH |
+### Core: R3F Post-Processing & Visual Effects
 
-**Why NOT react-i18next:** next-i18next (the Next.js wrapper) is not compatible with App Router. Maintainers officially recommend react-i18next for App Router, but next-intl is simpler and more integrated.
+| Technology | Version (verified) | Purpose | Why Recommended |
+|---|---|---|---|
+| `@react-three/postprocessing` | ^3.0.4 | WebGL post-processing effects (bloom, depth-of-field, chromatic aberration, noise, vignette) | The canonical R3F post-processing wrapper around pmndrs/postprocessing. Version 3.x has peer deps `@react-three/fiber ^9.0.0` and `three >= 0.156.0` — both satisfied by the existing stack. Single `<EffectComposer>` wraps all effects; automatically merges passes for performance. Essential for the media-art aesthetic (bloom on particle glows, DoF for depth, vignette for cinematic framing). |
 
-**Setup:**
-- Plugin integrates with Next.js build/runtime
-- JSON-based translations (simple, no complex namespace configuration)
-- Top-level `[locale]` dynamic segment for routing
-- Works seamlessly with Server Components (no hydration issues)
+**Effects available in `@react-three/postprocessing` 3.x (use as needed):**
+- `<Bloom>` — glow on emissive materials and particles (core media-art effect)
+- `<DepthOfField>` — bokeh blur to focus/defocus scene elements
+- `<ChromaticAberration>` — RGB split for glitch/analog aesthetic
+- `<Vignette>` — dark edges for cinematic framing
+- `<Noise>` — film grain overlay for texture
+- `<SMAA>` — anti-aliasing (preferred over MSAA with post-processing)
 
-**For Korean/English:**
-```
-├── messages/
-│   ├── ko.json
-│   └── en.json
-├── [locale]/
-│   ├── layout.tsx
-│   └── page.tsx
-```
+---
 
-### Deployment
-| Technology | Cost | Purpose | Why | Confidence |
-|------------|------|---------|-----|------------|
-| Vercel | Free tier sufficient | Next.js deployment platform | Zero-config deployment, built by Next.js creators, automatic preview URLs, edge functions. Free tier: unlimited projects, 100GB bandwidth/month. For portfolio (low traffic), free tier is enough. | HIGH |
-| Cloudflare Pages | Free (unlimited) | Alternative deployment | Unlimited bandwidth/requests on free tier, edge network performance, no commercial-use restriction. Better free tier than Vercel. | HIGH |
-| Netlify | Free tier available | Alternative deployment | Strong Vercel alternative, more generous free tier, good DX. | MEDIUM |
+### Supporting: Math & Shader Utilities
 
-**Recommendation:** Start with **Vercel** (easiest, zero config) or **Cloudflare Pages** (better free tier). Both provide:
-- Automatic deployments from Git
-- Preview URLs for PRs
-- Edge network (fast global delivery)
-- Custom domains
-- SSL certificates
+| Library | Version (verified) | Purpose | When to Use |
+|---|---|---|---|
+| `maath` | ^0.10.8 | R3F math helpers: easing functions, random distributions, geometry helpers | Use for `easing.dampE()` (smooth exponential dampening in the `useFrame` loop), `random.inSphere()` (particle distribution), `geometry.mergeVertices()`. Part of the pmndrs ecosystem, designed for R3F idioms. |
 
-**Why NOT self-hosted:** For a portfolio, managed platforms provide better DX and performance. Self-hosting adds complexity without benefit unless demonstrating DevOps skills.
+**Shader noise:** Do NOT add a noise library package. Write noise GLSL inline using the canonical
+Simplex noise GLSL snippet (public domain, ~30 lines). `@react-three/drei`'s `shaderMaterial` helper
+handles shader compilation. Adding `glsl-noise` (abandoned, 12 years old) or `gl-noise` introduces
+unnecessary dependency risk for functionality that ships as trivial inline GLSL.
 
-### Dev Tools
-| Tool | Version | Purpose | Why | Confidence |
-|------|---------|---------|-----|------------|
-| Biome | 2.x (stable) | Linting & formatting | 10-25x faster than ESLint+Prettier, single tool (zero config), 97% Prettier-compatible. Rust-based, ships as single binary. Next.js 15.5 offers Biome in `create-next-app`. | HIGH |
-| ESLint | 9.x (fallback) | Linting | If you need specific plugins Biome doesn't support. More ecosystem maturity. | MEDIUM |
-| Husky | 9.x | Git hooks | Industry standard for pre-commit hooks. Automate linting, formatting, tests before commit. | HIGH |
-| lint-staged | 15.x | Run linters on staged files | Performance optimization (only lint changed files). Pairs with Husky. | HIGH |
+**Custom GLSL imports:** Use Webpack raw-loader or inline template literals for GLSL. Drei's
+`shaderMaterial` accepts template literal shader strings natively — no build plugin needed.
 
-**Biome vs ESLint+Prettier in 2026:**
-- Biome is the modern choice (faster, simpler, all-in-one)
-- ESLint still has larger plugin ecosystem
-- For new projects: Biome is recommended unless you need specific ESLint plugins
+---
 
-**Next.js 15.5 deprecation note:** `next lint` command is deprecated, removed in Next.js 16. Explicit linting config required (ESLint or Biome).
+### Supporting: Drei Helpers (already installed — specific APIs to use)
 
-**Git hooks setup:**
-```json
-{
-  "scripts": {
-    "lint": "biome check",
-    "format": "biome format --write",
-    "prepare": "husky"
-  }
-}
-```
+`@react-three/drei` ^10.7.7 is already installed. The following APIs are specifically needed for /lab2:
 
-Pre-commit hook runs Biome on staged files only (fast feedback loop).
+| Drei API | Purpose |
+|---|---|
+| `<shaderMaterial>` (via `extend`) | Custom GLSL materials for particle systems and distortion effects |
+| `<Points>` / `<PointMaterial>` | Efficient particle rendering (use with `useFrame` for animation) |
+| `<Float>` | Gentle floating animation for 3D objects (zero-code hover feel) |
+| `<Environment>` | IBL environment map for realistic material reflections |
+| `<Text>` | 3D SDF text rendering (for typographic 3D elements) |
+| `<ScrollControls>` | R3F-native scroll rig — useful if 3D scroll is managed entirely within R3F canvas |
+| `<useProgress>` | Loading progress for asset preload screen |
+| `<PerspectiveCamera>` | Declarative camera control |
 
-### Package Manager
-| Tool | Performance | Purpose | When to Use | Confidence |
-|------|-------------|---------|-------------|------------|
-| pnpm | 3.7x faster than npm | Disk-efficient package manager | Recommended for new projects. Saves disk space (global store), faster installs, better monorepo support. | HIGH |
-| Bun | 22x faster than npm | All-in-one runtime + package manager | Bleeding edge. Stable for production as of 2026, but ecosystem maturity still growing. Use if you want maximum performance. | MEDIUM |
-| npm | Baseline | Default package manager | Perfectly fine for small projects. Maximum compatibility. | HIGH |
+**Note on `<ScrollControls>` vs external Lenis:** Use `<ScrollControls>` (drei) when scroll is
+canvas-only. Use Lenis + GSAP when scroll also drives DOM elements outside the canvas (e.g., text
+overlays, project cards). For /lab2's hybrid layout (3D canvas + DOM overlay panels), Lenis + GSAP is
+the correct choice.
 
-**Recommendation for portfolio:** Use **pnpm** or **npm**
-- **pnpm:** Better performance, modern best practice, shows awareness of tooling
-- **npm:** Simpler, zero learning curve, perfectly adequate for portfolio size
-- **Bun:** Skip unless you want to showcase bleeding-edge tech (may raise questions in interviews)
+---
 
-### Build & Bundling
-| Technology | Purpose | Status | Why | Confidence |
-|------------|---------|--------|-----|------------|
-| Turbopack | Next.js bundler | Beta (production-ready) | Built into Next.js 15.5. Use `next build --turbopack` for 2-5x faster builds. Powers vercel.com, v0.app, nextjs.org (1.2B+ requests). | MEDIUM |
-| Webpack | Next.js bundler (default) | Stable | Default in Next.js 15. More battle-tested, better bundle optimization in some cases. | HIGH |
+## What NOT to Add
 
-**Recommendation:** Use **Webpack** (default) for now. Turbopack is beta but production-ready. Switch to Turbopack if build times become an issue or to demonstrate awareness of cutting-edge tools.
+| Avoid | Why | Use Instead |
+|---|---|---|
+| `three-stdlib` | Redundant — drei wraps the useful parts. Adds bundle weight. | Use `@react-three/drei` directly |
+| `@studio-freight/lenis` | Deprecated. Package renamed to `lenis`. | `lenis` (bare package name) |
+| `framer-motion` (old import) | Rebranded to `motion` at v12. Install as `motion`, import from `motion/react`. | `motion` package |
+| `framer-motion-3d` | Redundant — `motion/react-three-fiber` is the current path, included in `motion` package | `motion` (includes 3D support) |
+| `react-spring` / `@react-spring/three` | Duplicates what GSAP + motion already provide. Two spring libraries in one project is confusion. | Use GSAP for scroll-driven, `motion` for UI springs |
+| `ScrollSmoother` (GSAP Club) | Requires GSAP Club subscription. Lenis is free, better maintained, and more composable. | `lenis` |
+| `locomotive-scroll` | Actively declining in maintenance. Lenis is the 2025 successor from the same ecosystem. | `lenis` |
+| `cannon-es` / `rapier` physics | Physics engine adds significant complexity and bundle weight. /lab2 is visual, not interactive physics. | Custom spring math with `maath` + `useFrame` |
+| `glsl-noise` (npm) | Abandoned 12 years ago. | Inline GLSL snippet (no dependency) |
+| `three-noise` | Unnecessary dependency for functionality that is 30 lines of inline GLSL. | Inline GLSL snippet |
+| `@react-three/a11y` | Accessibility for 3D is desktop-only context here; adds bundle size. Skip for /lab2. | — |
 
-## Alternatives Considered
-
-| Category | Recommended | Alternative | Why Not |
-|----------|-------------|-------------|---------|
-| Framework | Next.js 15 | Remix, Astro | Next.js is industry standard, has largest ecosystem, best for React-heavy apps. Remix is great but smaller adoption. Astro is for content sites. |
-| Styling | Tailwind v4 | CSS Modules, styled-components | Tailwind is 2026 standard. CSS Modules are fine but verbose. styled-components has performance overhead with Server Components. |
-| i18n | next-intl | react-i18next | next-intl built for App Router. react-i18next requires more config and is better for Pages Router. |
-| Linting | Biome | ESLint + Prettier | Biome is 10-25x faster, simpler config, single tool. ESLint+Prettier still valid for plugin ecosystem. |
-| Deployment | Vercel | Netlify, Cloudflare Pages, Railway | Vercel is zero-config for Next.js. Cloudflare Pages has better free tier. Railway is overkill for static portfolio. |
-| Animation | CSS Animations | Framer Motion, GSAP | CSS is lighter, faster, simpler. Framer Motion adds 50kb for features you likely won't use. GSAP is overkill. |
+---
 
 ## Installation
 
-### Initial Setup
 ```bash
-# Create Next.js project with Biome
-npx create-next-app@latest
+# Smooth scroll (Lenis)
+npm install lenis --cache /tmp/npm-cache-temp
 
-# During setup, choose:
-# - TypeScript: Yes
-# - ESLint or Biome: Biome (recommended)
-# - Tailwind CSS: Yes
-# - App Router: Yes
-# - Turbopack: No (use default for now)
+# Motion (framer-motion rebranded, React 19 compatible)
+npm install motion --cache /tmp/npm-cache-temp
+
+# Post-processing effects
+npm install @react-three/postprocessing --cache /tmp/npm-cache-temp
+
+# Math helpers (R3F ecosystem)
+npm install maath --cache /tmp/npm-cache-temp
 ```
 
-### Core Dependencies
+**Single install command:**
 ```bash
-# Package manager (choose one)
-npm install next@latest react@latest react-dom@latest
-
-# Or with pnpm
-pnpm add next@latest react@latest react-dom@latest
-
-# Tailwind utilities
-npm install clsx tailwind-merge
-
-# i18n
-npm install next-intl
+npm install lenis motion @react-three/postprocessing maath --cache /tmp/npm-cache-temp
 ```
 
-### Dev Dependencies
-```bash
-npm install -D @tailwindcss/postcss postcss
+---
 
-# Git hooks (optional but recommended)
-npm install -D husky lint-staged
+## Alternatives Considered
 
-# Initialize Husky
-npx husky init
-```
+| Recommended | Alternative | When Alternative is Better |
+|---|---|---|
+| `lenis` | Native browser scroll | When no smooth-scroll UX is needed — but for media-art feel, Lenis is non-negotiable |
+| `lenis` | `ScrollSmoother` (GSAP Club) | If already paying for GSAP Club membership — feature-equivalent but costs money |
+| `motion` | Pure GSAP for DOM animations | If the team only wants one animation system — GSAP can animate DOM; but motion/react declarative API is faster to write for React component trees |
+| `@react-three/postprocessing` | Manual Three.js EffectComposer | Direct Three.js control — but the R3F wrapper handles pass merging automatically and is production-tested |
+| `maath` | Hand-written math utilities | If only 1-2 functions are needed — then inline the math; but maath is tiny and covers the full R3F math toolkit |
 
-### Tailwind CSS v4 Setup
-```bash
-# Install Tailwind v4 and PostCSS plugin
-npm install tailwindcss@next @tailwindcss/postcss
-```
+---
 
-**postcss.config.mjs:**
-```js
-export default {
-  plugins: {
-    '@tailwindcss/postcss': {},
-  },
-};
-```
+## Integration Points with Existing Setup
 
-**app/globals.css:**
-```css
-@import "tailwindcss";
-```
+### Lenis + GSAP ScrollTrigger (the canonical sync pattern)
 
-### next-intl Setup
-```bash
-# Install next-intl
-npm install next-intl
-
-# Create plugin wrapper in next.config.ts
-```
-
-## Configuration Files
-
-### next.config.ts
 ```typescript
-import createNextIntlPlugin from 'next-intl/plugin';
+// providers/SmoothScrollProvider.tsx  (new file — 'use client')
+import { ReactLenis, useLenis } from 'lenis/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { gsap } from 'gsap';
+import { useEffect } from 'react';
 
-const withNextIntl = createNextIntlPlugin();
+gsap.registerPlugin(ScrollTrigger);
 
-const nextConfig = {
-  // Enable typed routes (stable in 15.5)
-  typedRoutes: true,
-};
+export function SmoothScrollProvider({ children }: { children: React.ReactNode }) {
+  const lenis = useLenis(({ scroll }) => {
+    // Keep ScrollTrigger in sync with Lenis scroll position
+    ScrollTrigger.update();
+  });
 
-export default withNextIntl(nextConfig);
-```
+  useEffect(() => {
+    // Hook Lenis RAF into GSAP ticker
+    gsap.ticker.add((time) => {
+      lenis?.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
+    return () => gsap.ticker.remove((time) => lenis?.raf(time * 1000));
+  }, [lenis]);
 
-### biome.json (if using Biome)
-```json
-{
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-  "organizeImports": {
-    "enabled": true
-  },
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "recommended": true
-    }
-  },
-  "formatter": {
-    "enabled": true,
-    "indentStyle": "space",
-    "indentWidth": 2
-  }
+  return <ReactLenis root>{children}</ReactLenis>;
 }
 ```
 
-### package.json scripts
-```json
-{
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "biome check",
-    "lint:fix": "biome check --write",
-    "format": "biome format --write .",
-    "type-check": "tsc --noEmit"
-  }
-}
+### motion/react with scroll progress from Lenis
+
+```typescript
+// In any 'use client' component
+import { useScroll, useTransform, motion } from 'motion/react';
+
+// useScroll tracks DOM scroll — compatible with Lenis since Lenis drives window scroll
+const { scrollYProgress } = useScroll();
+const opacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
+
+return <motion.div style={{ opacity }}>Content</motion.div>;
 ```
 
-### .husky/pre-commit (Git hooks)
-```bash
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+### R3F Canvas + Post-Processing
 
-npx lint-staged
+```typescript
+// LabScene2.tsx (new component, SSR-disabled via next/dynamic)
+import { EffectComposer, Bloom, Vignette, ChromaticAberration } from '@react-three/postprocessing';
+import { BlendFunction } from 'postprocessing';
+
+// Inside <Canvas>:
+<EffectComposer>
+  <Bloom luminanceThreshold={0.9} intensity={1.5} mipmapBlur />
+  <Vignette eskil={false} offset={0.1} darkness={0.5} />
+  <ChromaticAberration blendFunction={BlendFunction.NORMAL} offset={[0.002, 0.002]} />
+</EffectComposer>
 ```
 
-### lint-staged.config.js
-```js
-module.exports = {
-  '*.{js,jsx,ts,tsx}': ['biome check --write'],
-};
+### Next.js SSR Guard (same pattern as /lab)
+
+```typescript
+// app/[locale]/lab2/page.tsx
+import dynamic from 'next/dynamic';
+
+const Lab2Scene = dynamic(() => import('@/components/lab2/Lab2Scene'), {
+  ssr: false,           // THREE.js requires window — must disable SSR
+  loading: () => <LoadingScreen />,
+});
 ```
 
-## Anti-Patterns to Avoid
+---
 
-### Don't Use Outdated Patterns
-- **Pages Router:** App Router is the standard in 2026
-- **next-i18next:** Not compatible with App Router
-- **CSS-in-JS (emotion, styled-components):** Poor Server Component compatibility, runtime overhead
-- **Framer Motion for simple effects:** Adds 50kb for animations CSS handles natively
+## Version Compatibility
 
-### Don't Over-Engineer
-- **Global state (Redux, Zustand) for static content:** Portfolio likely doesn't need client state management
-- **Complex animation libraries:** CSS handles 90% of portfolio animations
-- **Backend frameworks:** Portfolio is static/SSG, doesn't need Express/Fastify
-- **Docker/K8s:** Deployment platforms handle this; self-hosting adds complexity
+| Package | Version | Compatible With | Notes |
+|---|---|---|---|
+| `@react-three/postprocessing` | ^3.0.4 | `@react-three/fiber ^9.0.0`, `three >= 0.156.0` | Peer deps confirmed via npm. Existing three@0.182 and R3F@9.5 satisfy requirements. |
+| `motion` | ^12.34.3 | React 19 | React 19 support added at v12. Import from `motion/react`, not `framer-motion`. |
+| `lenis` | ^1.3.17 | Next.js App Router, React 19 | Use `'use client'` directive. React sub-path: `lenis/react`. |
+| `maath` | ^0.10.8 | `@react-three/fiber`, `three` | pmndrs package, same ecosystem as drei/R3F — no conflicts. |
 
-### Don't Use Legacy Tools
-- **Prettier (alone):** Biome combines linting + formatting, 10x faster
-- **Webpack config tweaking:** Next.js abstracts this; custom config is rarely needed
-- **npm (if performance matters):** pnpm is 3.7x faster with same compatibility
+---
 
-## Browser Support
+## Stack Patterns by Variant
 
-**Tailwind CSS v4 requirements:**
-- Safari 16.4+
-- Chrome 111+
-- Firefox 128+
+**If the scroll experience is purely inside the R3F canvas (no DOM text overlays):**
+- Use `<ScrollControls>` from `@react-three/drei` instead of Lenis
+- Simpler setup, no Lenis sync needed
+- Access scroll with `useScroll()` from drei (not motion)
 
-**Implication:** Drops IE11, older Safari. Acceptable for 2026 portfolio targeting modern companies.
+**If the scroll experience drives both the 3D canvas and DOM content panels (recommended for /lab2):**
+- Use Lenis for smooth scroll normalization
+- Feed scroll progress to R3F via a shared ref or Zustand atom
+- Use `motion/react`'s `useScroll` / `useTransform` for DOM elements
+- Use GSAP ScrollTrigger for timeline-based 3D scene transitions
 
-**If you need older browser support:** Use Tailwind v3.4 instead.
+**If a particle system is needed (e.g., floating particles as background):**
+- Use `<Points>` + custom `shaderMaterial` from drei
+- Animate in `useFrame` using `maath`'s `easing.dampE` for smooth lerp
+- Add `<Bloom>` from `@react-three/postprocessing` to make emissive particles glow
 
-## Performance Budget
-
-Target metrics for portfolio site:
-
-| Metric | Target | How to Achieve |
-|--------|--------|----------------|
-| First Contentful Paint (FCP) | < 1.5s | Server Components, minimal client JS, Vercel edge deployment |
-| Largest Contentful Paint (LCP) | < 2.5s | Image optimization (next/image), SSG, CDN delivery |
-| Time to Interactive (TTI) | < 3.5s | Minimize JavaScript bundle, code splitting, Server Components |
-| Total Bundle Size | < 150kb | CSS animations instead of Framer Motion, Server Components reduce client JS by 20-30% |
-
-**Next.js optimizations out of the box:**
-- Automatic code splitting
-- Image optimization (WebP/AVIF conversion)
-- Font optimization (next/font)
-- Server Components (zero bundle size for server-only code)
-
-## Summary
-
-**Core Stack:**
-- Next.js 15.5 + React 19 + TypeScript 5.9
-- Tailwind CSS v4 for styling
-- next-intl for Korean/English i18n
-- CSS animations (no Framer Motion unless needed)
-- Biome for linting/formatting
-- pnpm or npm for package management
-- Vercel or Cloudflare Pages for deployment
-
-**Philosophy:**
-- Modern, battle-tested technologies (not bleeding edge)
-- Performance-first (Server Components, minimal client JS)
-- Clean, maintainable code (TypeScript, Biome, git hooks)
-- Demonstrate 2026 best practices (App Router, typed routes, Tailwind v4)
-
-**For Korean big tech interviews:**
-This stack shows awareness of current industry standards, modern React patterns (Server Components), performance optimization, and clean code practices. It's production-ready, not experimental.
+---
 
 ## Sources
 
-**Next.js & React:**
-- [Next.js 15.5 Release](https://nextjs.org/blog/next-15-5)
-- [Next.js Releases](https://github.com/vercel/next.js/releases)
-- [React 19.2 Release](https://react.dev/blog/2025/10/01/react-19-2)
-- [Next.js 15 & 16 Migration Guide 2026](https://jishulabs.com/blog/nextjs-15-16-features-migration-guide-2026)
+- npm registry (direct `npm show [package] version` calls) — version verification for all packages
+- [pmndrs/react-postprocessing GitHub](https://github.com/pmndrs/react-postprocessing) — v3.0.4 release date (Feb 2025), peer deps
+- [darkroomengineering/lenis GitHub](https://github.com/darkroomengineering/lenis) — v1.3.17, `lenis/react` sub-path confirmed
+- [motion.dev — Motion for React Three Fiber](https://motion.dev/docs/react-three-fiber) — 3D motion integration docs
+- [GSAP Community — Lenis + ScrollTrigger sync pattern](https://gsap.com/community/forums/topic/40426-patterns-for-synchronizing-scrolltrigger-and-lenis-in-reactnext/) — canonical integration pattern
+- [Wawa Sensei — 3D Portfolio with R3F + Framer Motion Scroll](https://wawasensei.dev/tuto/build-a-3D-portfolio-with-react-three-fiber-framer-motion-scroll-animations) — real-world integration pattern
+- [Maxime Heckel — Particles with R3F and Shaders](https://blog.maximeheckel.com/posts/the-magical-world-of-particles-with-react-three-fiber-and-shaders/) — particle system patterns with R3F
+- [Codrops — GPGPU Particle Effect with Three.js (Dec 2024)](https://tympanus.net/codrops/2024/12/19/crafting-a-dreamy-particle-effect-with-three-js-and-gpgpu/) — advanced particle techniques
 
-**Tailwind CSS:**
-- [Tailwind CSS v4.0 Release](https://tailwindcss.com/blog/tailwindcss-v4)
-- [Tailwind CSS Releases](https://github.com/tailwindlabs/tailwindcss/releases)
-- [A dev's guide to Tailwind CSS in 2026](https://blog.logrocket.com/tailwind-css-guide/)
+---
 
-**Internationalization:**
-- [next-intl Documentation](https://next-intl.dev/)
-- [Best i18n Libraries for Next.js App Router 2025](https://medium.com/better-dev-nextjs-react/the-best-i18n-libraries-for-next-js-app-router-in-2025-21cb5ab2219a)
-- [Why I Chose next-intl](https://medium.com/@isurusasanga1999/why-i-chose-next-intl-for-internationalization-in-my-next-js-66c9e49dd486)
-- [Next.js i18n Guide](https://poeditor.com/blog/next-js-i18n/)
-
-**Development Tools:**
-- [Biome vs ESLint 2025](https://medium.com/better-dev-nextjs-react/biome-vs-eslint-prettier-the-2025-linting-revolution-you-need-to-know-about-ec01c5d5b6c8)
-- [Package Managers Comparison 2026](https://pockit.tools/blog/pnpm-npm-yarn-bun-comparison-2026/)
-- [Husky and lint-staged Guide](https://betterstack.com/community/guides/scaling-nodejs/husky-and-lint-staged/)
-
-**Deployment:**
-- [Top Vercel Alternatives 2026](https://www.digitalocean.com/resources/articles/vercel-alternatives)
-- [Best Next.js Hosting Providers 2026](https://makerkit.dev/blog/tutorials/best-hosting-nextjs)
-
-**Performance & Optimization:**
-- [React Server Components 2026 Guide](https://www.grapestechsolutions.com/blog/react-server-components-explained/)
-- [Zero-Bundle-Size React Server Components](https://www.syncfusion.com/blogs/post/zero-bundle-size-react-server-components)
-- [Framer Motion vs CSS Animations 2025](https://medium.com/@theekshanachamodhya/why-framer-motion-still-beats-css-animations-in-2025-16b3d74eccbd)
-- [Do You Still Need Framer Motion?](https://motion.dev/blog/do-you-still-need-framer-motion)
-
-**TypeScript:**
-- [TypeScript 5.7 Release](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-7.html)
-- [TypeScript Releases](https://github.com/microsoft/typescript/releases)
+*Stack research for: Media-art 3D interactive portfolio (/lab2)*
+*Researched: 2026-02-28*

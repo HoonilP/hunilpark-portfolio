@@ -1,339 +1,215 @@
 # Project Research Summary
 
-**Project:** Frontend Developer Portfolio Website
-**Domain:** Portfolio Website (targeting Korean big tech companies)
-**Researched:** 2026-02-11
-**Confidence:** MEDIUM-HIGH
+**Project:** Portfolio /lab2 — Media-Art 3D Interactive Experience
+**Domain:** Scroll-driven 3D WebGL portfolio route (media-art installation style)
+**Researched:** 2026-02-28
+**Confidence:** HIGH
 
 ## Executive Summary
 
-A frontend developer portfolio targeting Korean big tech companies (Samsung, Naver, Kakao) requires a fast, mobile-first, bilingual (Korean/English) showcase of 3-5 polished projects. Recruiters spend approximately 90 seconds evaluating portfolios, prioritizing performance, clear project documentation, and quantifiable technical achievements over flashy animations or generic content.
+The `/lab2` milestone is a single-route, desktop-only media-art experience that proves frontend engineering depth through the experience itself. Research confirms this is a well-understood domain with multiple high-quality Codrops 2025 case studies (Stas Bondar, Roman Jean-Elie, Stefan Vitasović) establishing clear patterns. The winning approach is a scroll-driven architecture where one continuous timeline advances the camera through 6 chapters (intro + 5 projects), with DOM overlay panels for readable content. All project content and images already exist in the codebase — this is purely an interactive visualization layer built on top of established data.
 
-The recommended approach combines Next.js 15.5 with App Router (Server Components for optimal performance), Tailwind CSS v4 (5-100x faster builds), next-intl for bilingual support, and CSS animations over heavy libraries. The architecture follows a hybrid static generation model with locale-based routing, atomic component design, and TypeScript data files rather than a backend database. This stack is battle-tested, demonstrates 2026 best practices, and achieves the sub-3-second load times that 80% of recruiters expect.
+The recommended stack requires only 4 new packages on top of what is already installed (`lenis`, `motion`, `@react-three/postprocessing`, `maath`). The existing `/lab` codebase provides a proven scaffold — sticky canvas pattern, `dynamic()` SSR guard, scroll progress → prop → `useFrame` architecture — that `/lab2` extends rather than reinvents. The core differentiator is scroll-velocity as a consistent visual language: scroll speed drives text distortion, camera feel, and transition intensity throughout, unifying all visual effects under one conceptual direction (the pattern used across all three 2025 SOTD-winning reference portfolios).
 
-Critical risks include: (1) PM-centric project narratives that fail to showcase frontend technical depth, (2) treating internationalization as an afterthought leading to broken Korean layouts, (3) poor Core Web Vitals performance from misconfigured images or request waterfalls, and (4) generic content that doesn't position the developer as a frontend specialist. Mitigation requires technical-first project rewrites, i18n infrastructure from day one, continuous performance monitoring, and focused positioning around React/Next.js expertise.
+The primary risk is performance on mid-range hardware (integrated GPU laptops common in Korean office environments). Research from Awwwards SOTD analysis and Three.js best practices converges on one rule: post-processing effects must be wrapped in `PerformanceMonitor` with adaptive quality from the first effect added, never retrofitted. A secondary risk is Phase 1 architecture decisions — WebGL context management, animation state via refs vs. state, and scroll authority — that are expensive to reverse if gotten wrong. These must be decided and enforced before any scene content is built.
 
 ## Key Findings
 
 ### Recommended Stack
 
-Next.js 15.5 with App Router is the 2026 industry standard for React portfolios, providing Server Components (20-30% bundle size reduction), automatic code splitting, and TypeScript 5.9 support with typed routes. Tailwind CSS v4 offers 5-100x faster builds with modern CSS-based configuration. For Korean/English bilingual support, next-intl is built specifically for App Router (react-i18next is Pages Router legacy). CSS animations are preferred over Framer Motion (saves 50KB) for the clean, fast aesthetic Korean companies expect.
+The existing stack (Three.js 0.182, R3F 9.5, Drei 10.7.7, GSAP 3.14, `@gsap/react`) already covers the core 3D and animation requirements. Four additions are needed. `lenis` (v1.3.17) provides smooth scroll normalization that feeds consistently into both GSAP ScrollTrigger and R3F — use the canonical package name (not the deprecated `@studio-freight/lenis`). `motion` (v12.34.3, the rebranded Framer Motion) handles DOM overlay animations declaratively; it is React 19 compatible and scoped strictly to the DOM layer, imported from `motion/react`. `@react-three/postprocessing` (v3.0.4) wraps the pmndrs post-processing pipeline for bloom, vignette, chromatic aberration, and film grain; peer deps satisfied by the existing stack. `maath` (v0.10.8) provides R3F-idiomatic math helpers for smooth `easing.dampE()` in `useFrame` loops and `random.inSphere()` for particle distribution. Inline GLSL template literals via Drei's `shaderMaterial` cover all shader needs without additional packages.
 
 **Core technologies:**
-- **Next.js 15.5 + React 19 + TypeScript 5.9**: Production-ready Server Components, typed routes, zero-config deployment to Vercel/Cloudflare Pages
-- **Tailwind CSS v4**: 5-100x faster builds, CSS-native config, minimal custom CSS demonstrates mastery
-- **next-intl 4.8.2**: App Router-native i18n with JSON translations, locale routing via `[locale]` segment
-- **CSS Animations (not Framer Motion)**: Native browser performance, zero bundle cost, demonstrates CSS proficiency
-- **Biome (or ESLint)**: 10-25x faster linting/formatting, single tool, recommended by Next.js 15.5
-- **pnpm or npm**: Package management (pnpm 3.7x faster, npm maximum compatibility)
-- **Vercel or Cloudflare Pages**: Zero-config deployment, free tier sufficient, edge network performance
+- `lenis` v1.3.17: Smooth scroll normalization — syncs with GSAP ScrollTrigger via `ScrollTrigger.update()` on each Lenis tick; use `lenis/react` sub-path for `ReactLenis` wrapper
+- `motion` v12.34.3: DOM overlay animations (section titles, content panels, UI transitions) — React 19 compatible; import from `motion/react`, not `framer-motion`
+- `@react-three/postprocessing` v3.0.4: Bloom, vignette, chromatic aberration, film grain — peer deps satisfied by existing R3F 9.5 + Three.js 0.182
+- `maath` v0.10.8: `easing.dampE()` for smooth `useFrame` lerps, `random.inSphere()` for particle distribution — pmndrs ecosystem, no conflicts
+- **Do not add:** `framer-motion-3d` (discontinued, React 19 incompatible), physics engines (Cannon/Rapier — overkill for visual project), noise npm packages (use 30-line inline GLSL), `locomotive-scroll` (use `lenis`), `@studio-freight/lenis` (deprecated)
 
-**Critical versions:**
-- Tailwind v4 requires Safari 16.4+, Chrome 111+, Firefox 128+ (acceptable for 2026 portfolio)
-- React 19 stable since Dec 2024, required for Next.js 15+
-- Next.js 15.5 is latest stable (16.x available but fewer production deployments)
+**Install command:**
+```bash
+npm install lenis motion @react-three/postprocessing maath --cache /tmp/npm-cache-temp
+```
 
 ### Expected Features
 
-Recruiters expect fast load times (<3s), mobile-first responsive design, and bilingual Korean/English toggle as table stakes. Missing any of these results in immediate rejection.
+Research from three Codrops 2025 case studies and Awwwards SOTD analysis establishes two tiers. The table-stakes tier produces a credible experience; the differentiator tier produces an award-worthy one. The critical finding: cohesion beats feature count. One visual language applied consistently (scroll-velocity distortion throughout) beats many isolated effects. Roman Jean-Elie's principle: the best work removes features — every element must earn its presence.
 
-**Must have (table stakes):**
-- **Fast load time (<3s LCP)** — 80% of recruiters check portfolios; slow = unprofessional
-- **Mobile-first responsive design** — 50%+ traffic is mobile; recruiters check on phone
-- **3-5 polished projects with live demos** — Quality over quantity; curation shows judgment
-- **Korean/English language toggle** — Korean big tech expects bilingual fluency demonstration
-- **Project case studies** — Problem → Solution → Results format (800-1500 words); recruiters want problem-solving process
-- **Clear tech stack per project** — Keyword visibility (React, TypeScript, etc.) for recruiter searches
-- **Contact section with multiple methods** — Email, LinkedIn, GitHub minimum; friction = lost opportunity
-- **GitHub profile link** — Validates code quality and contribution consistency
-- **About section (brief)** — 2-3 paragraphs: who you are, what you do, what you're looking for
-- **Skills overview** — Categorized list (Languages, Frameworks, Tools); avoid rating bars
+**Must have (table stakes — P1):**
+- Scroll-driven camera path storytelling — the entire experience spine; 6 chapters, camera flies between waypoints on scroll
+- Loading screen with `useProgress` progress bar — non-negotiable for any 3D site
+- Smooth scroll via Lenis — eliminates mechanical scroll feel; single setup call
+- Character-level text reveals (GSAP SplitText, now free in GSAP 3.x) — highest ROI differentiator at lowest implementation cost
+- HTML overlay content panels for project details — readable DOM text, not 3D geometry
+- Existing 13 WebP images mapped onto 3D texture planes — zero new asset creation required; all images in `/public/images/`
+- Particle field environment (<3k particles) — creates spatial inhabitation without GPU cost
+- `PerformanceMonitor` + adaptive DPR — must not crash integrated GPU in Korean office environments
+- Chapter progress indicator ("3 / 5") — hiring managers must know they've seen everything
+- Desktop-only gate (viewport < 1024px) — explicit "best on desktop" message; no broken mobile 3D
+- Back-to-main navigation — port directly from `/lab`
 
-**Should have (competitive differentiators):**
-- **Quantifiable metrics in projects** — "Reduced load time from 3.2s to 1.1s" proves business impact
-- **Performance documentation** — Lighthouse reports, bundle analysis, optimization decision log
-- **Architecture diagrams** — Component diagrams show system thinking beyond coding
-- **"What I'd Do Next" sections** — 2-3 bullet points per project shows growth mindset
-- **Demo videos or GIFs** — 10-20s videos/optimized GIFs (<500KB) for interactive features
-- **Accessibility compliance details** — WCAG 2.1 AA compliance notes, screen reader testing
-- **Real-world problem solving** — Portfolio projects address actual needs (not just tutorials)
+**Should have (competitive differentiators — P2):**
+- Scroll-velocity text stretch shader (`uVelocity` uniform to headline geometry) — single highest-ROI effect once core is stable
+- Post-processing: bloom + film grain — transforms "3D viewport" into "cinematic experience"; gated by `PerformanceMonitor`
+- Entry intro sequence — 2–3 second GSAP timeline after loading completes, before scroll begins
+- Mouse parallax on idle — interpolated camera drift toward cursor; port directly from `/lab`
+- Transition wipes between chapters — CSS clip-path animated by GSAP; makes chapter metaphor tangible
+- Custom cursor — 40px circle, `mix-blend-mode: difference`
+- Per-project color temperature (ambient/directional light shifts per chapter)
 
-**Defer (v2+):**
-- Open source contribution section — High complexity; requires meaningful contributions first
-- AI tool integration mentions — Low value until standard practice
-- Advanced accessibility documentation — Compliance first, documentation later
-- Architecture diagrams for simple projects — Add when applying to senior roles
-
-**Explicitly avoid (anti-features):**
-- **Overly complex animations** — Distracts from content, hurts performance; recruiters value clarity over flashiness
-- **Splash/loading screens** — Adds friction; users close tabs
-- **Too many projects (>6)** — Dilutes quality; appears unfocused
-- **Skill rating bars** — Subjective, meaningless ("80% React"?); wastes space
-- **Auto-playing music/videos** — Annoying, accessibility fail
-- **Generic content** — "I'm a passionate developer" = everyone says this
-- **Tutorial clones without customization** — Experienced recruiters recognize them
+**Defer to v2+:**
+- Portal / FBO masked reveals — requires fundamentally different render-to-texture pipeline; architecture must accommodate it but do not build it now
+- Per-project GLSL shader signatures — requires per-project shader authoring
+- Audio opt-in — inappropriate for Korean hiring context
+- 3D extruded text for hero moments — only if confirmed GPU headroom
 
 ### Architecture Approach
 
-Next.js App Router portfolios with internationalization follow a server-first hybrid architecture: locale-based routing via `[locale]` dynamic segment, atomic component hierarchy (ui atoms → molecules → section organisms → page composition), static TypeScript data files in `lib/data/` (no database needed), and next-intl middleware for automatic locale detection. Server Components are default; only interactive leaves (ContactForm, LocaleSwitcher, ProjectGallery) use "use client".
+The `/lab2` architecture extends the proven `/lab` scaffold with a clear three-layer system. A Server Component wrapper calls `setRequestLocale()` then renders a Client Component that owns a custom scroll container div. The scroll container derives `scrollProgress: number [0..1]` and `activeScene: SceneKey` from raw scroll position. The R3F Canvas is position-sticky (sticky, top-0, 100vh) and receives `scrollProgress` as a prop; inside Canvas, `CameraRig2` uses `useFrame` to lerp camera toward scroll-progress-derived waypoints with zero React state involvement. DOM overlay (`ContentPanel2`) receives `activeScene` and uses `motion/react` `AnimatePresence` to switch content. Individual scenes are isolated components under a `SceneRouter` for future code splitting.
 
 **Major components:**
-1. **[locale] routing layer** — Middleware detects locale, routes to `/ko` or `/en/`, NextIntlClientProvider wraps layout
-2. **Atomic UI foundation** — Button, Card, Badge primitives in `components/ui/` used by all sections
-3. **Section organisms** — Hero, About, Skills, Projects, Experience, Education, Contact in `components/sections/`
-4. **Data layer** — TypeScript files in `lib/data/` (projects.ts, skills.ts, experience.ts) with locale keys for bilingual content
-5. **Layout components** — Header with LocaleSwitcher, Footer; consistent across all pages
-6. **Page composition** — `app/[locale]/page.tsx` composes sections in order; `app/[locale]/projects/[slug]/page.tsx` for detail pages
-7. **Static generation** — `generateStaticParams` for all locales and project slugs; full static export to HTML/CSS/JS
+1. `lab2/page.tsx` (Server Component wrapper) — calls `setRequestLocale(locale)`, renders `Lab2Client` via `dynamic()` with `ssr: false`
+2. `Lab2Client` / `lab2/page-client.tsx` — owns scroll container ref, derives `scrollProgress` + `activeScene`; `'use client'`
+3. `Lab2Scene` (Canvas wrapper) — sticky Canvas with `dpr={[1, 1.5]}`, `Suspense` boundaries, scene composition
+4. `CameraRig2` — `useFrame` lerp between 6 camera waypoints; all values in `useRef`, zero `setState`
+5. `SceneRouter` — mounts scenes by `sceneKey`; each scene independently deployable; enables `React.lazy()` code splitting
+6. `ContentPanel2` — fixed DOM overlay with `AnimatePresence` keyed by `activeScene`; `motion/react` for transitions
+7. `PostProcessing` — `EffectComposer` with conditional bloom/vignette gated by `PerformanceMonitor`
+8. `HUD` — fixed navigation dots, back link, scroll hint
 
 **Key patterns:**
-- **Server Component default** — Only add "use client" when hitting limitation (hooks, events, browser APIs)
-- **Direct data import** — Server Components import data files directly; no API routes needed
-- **Composition over configuration** — Build pages by composing small, focused components
-- **Locale-aware content** — Data objects have locale keys (`title: { ko: '...', en: '...' }`) for type-safe access
-- **Static generation with dynamic routes** — Use generateStaticParams to pre-render all locale/slug combinations
-
-**Build order:**
-1. **Foundation** — Next.js setup, i18n config, Tailwind, base layout with [locale] routing
-2. **Design system** — UI atoms (Button, Card, Badge), utility functions (cn helper)
-3. **Data layer** — TypeScript interfaces and data files (projects, skills, experience)
-4. **Layout** — Header, Footer, LocaleSwitcher (depends on ui atoms + i18n)
-5. **Sections** — Hero → About → Skills → Projects → Experience → Education → Contact (depends on ui + data + layout)
-6. **Main page** — Compose all sections (depends on sections)
-7. **Project details** — ProjectGallery component, project/[slug]/page.tsx (can parallel with Phase 5-6)
-8. **Polish** — Metadata, loading states, error boundaries, 404 page
+- Scroll container → `scrollProgress` float → prop into Canvas → `useFrame` lerp (same spine as `/lab`)
+- All 60fps animation values in `useRef`; only discrete scene transitions use `useState`
+- Single `<Canvas>` alive for entire /lab2 subtree — never conditionally render the Canvas
+- `dynamic(..., {ssr: false})` guard on all Three.js/R3F/Drei imports
 
 ### Critical Pitfalls
 
-Based on research into portfolio mistakes and Next.js performance issues, the following pitfalls cause rewrites, major issues, or immediate hiring rejection.
+Research from R3F official docs, verified GitHub issues, and GSAP community forums identified 10 pitfalls. The following 5 are the highest-risk architectural decisions that cannot be cheaply reversed:
 
-1. **PM-centric project narratives** — Describing projects as "managed team," "coordinated features" instead of "built X using Y to solve Z." Korean tech companies want frontend technical depth, not PM activities. **Prevention:** Reframe ALL projects with technical focus: frontend challenges, performance optimization, state management decisions, architecture rationale. Include quantifiable metrics.
+1. **WebGL context leak on route navigation** — Keep one `<Canvas>` alive for the entire /lab2 subtree; never conditionally render the Canvas itself; call `renderer.dispose()` + geometry/material disposal on route exit. Chrome allows ~16 WebGL contexts; exceeding the limit silently kills the oldest context. Must be correct from the first commit.
 
-2. **Poor Core Web Vitals performance** — 64% of websites fail all three metrics. Misconfigured next/image (missing sizing), request waterfalls (sequential await), heavy animations, or unoptimized scripts cause slow loads. Korean companies with 224 Mbps infrastructure expect technical excellence. **Prevention:** Configure next/image with proper sizing from start, use Promise.all for parallel requests, monitor Lighthouse during development, target LCP <2.5s.
+2. **setState inside useFrame causes cascading re-renders** — Animation-driving values (camera lerp targets, shader uniforms) must live in `useRef`, updated imperatively in `useFrame`. Only use `useState` for discrete events (scene changed, loading complete). 60fps `setState` causes 60 React reconciler cycles/second independent of GPU load.
 
-3. **Missing or broken bilingual support** — Treating i18n as afterthought results in broken Korean layouts (text longer than English), machine-translated content, or missing translations. Korean recruiters get inferior experience. **Prevention:** Set up next-intl i18n routing from Day 1, design layouts with 30% flex for Korean text, write content in both languages simultaneously (not translate later), use formal honorifics (존댓말) in Korean, test both versions equally.
+3. **Shader compilation stall on first paint** — Call `renderer.compile(scene, camera)` inside the R3F `onCreated` callback to force GPU shader compilation during the loading screen, before revealing the scene. Without this, first frame freezes 2–10 seconds on mid-range hardware.
 
-4. **Skill bars and percentage charts** — "JavaScript 80%" provides zero meaningful information. Signals junior developer or cargo-culting. **Prevention:** Show skills through projects with tangible outcomes, technology tags with context, code quality indicators (TypeScript strict mode, testing coverage, performance metrics). Ban skill percentages explicitly.
+4. **Bundle size explosion from unguarded Three.js imports** — All Three.js/R3F/Drei imports must live exclusively inside components behind `dynamic(..., { ssr: false })`. A single indirect import in a shared module adds 600KB to every page. Verify with `@next/bundle-analyzer` before writing scene code.
 
-5. **Overly complex animations** — Elaborate 3D effects, heavy parallax, cutting-edge visuals slow performance, distract from content, break on mobile. **Prevention:** Animation budget of 2-3 purposeful animations maximum, use hardware-accelerated CSS properties only (transform, opacity), avoid animating layout properties, test on mid-range mobile devices, respect prefers-reduced-motion.
+5. **GSAP ScrollTrigger + Drei ScrollControls double-scroll conflict** — Choose ONE scroll authority (custom scroll div, same as `/lab`). Never add Drei `<ScrollControls>` on top of an existing GSAP ScrollTrigger setup. GSAP should animate Three.js object properties via refs inside `useFrame`, not observe the scroll container via ScrollTrigger's DOM observation.
 
 ## Implications for Roadmap
 
-Based on combined research, the portfolio requires a linear build progression due to dependencies (i18n must precede content, UI atoms must precede sections), with early focus on technical setup and content strategy to avoid rework.
+Based on research, suggested phase structure:
 
-### Phase 1: Foundation & Content Strategy
-**Rationale:** i18n infrastructure, performance monitoring, and project narrative rewrites must happen before building features. Starting with PM-centric content or English-only setup requires expensive rework later.
+### Phase 1: Foundation
+**Rationale:** Architecture decisions here are the most expensive to reverse. WebGL context management, animation state boundaries, bundle isolation, and Next.js/next-intl integration must be verified before any scene content exists. The pitfalls research maps 7 of 10 critical pitfalls directly to this phase.
+**Delivers:** A working `/lab2` route with sticky Canvas, scroll progress wiring, empty scene, loading screen, and HUD — no visual content yet, but full infrastructure validated.
+**Addresses:** Loading screen (P1), back navigation (P1), desktop-only gate (P1), Server/Client wrapper pattern for next-intl
+**Avoids:** WebGL context leak, setState-in-useFrame, bundle bloat, framer-motion-3d incompatibility, next-intl hydration mismatch, shader compilation stall
+**Verification gates:** Navigate /lab2 ↔ / 10× (no canvas blackout); `ANALYZE=true npm run build` (Three.js in /lab2 chunk only); `npm run build` succeeds for both `ko` and `en`
 
-**Delivers:**
-- Next.js 15.5 + TypeScript + Tailwind v4 scaffolding
-- next-intl routing configuration ([locale] segment, middleware)
-- Lighthouse CI and Core Web Vitals tracking setup
-- Project content audited and rewritten with technical focus
-- Bilingual content framework (messages/ko.json, messages/en.json)
+### Phase 2: Scroll Spine + Camera
+**Rationale:** Camera path storytelling is the experience itself — everything else is decoration on top. This phase establishes the `scrollProgress → waypoints → camera lerp` system with 6 real chapter boundaries. Nothing else can be built until this is correct and smooth.
+**Delivers:** Full scroll travel through 6 chapters with camera moving between defined 3D waypoints; cinematic feel; chapter state derivation working.
+**Uses:** Lenis + GSAP ScrollTrigger sync pattern; `CameraRig2` with `useFrame` + `maath.easing.dampE`; `useScrollProgress` + `useSceneState` hooks
+**Avoids:** GSAP + ScrollControls double-scroll conflict; scroll jank from main thread contention; magic-number scroll thresholds (extract to `SCENES` config constant from day 1)
+**Verification gate:** Scroll position maps 1:1 to camera position; Chrome Performance tab shows no Long Tasks during scroll
 
-**Addresses:**
-- Pitfall #1 (PM narratives) via content rewrite before implementation
-- Pitfall #2 (performance) via monitoring from start
-- Pitfall #3 (i18n) via architecture from Day 1
+### Phase 3: 3D Scene Content
+**Rationale:** With camera and scroll proven, each scene can be built incrementally and verified independently. IntroScene first to validate the full pipeline end-to-end; project scenes carry the content payload.
+**Delivers:** 6 populated 3D scenes with particle field environment and project images mapped as texture planes.
+**Addresses:** Scroll-driven 3D environment (P1), existing images as 3D textures (P1), particle field (P1)
+**Implements:** `SceneRouter`, per-scene components, `ParticleMaterial` + `WaveMaterial` shaderMaterials via Drei `extend`
+**Avoids:** One giant scene component (anti-pattern); new `THREE.Vector3()` inside `useFrame` (GC pressure); single Suspense boundary wrapping all assets
+**Build order:** IntroScene → verify pipeline → AboutScene → ProjectsScene → SkillsScene → ContactScene
 
-**Avoids:** Building features before i18n (rework), writing PM-centric content (rejection), missing performance budget (technical debt)
+### Phase 4: Content Overlay + HUD
+**Rationale:** Project content readability is a hiring requirement. `ContentPanel2` with `AnimatePresence` keyed by `activeScene` gives hiring managers clear, readable project details synchronized with scene state. Chapter nav confirms they've seen all 5 projects.
+**Delivers:** `ContentPanel2` with per-scene project content (name, summary, tech stack, localized KO/EN); chapter progress indicator "3 / 5"; new `Lab2` translation namespace.
+**Addresses:** Project panels (P1), chapter progress indicator (P1), bilingual content integration
+**Note:** No new content authoring — all project text already exists in main site translations; this phase wires existing content to the overlay
 
-### Phase 2: Design System & Data Layer
-**Rationale:** UI atoms and data structures are dependencies for all sections. Building these first enables parallel section development and ensures consistency.
+### Phase 5: Typography Interactions
+**Rationale:** Character-level text animation is the single highest-ROI differentiator from the feature analysis. Research from all three 2025 case studies confirms this. GSAP SplitText is now free in GSAP 3.x. This adds the motion language that makes the experience feel "made carefully" to technical viewers.
+**Delivers:** Chapter headlines assembled character-by-character on scroll; GSAP SplitText with clip-path mask; scroll-velocity reactive text stretch shader on headlines.
+**Addresses:** Character-level text reveals (P1), scroll-velocity text stretch (P2)
+**Implements:** GSAP SplitText + stagger 0.02–0.05s/char; `uVelocity` uniform in headline vertex shader; scroll delta tracking between frames
+**Avoids:** Simultaneous independent GSAP tweens on same elements; 3D text for body copy (DOM only)
 
-**Delivers:**
-- Atomic UI components (Button, Card, Badge) with Tailwind variants
-- Utility functions (cn helper for class merging)
-- TypeScript data interfaces (Project, Skill, Experience, Education)
-- Data files in lib/data/ with bilingual locale keys
-- Translation content populated in messages/ files
-
-**Uses:**
-- Tailwind CSS v4 for utility-first styling
-- clsx + tailwind-merge for dynamic classes
-- TypeScript for type-safe data structures
-
-**Implements:** Atomic component hierarchy (atoms layer), data management strategy (TypeScript files, not database)
-
-### Phase 3: Layout & Core Components
-**Rationale:** Header, Footer, and LocaleSwitcher are needed by all pages. Building layout first provides the frame for content sections.
-
-**Delivers:**
-- Header component with navigation links (i18n-aware)
-- LocaleSwitcher component (Client Component for route switching)
-- Footer component with contact links
-- Base layout.tsx with NextIntlClientProvider
-
-**Addresses:**
-- Feature requirement: bilingual toggle
-- Architecture pattern: i18n navigation wrappers
-
-### Phase 4: Main Page Sections
-**Rationale:** Build sections in top-to-bottom order (Hero → About → Skills → Projects → Experience → Education → Contact) for logical development flow. Each section demonstrates different technical skills.
-
-**Delivers:**
-- Hero section with CTA (Server Component)
-- About section (2-3 paragraphs, bilingual)
-- Skills section (categorized list, NO rating bars per Pitfall #4)
-- Projects section (3-5 featured projects with tech stack badges)
-- Experience section (work history timeline)
-- Education section (educational background)
-- Contact section (Client Component with form validation)
-
-**Addresses:**
-- Table stakes features: About, Skills, Contact, Projects overview
-- Pitfall #4 (skill bars) via explicit ban, showing skills through projects instead
-- Pitfall #7 (poor documentation) via project card template with context
-
-### Phase 5: Project Detail Pages
-**Rationale:** Detail pages can be built after main page sections are complete, or in parallel during Phase 4. Each project page is independent.
-
-**Delivers:**
-- Project detail page template (app/[locale]/projects/[slug]/page.tsx)
-- Project case studies (Problem → Solution → Results format, 800-1500 words)
-- ProjectGallery component (Client Component for image carousel)
-- Quantifiable metrics per project (Lighthouse scores, performance improvements)
-- "What I'd Do Next" sections (growth mindset demonstration)
-- Live demo links + GitHub links
-
-**Addresses:**
-- Table stakes features: project case studies, live demos, technical context
-- Differentiators: quantifiable metrics, performance documentation
-- Pitfall #5 (tutorial projects) via audit and exclusion
-- Pitfall #7 (poor context) via case study template
-
-### Phase 6: Polish & Optimization
-**Rationale:** Polish comes after core functionality is working. Performance audit, accessibility testing, and SEO optimization are final validation steps.
-
-**Delivers:**
-- SEO metadata (generateMetadata for all pages, Open Graph tags)
-- Accessibility audit (WCAG 2.1 AA compliance, keyboard navigation, screen reader testing)
-- Performance optimization (image optimization, lazy loading, code splitting verification)
-- Error handling (error.tsx, not-found.tsx with i18n)
-- Demo video/GIF creation for interactive features
-- Link verification (all contact links, live demos, GitHub links working)
-
-**Addresses:**
-- Differentiators: accessibility compliance, performance documentation
-- Pitfall #2 (Core Web Vitals) via final audit
-- Pitfall #8 (inaccessible design) via WCAG testing
-- Pitfall #11 (poor SEO) via metadata completion
+### Phase 6: Post-Processing + Effects Polish
+**Rationale:** Post-processing is conditionally gated — it must not be added without `PerformanceMonitor`. With the core experience working at solid 60fps, this phase adds the cinematic layer that transforms visual quality, gated by measured GPU headroom.
+**Delivers:** Bloom on emissive elements, film grain, vignette, mouse parallax on idle, transition wipes, custom cursor, entry intro sequence, per-project color temperature shifts.
+**Addresses:** Post-processing bloom + grain (P2), entry intro sequence (P2), mouse parallax (P2), transition wipes (P2), custom cursor (P2), per-project color temperature (P2)
+**Uses:** `@react-three/postprocessing` `EffectComposer`; `PerformanceMonitor` from Drei gates all effects
+**Avoids:** GPU overload without adaptive quality; excessive particle counts (>3k); post-processing without quality fallback
+**Trigger:** Only start this phase when `PerformanceMonitor` confirms render budget headroom on target hardware
 
 ### Phase Ordering Rationale
 
-- **Linear dependencies:** i18n routing (Phase 1) → UI atoms (Phase 2) → Layout (Phase 3) → Sections (Phase 4) → Pages (Phase 5) → Polish (Phase 6)
-- **Critical path:** Foundation must happen first to avoid rework; design system must precede sections; polish comes last
-- **Risk mitigation:** Early content strategy (Phase 1) addresses PM narrative pitfall before writing project descriptions
-- **Performance focus:** Monitoring setup in Phase 1, continuous validation in Phases 2-5, final audit in Phase 6
-- **Bilingual from start:** i18n in Phase 1 prevents broken layouts and translation debt
+- Phase 1 before everything: 7 of 10 critical pitfalls must be prevented at the architectural level before any scene content exists. Retrofitting costs 2–5× more than getting them right first.
+- Phase 2 before Phase 3: Camera waypoints define where scenes live in 3D space. Building scenes without knowing the camera path produces work that must be repositioned.
+- Phase 4 after Phase 3: Content panel content references scene names that exist after Phase 3. Structural shell can be built in parallel but content wiring requires scenes to exist.
+- Phase 5 after Phase 4: Typography interactions enhance content that Phase 4 delivers. SplitText applies to DOM text nodes that must already be rendering.
+- Phase 6 last: Post-processing is additive polish, never foundational. The `PerformanceMonitor` gate enforces this — effects only if headroom exists on target hardware.
 
 ### Research Flags
 
-**Phases likely needing deeper research during planning:**
-- **Phase 1:** Next.js 15.5 i18n setup with next-intl — Specific configuration for App Router locale routing (research-phase for middleware, routing.ts, request.ts files)
-- **Phase 4 (Contact section):** Contact form implementation — Form validation libraries (React Hook Form + Zod), API route for form submission, email service integration (research-phase for form handling patterns)
-- **Phase 5:** Project case study writing — How to frame technical narratives for Korean big tech audience (may need Korean developer review or hiring manager input)
+Phases with standard, well-documented patterns (low research risk):
+- **Phase 1 (Foundation):** Proven `/lab` scaffold to copy directly; all patterns have working implementations in the codebase.
+- **Phase 2 (Scroll Spine):** Lenis + GSAP ScrollTrigger sync is canonical with official documentation and verified community examples.
+- **Phase 4 (Content Overlay):** `AnimatePresence` with `motion/react` is documented; next-intl `useTranslations()` already used throughout codebase.
 
-**Phases with standard patterns (skip research-phase):**
-- **Phase 2 (Design system):** Tailwind CSS setup, atomic components — Well-documented, established patterns
-- **Phase 3 (Layout):** Header/Footer components — Straightforward implementation
-- **Phase 4 (Hero, About, Skills):** Simple content sections — Standard Next.js components
-- **Phase 6 (SEO, Accessibility):** Metadata and WCAG compliance — Next.js docs cover SEO, WCAG checklist available
+Phases likely needing prototyping or careful iteration:
+- **Phase 3 (3D Scene Content):** Scene composition and spatial layout are artistic decisions, not engineering ones — scene-by-scene iteration required. Prototype IntroScene first to validate full pipeline before committing to scene structure.
+- **Phase 5 (Typography):** Scroll-velocity text stretch shader requires GLSL authoring; `uVelocity` uniform integration needs prototyping to tune feel. This is the highest artistic risk in the roadmap.
+- **Phase 6 (Effects):** Post-processing tuning is hardware-dependent. Bloom `luminanceThreshold` and `intensity` must be tested on integrated GPU, not just M-series MacBook. Dedicated performance test on target hardware profile before launch.
 
 ## Confidence Assessment
 
 | Area | Confidence | Notes |
 |------|------------|-------|
-| Stack | HIGH | Next.js 15.5, React 19, Tailwind v4, next-intl all verified with official docs and 2026 sources. Version numbers confirmed from release notes. |
-| Features | MEDIUM | General portfolio best practices verified across 10+ sources. Korean big tech specifics have LOWER confidence (limited Korean-specific sources). Table stakes features have HIGH confidence (recruiter expectation articles), Korean cultural preferences need validation. |
-| Architecture | HIGH | Next.js App Router patterns verified with official docs. next-intl setup confirmed from library docs. Component hierarchy and data management patterns standard for 2026. |
-| Pitfalls | MEDIUM-HIGH | Performance pitfalls verified with Next.js production checklist and Core Web Vitals research. Portfolio mistakes verified across multiple developer articles. Korean market specifics have LOWER confidence (extrapolated from general Korean hiring practices). |
+| Stack | HIGH | All 4 new packages npm-verified at specific versions; peer deps confirmed against existing stack; integration patterns documented in official Motion, Lenis, and pmndrs sources |
+| Features | HIGH | Three Codrops 2025 case studies + Awwwards SOTD analysis from the exact same domain; prioritization matrix backed by real-world examples; dependency graph verified against reference implementations |
+| Architecture | HIGH | Existing `/lab` codebase directly inspected and verified; R3F official scaling docs + Codrops Feb 2026 tutorial corroborate patterns; 10-step build order derived from actual dependency graph |
+| Pitfalls | HIGH | R3F official pitfalls docs + verified GitHub issues (not theoretical warnings); GSAP conflict documented in official GSAP forum; framer-motion-3d deprecation verified on npm |
 
-**Overall confidence:** MEDIUM-HIGH
-
-General portfolio and Next.js technical patterns are HIGH confidence (official sources, multiple verification). Korean market-specific preferences are MEDIUM-LOW confidence (limited Korean sources, need validation with actual Korean recruiters or developers at target companies).
+**Overall confidence:** HIGH
 
 ### Gaps to Address
 
-Research identified these gaps requiring attention during planning or validation:
-
-- **Korean big tech hiring norms:** What do Naver/Kakao/Samsung recruiters actually prioritize? (Need informational interviews with Korean developers at these companies or recruiters)
-- **Portfolio vs PDF resume balance:** Korean hiring may expect both web portfolio and PDF resume; clarify workflow and whether to provide downloadable resume
-- **Design aesthetic preferences:** Korean web design trends may differ from Western minimal style; validate clean/fast approach vs Korean design conventions
-- **Certification importance:** Unclear if Korean companies value AWS/GCP certifications on portfolio or GitHub profile activity
-- **Professional photo expectation:** Korean job applications often expect professional photo; validate if portfolio should include photo
-- **Korean language quality:** Formal honorifics (존댓말) usage confirmed, but translation quality should be reviewed by native Korean speaker before launch
-- **Contact method preferences:** Validate if Korean recruiters prefer specific contact methods (email vs LinkedIn vs direct message)
-
-**How to handle during planning:**
-- Phase 1 (Content Strategy): Reach out to Korean developers or recruiters for validation interview (optional but recommended)
-- Phase 3 (Content Writing): Have native Korean speaker review all Korean translations before Phase 4 implementation
-- Phase 5 (Polish): Test portfolio with Korean developers for cultural fit and design aesthetic feedback
+- **GLSL shader aesthetics:** Research confirms the technical pattern (shaderMaterial + uniforms + useFrame) but does not prescribe the specific GLSL code for the scroll-velocity stretch effect. The vertex shader for `uVelocity`-driven distortion must be authored during Phase 5. Prototype early — this is the highest artistic risk.
+- **Scene 3D layout and camera waypoints:** Camera waypoints and 3D scene positioning are aesthetic decisions. There is no "correct" answer from research — requires design iteration. Define the 6 waypoints in a config constant before building any scene geometry.
+- **Turbopack GLSL import compatibility:** ARCHITECTURE.md flags that GLSL file imports as raw strings may need Turbopack config with the current `next dev --turbopack` setup. Recommendation is to use inline template literals to avoid this. Validate this assumption in Phase 1 before committing to an approach.
+- **Mid-range GPU baseline:** All performance thresholds (particle count <3k, bloom `resolution={256}`, DPR max 1.5×) are calibrated from research analysis, but have not been tested on the specific hardware profile that Korean hiring managers use. A dedicated performance audit on an Intel Iris or AMD Vega integrated GPU laptop should happen during Phase 6 before launch.
 
 ## Sources
 
-### Primary Sources (HIGH confidence)
+### Primary (HIGH confidence)
+- [Stas Bondar '25 — Code and Techniques (Codrops March 2025)](https://tympanus.net/codrops/2025/03/25/stas-bondar-25-the-code-techniques-behind-a-next-level-portfolio/) — scroll-velocity patterns, SplitText, PerformanceMonitor
+- [Letting the Creative Process Shape a WebGL Portfolio (Codrops Nov 2025)](https://tympanus.net/codrops/2025/11/27/letting-the-creative-process-shape-a-webgl-portfolio/) — camera path storytelling, restraint principle
+- [Case Study: Stefan Vitasovic Portfolio 2025 (Codrops March 2025)](https://tympanus.net/codrops/2025/03/05/case-study-stefan-vitasovic-portfolio-2025/) — kinetic typography, scroll-velocity text stretch
+- [Building Efficient Three.js Scenes (Codrops Feb 2025)](https://tympanus.net/codrops/2025/02/11/building-efficient-three-js-scenes-optimize-performance-while-maintaining-quality/) — InstancedMesh, draw call batching
+- [React Three Fiber: Performance Pitfalls (official docs)](https://r3f.docs.pmnd.rs/advanced/pitfalls) — setState/useFrame anti-patterns, context leak
+- [React Three Fiber: Scaling Performance (official docs)](https://r3f.docs.pmnd.rs/advanced/scaling-performance) — DPR capping, PerformanceMonitor
+- [Lenis GitHub: darkroomengineering/lenis](https://github.com/darkroomengineering/lenis) — v1.3.17, `lenis/react` sub-path confirmed
+- [Motion docs: React Three Fiber integration](https://motion.dev/docs/react-three-fiber) — React 19 compatibility
+- [npm registry](https://www.npmjs.com) — version verification for all 4 new packages
+- [R3F GitHub issue #514: Leaking WebGLRenderer on unmount](https://github.com/pmndrs/react-three-fiber/issues/514) — WebGL context leak pattern
+- [GSAP Forum: ScrollTrigger + ScrollControls conflict](https://gsap.com/community/forums/topic/40114-scrolltrigger-pin-and-dreis-scrollcontrols-dont-play-well-together/) — scroll authority conflict
+- [pmndrs/react-postprocessing GitHub](https://github.com/pmndrs/react-postprocessing) — v3.0.4 peer deps confirmed
+- [WCAG 2.3.3: Animation from Interactions — W3C](https://www.w3.org/WAI/WCAG21/Understanding/animation-from-interactions.html) — prefers-reduced-motion handling
 
-**Next.js & React:**
-- [Next.js 15.5 Release](https://nextjs.org/blog/next-15-5) — Latest stable version, Turbopack production-ready
-- [Next.js Project Structure](https://nextjs.org/docs/app/getting-started/project-structure) — Official folder conventions
-- [Next.js Static Exports](https://nextjs.org/docs/app/guides/static-exports) — Static generation guide
-- [React 19.2 Release](https://react.dev/blog/2025/10/01/react-19-2) — Stable version with Server Components
+### Secondary (MEDIUM confidence)
+- [Building a Scroll-Revealed WebGL Gallery (Codrops Feb 2026)](https://tympanus.net/codrops/2026/02/02/building-a-scroll-revealed-webgl-gallery-with-gsap-three-js-astro-and-barba-js/) — ref-based state pattern, unified motion system
+- [Wawa Sensei — 3D Portfolio R3F + Framer Motion Scroll](https://wawasensei.dev/tuto/build-a-3D-portfolio-with-react-three-fiber-framer-motion-scroll-animations) — real-world Next.js integration pattern
+- [Maxime Heckel — Particles with R3F and Shaders](https://blog.maximeheckel.com/posts/the-magical-world-of-particles-with-react-three-fiber-and-shaders/) — particle system patterns
+- [Three.js Discourse: Dispose things correctly](https://discourse.threejs.org/t/dispose-things-correctly-in-three-js/6534) — GPU context cleanup
+- [Three.js Discourse: Reducing shader compile time](https://discourse.threejs.org/t/reducing-shader-compile-time-on-scene-initialization/56572) — compile-before-reveal pattern
+- [14islands/r3f-scroll-rig GitHub](https://github.com/14islands/r3f-scroll-rig) — validates sticky canvas pattern
 
-**Internationalization:**
-- [next-intl App Router Setup](https://next-intl.dev/docs/getting-started/app-router) — Official i18n configuration
-- [next-intl Locale-Based Routing](https://next-intl.dev/docs/routing/setup) — Locale routing patterns
-
-**Styling:**
-- [Tailwind CSS v4.0 Release](https://tailwindcss.com/blog/tailwindcss-v4) — New CSS-based config, performance improvements
-- [Tailwind CSS with Next.js](https://tailwindcss.com/docs/guides/nextjs) — Official integration guide
-
-**Performance:**
-- [Next.js Production Checklist](https://nextjs.org/docs/app/guides/production-checklist) — Official performance guide
-- [Next.js Data Fetching](https://nextjs.org/docs/app/getting-started/fetching-data) — Server Components data access
-
-### Secondary Sources (MEDIUM confidence)
-
-**Portfolio Best Practices:**
-- [What Recruiters Look for in Developer Portfolios](https://pesto.tech/resources/what-recruiters-look-for-in-developer-portfolios) — 90-second rule, project expectations
-- [Top 10 Full Stack Portfolio Projects for 2026](https://www.nucamp.co/blog/top-10-full-stack-portfolio-projects-for-2026-that-actually-get-you-hired) — Project quality over quantity
-- [25 Web Developer Portfolio Examples](https://www.hostinger.com/tutorials/web-developer-portfolio) — Feature expectations
-- [Building an Effective Frontend Developer Portfolio](https://www.frontendmentor.io/articles/building-an-effective-frontend-developer-portfolio--7cE8BfMG_) — Frontend-specific guidance
-
-**Portfolio Mistakes:**
-- [5 Mistakes Developers Make in Their Portfolio Websites](https://www.devportfoliotemplates.com/blog/5-mistakes-developers-make-in-their-portfolio-websites) — Skill bars, complexity, mobile testing
-- [7 Deadly Sins of Developer Portfolios](https://pesto.tech/resources/7-deadly-sins-of-developer-portfolios-and-how-to-avoid-them) — Anti-patterns
-- [Five Common Mistakes Found on Frontend Portfolio Sites](https://medium.com/illumination/five-common-mistakes-found-on-frontend-portfolio-sites-687b74063f9d) — Frontend-specific issues
-
-**Next.js Performance:**
-- [7 Common Performance Mistakes in Next.js](https://medium.com/full-stack-forge/7-common-performance-mistakes-in-next-js-and-how-to-fix-them-edd355e2f9a9) — Image optimization, request waterfalls
-- [Next.js Image Component: Performance and CWV](https://pagepro.co/blog/nextjs-image-component-performance-cwv/) — Core Web Vitals optimization
-- [React & Next.js Best Practices in 2026](https://fabwebstudio.com/blog/react-nextjs-best-practices-2026-performance-scale) — Current patterns
-
-**Accessibility:**
-- [WCAG 2.1 & 2.2 Compliance Checklist 2026](https://mivibzzz.com/resources/accessibility/wcag-checklist) — Standards compliance
-- [A Detailed Guide to WCAG Compliance in 2026](https://www.accessibilitychecker.org/guides/wcag/) — Testing approach
-
-**Architecture:**
-- [Next.js App Router Project Structure Guide](https://makerkit.dev/blog/tutorials/nextjs-app-router-project-structure) — 2026 folder organization
-- [Next.js Architecture 2026](https://www.yogijs.tech/blog/nextjs-project-architecture-app-router) — Server-first patterns
-- [Atomic Design + Next.js 2026](https://medium.com/@buwanekasumanasekara/atomic-design-meets-feature-based-architecture-in-next-js-a-practical-guide-c06ea56cf5cc) — Component hierarchy
-
-### Tertiary Sources (LOW-MEDIUM confidence)
-
-**Korean Market Context:**
-- [Top 10 Tips for Building a Stand-Out Tech Portfolio in South Korea](https://www.nucamp.co/blog/coding-bootcamp-south-korea-kor-top-10-tips-for-building-a-standout-tech-portfolio-in-south-korea) — Korean hiring preferences
-- [Gwak Tae-wook Portfolio](https://gwak2837.vercel.app/ko) — Real 2026 Korean developer portfolio example
-- [GitHub: Awesome Korean Resume](https://github.com/9j/awesome-korean-resume) — Korean resume best practices
-- [Digital 2026: South Korea](https://datareportal.com/reports/digital-2026-south-korea) — Infrastructure context (224 Mbps mobile speeds)
-
-**Development Tools:**
-- [Biome vs ESLint 2025](https://medium.com/better-dev-nextjs-react/biome-vs-eslint-prettier-the-2025-linting-revolution-you-need-to-know-about-ec01c5d5b6c8) — Modern linting options
-- [Package Managers Comparison 2026](https://pockit.tools/blog/pnpm-npm-yarn-bun-comparison-2026/) — pnpm vs npm performance
+### Tertiary (LOW confidence)
+- [100 Three.js Tips That Actually Improve Performance (2026)](https://www.utsubo.com/blog/threejs-best-practices-100-tips) — performance tips (validate against official sources before applying)
 
 ---
-
-**Research completed:** 2026-02-11
-**Ready for roadmap:** Yes
-
-**Next steps:** Use this summary to create initial roadmap with 6 phases. Phase 1 and Phase 4 (Contact section) likely need research-phase for deep dives. Korean cultural validation recommended during Phase 1 content strategy.
+*Research completed: 2026-02-28*
+*Ready for roadmap: yes*

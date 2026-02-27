@@ -1,795 +1,649 @@
-# Domain Pitfalls: Frontend Developer Portfolio
+# Pitfalls Research: Media-Art 3D Interactive Portfolio (/lab2)
 
-**Domain:** Frontend Developer Portfolio (targeting Korean big tech)
-**Researched:** 2026-02-11
-**Confidence:** MEDIUM (WebSearch findings verified across multiple sources)
+**Domain:** Scroll-driven 3D interactive experience added to existing Next.js portfolio
+**Researched:** 2026-02-28
+**Confidence:** HIGH (R3F official docs + verified community patterns + multiple corroborating sources)
+
+This file focuses exclusively on pitfalls when ADDING media-art 3D interactive features to
+an existing Next.js 16 App Router portfolio that already has /lab (R3F + scroll-driven camera).
+The existing codebase uses `dynamic(..., { ssr: false })`, `useFrame` refs, and a sticky-canvas
+scroll pattern — all patterns that must be carried forward and extended carefully.
+
+---
 
 ## Critical Pitfalls
 
-Mistakes that cause rewrites, major issues, or immediate rejection in hiring processes.
+### Pitfall 1: WebGL Context Leak on Route Navigation
 
-### Pitfall 1: PM-Centric Project Narratives
-**What goes wrong:** Describing projects from product management perspective ("managed team," "coordinated features") instead of frontend technical implementation, resulting in portfolios that don't showcase actual coding skills or technical decision-making.
-
-**Why it happens:** Developer has 5 years across multiple domains but projects were originally written from PM perspective. Korean big tech (Samsung, Naver, Kakao) specifically look for technical depth and hands-on frontend expertise.
-
-**Consequences:**
-- Recruiters can't assess technical capabilities
-- Portfolio reads like PM/coordinator role, not developer role
-- Fails to demonstrate frontend-specific problem-solving
-- Korean tech companies value technical prowess highly - this is a deal-breaker
-
-**Prevention:**
-- Reframe ALL projects with technical focus: "Built X using Y to solve Z problem"
-- Highlight frontend-specific challenges: performance optimization, state management, responsive design, accessibility
-- Include technical decision rationale: "Chose React Query over Redux because..."
-- Show code quality through architecture decisions and implementation details
-
-**Detection:** If project descriptions focus on "coordinated," "managed," "planned" rather than "built," "implemented," "optimized" - red flag.
-
-**Phase mapping:** Phase 1 (Content Strategy) must address this immediately. All project rewrites should emphasize technical implementation over management activities.
-
----
-
-### Pitfall 2: Poor Core Web Vitals Performance
-**What goes wrong:** Portfolio site loads slowly or has poor interaction metrics, failing to meet Core Web Vitals standards. 64% of websites fail all three metrics, and Korean tech companies with advanced infrastructure (224 Mbps mobile speeds) expect fast, optimized experiences.
+**What goes wrong:**
+Navigating between /lab2 and other routes remounts the `<Canvas>` component. Each mount
+creates a new WebGLRenderer and GPU context. Browsers enforce hard context limits —
+Chrome allows ~16 contexts on desktop, 8 on Android, Firefox mobile caps at 2 per
+principal. Once the cap is hit the oldest context is silently killed. The Three.js scene
+goes black; no error is thrown to the user.
 
 **Why it happens:**
-- Next.js Image component misconfigured (missing sizing, incorrect fill usage)
-- Heavy animations without optimization
-- Request waterfalls (sequential await calls)
-- Unoptimized third-party scripts
-- Over-preloading images
+Developers treat the R3F `<Canvas>` like a normal React component and let Next.js App
+Router unmount it on route change. The WebGLRenderer is not explicitly disposed, so its
+GPU context lives on the GPU heap even after React unmounts the component.
 
-**Consequences:**
-- Poor Google rankings (SEO disaster for portfolio discoverability)
-- 7% conversion rate drop per 100ms delay
-- Demonstrates lack of performance optimization skills
-- Korean companies with fast infrastructure expect technical excellence
-
-**Prevention:**
-```typescript
-// WRONG: Sequential waterfalls
-const user = await fetchUser();
-const posts = await fetchPosts(user.id);
-const comments = await fetchComments(posts);
-
-// RIGHT: Parallel requests
-const [user, posts] = await Promise.all([
-  fetchUser(),
-  fetchPosts()
-]);
-
-// WRONG: next/image without sizing
-<Image src="/hero.jpg" fill />
-
-// RIGHT: Proper sizing to prevent CLS
-<div className="relative w-full aspect-video">
-  <Image
-    src="/hero.jpg"
-    fill
-    sizes="100vw"
-    priority // Only for LCP hero
-  />
-</div>
-```
-
-**Detection:**
-- Run Lighthouse audit - target LCP < 2.5s, CLS < 0.1, INP low
-- Check Coverage tab in Chrome DevTools for unused JavaScript
-- Test on mobile with throttling
-
-**Phase mapping:**
-- Phase 2 (Technical Setup): Configure next/image correctly from start
-- Phase 3 (Core Features): Monitor performance during development
-- Phase 5 (Polish): Performance audit before deployment
-
----
-
-### Pitfall 3: Missing or Broken Bilingual Support
-**What goes wrong:** Korean/English language switching is afterthought, resulting in broken layouts, missing translations, inconsistent content depth, or machine-translated text that sounds unnatural in Korean.
-
-**Why it happens:**
-- Treating i18n as post-launch feature
-- Not designing layouts to accommodate Korean text (longer than English)
-- Using Google Translate instead of human translation
-- Different content between languages (Korean shorter/incomplete)
-
-**Consequences:**
-- Korean recruiters get inferior experience or broken layouts
-- Demonstrates poor internationalization skills
-- Korean companies expect professional Korean language support
-- Shows lack of attention to detail and cultural awareness
-
-**Prevention:**
-- Next.js app router with built-in i18n support from Day 1
-- Design layouts with 30% flex for Korean text expansion
-- Write content in both languages simultaneously (not translate later)
-- Use Korean formal honorifics (존댓말) in professional contexts
-- Test BOTH language versions equally throughout development
-- For Korean big tech: Korean version equally polished, not secondary
-
-```typescript
-// Set up i18n routing in next.config.js from start
-const nextConfig = {
-  i18n: {
-    locales: ['en', 'ko'],
-    defaultLocale: 'ko', // Korean companies likely visit Korean version first
-    localeDetection: true
-  }
-}
-```
-
-**Detection:**
-- Layout breaks when switching languages
-- Korean text sounds awkward or machine-generated
-- Content depth differs between languages
-- Missing translations showing English fallback in Korean version
-
-**Phase mapping:**
-- Phase 2 (Technical Setup): i18n architecture must be in place
-- Phase 3 (Content): Write bilingual content simultaneously
-- Phase 5 (Polish): Native Korean speaker review required
-
----
-
-### Pitfall 4: Skill Bars and Percentage Charts
-**What goes wrong:** Displaying skills as "JavaScript 80%" or percentage bar charts that provide zero meaningful information to recruiters. This is consistently listed as a top portfolio mistake.
-
-**Why it happens:** Common portfolio template pattern that "looks good" but is substance-free. What does "80% JavaScript" even mean?
-
-**Consequences:**
-- Signals junior developer or cargo-culting
-- Wastes valuable above-fold space
-- Provides no actual assessment of capability
-- Korean tech companies value demonstrated expertise over self-ratings
-
-**Prevention:**
-- Show skills through projects with tangible outcomes
-- Technology tags on project cards (context-based)
-- Code quality indicators: TypeScript strict mode, testing coverage, performance metrics
-- For Korean companies: Emphasize clean code, performance optimization, team collaboration
-
-**Instead of:**
-```
-JavaScript ████████░░ 80%
-React ██████████ 90%
-```
-
-**Do this:**
-```
-Built real-time dashboard handling 10K concurrent users
-- Next.js App Router with React Server Components
-- Optimized LCP from 4.2s to 1.8s
-- Reduced bundle size by 40% with code splitting
-```
-
-**Detection:** If portfolio has skill bars or percentage charts - remove immediately.
-
-**Phase mapping:** Phase 1 (Content Strategy) - explicitly document "NO skill percentages" rule.
-
----
-
-## Moderate Pitfalls
-
-Mistakes that cause delays, technical debt, or reduced hiring appeal.
-
-### Pitfall 5: Tutorial Projects Without Customization
-**What goes wrong:** Including projects that clearly came from tutorials or courses without significant customization or extension.
-
-**Why it happens:** Padding portfolio quantity, using tutorials as learning but not evolving them.
-
-**Consequences:**
-- Experienced recruiters recognize popular tutorial projects
-- Suggests inability to build original solutions
-- Wastes portfolio space that could showcase unique work
-- Korean big tech with competitive hiring expects original thinking
-
-**Prevention:**
-- If including tutorial-based project, customize extensively (80%+ different)
-- Add significant features beyond tutorial scope
-- Better: Link GitHub repo with note "based on X tutorial" instead of portfolio feature
-- Best: Only include original projects or heavily modified work
-- For 5-year developer: Tutorial projects inappropriate - should have real projects
-
-**Detection:** Projects matching popular tutorial patterns (todo app, weather app with default UI).
-
-**Phase mapping:** Phase 1 (Content Strategy) - audit existing projects, exclude or note tutorial origins.
-
----
-
-### Pitfall 6: Overly Complex Design and Animations
-**What goes wrong:** Portfolio has elaborate 3D effects, heavy animations, parallax scrolling, and cutting-edge visual features that:
-- Slow down page performance dramatically
-- Distract from actual project content
-- Break on mobile devices
-- Cause high bounce rates
-
-**Why it happens:** Temptation to showcase technical skills through visual complexity. Desire to stand out visually.
-
-**Consequences:**
-- Mobile performance disaster (mobile-first indexing hurts SEO)
-- Content buried under visual effects
-- Longer load times negate technical credibility
-- Accessibility issues from motion-heavy interfaces
-- Korean companies with fast infrastructure notice poor optimization
-
-**Prevention:**
-- Animation budget: Pick 2-3 purposeful animations maximum
-- Use hardware-accelerated CSS properties only (transform, opacity)
-- Avoid animating layout properties (width, height, top, left, margin, padding)
-- Test on mid-range mobile devices, not just MacBook Pro
-- Respect `prefers-reduced-motion` media query
-- For Korean market: Clean, fast, professional over flashy
-
-```css
-/* WRONG: Expensive animations */
-@keyframes slide {
-  from { left: 0; width: 100px; }
-  to { left: 100px; width: 200px; }
-}
-
-/* RIGHT: Hardware accelerated */
-@keyframes slide {
-  from { transform: translateX(0) scale(1); }
-  to { transform: translateX(100px) scale(2); }
-}
-```
-
-**Detection:**
-- Lighthouse performance score < 90
-- Mobile scroll feels janky
-- Layout shift during animations
-- JS bundle > 200KB for simple portfolio
-
-**Phase mapping:**
-- Phase 3 (Core Features): Establish animation budget upfront
-- Phase 4 (Projects): Prioritize content visibility over visual effects
-- Phase 5 (Polish): Remove animations that don't serve clear purpose
-
----
-
-### Pitfall 7: Poor Project Documentation and Context
-**What goes wrong:** Projects displayed as screenshots with no explanation, or technical details without business context. Non-technical recruiters (HR) can't understand value; technical reviewers can't assess decision-making.
-
-**Why it happens:**
-- Assuming screenshots are self-explanatory
-- Writing for technical audience only
-- Not explaining why technical choices matter
-
-**Consequences:**
-- HR screens out portfolio before technical interview
-- Can't demonstrate problem-solving process
-- Projects look like coding exercises rather than solutions
-- Korean companies value both technical skill AND communication
-
-**Prevention:**
-For EACH project, include:
-
-**Must-have:**
-- One-sentence summary (what it does)
-- Problem statement (why it needed to exist)
-- Your role (solo, team size, your specific contributions)
-- Tech stack with rationale (why these choices)
-- Key technical challenges solved
-- Measurable outcomes (performance metrics, user impact)
-- Live link + GitHub link (if possible)
-
-**Project case study structure:**
-```markdown
-## Real-time Analytics Dashboard
-
-Led frontend development for internal analytics platform serving 50+ data analysts.
-
-**Problem:** Legacy dashboard took 15+ seconds to load, blocking daily workflows
-
-**Solution:**
-- Migrated from CRA to Next.js 14 with App Router
-- Implemented React Server Components for initial data fetch
-- Added optimistic updates with React Query for perceived performance
-- Virtualized large data tables with react-window
-
-**Impact:**
-- LCP reduced from 15.2s to 1.8s (88% improvement)
-- User satisfaction score increased from 3.2 to 4.7/5
-- Reduced API calls by 60% through intelligent caching
-
-**Tech:** Next.js 14, TypeScript, React Query, Tailwind CSS, D3.js
-
-**Role:** Solo frontend developer (2-month timeline)
-```
-
-**Detection:**
-- Can a non-developer understand what the project does? If no - add context
-- Can a senior developer assess your decision-making? If no - add technical rationale
-
-**Phase mapping:**
-- Phase 1 (Content Strategy): Define project documentation template
-- Phase 4 (Projects): Apply template to ALL projects
-- Phase 5 (Polish): Have both technical and non-technical reviewers test clarity
-
----
-
-### Pitfall 8: Inaccessible Design (WCAG Non-Compliance)
-**What goes wrong:** Portfolio fails basic accessibility standards - poor color contrast, keyboard navigation broken, no alt text, missing ARIA labels, causing 30% of WCAG issues to slip through automated tools.
-
-**Why it happens:**
-- Treating accessibility as post-launch compliance checkbox
-- Relying on automated tools only (catches 30% of issues)
-- Not testing with actual keyboard navigation or screen readers
-
-**Consequences:**
-- Legal compliance risk (WCAG 2.1 AA is 2026 standard)
-- Demonstrates lack of professional frontend standards
-- Portfolio inaccessible to users with disabilities
-- Korean companies increasingly emphasize inclusive design
-- Shows poor attention to web standards
-
-**Prevention:**
-Target WCAG 2.1 Level AA minimum (WCAG 2.2 AA preferred):
-
-**Critical checks:**
-- Color contrast ratios: 4.5:1 for normal text, 3:1 for large text
-- Full keyboard navigation (Tab, Enter, Escape, Arrow keys)
-- Focus indicators visible and clear
-- Alt text for ALL images
-- Semantic HTML (proper heading hierarchy, landmarks)
-- Form labels and error messages
-- Skip to main content link
+**How to avoid:**
+- Keep one `<Canvas>` instance alive for the entire /lab2 route subtree. Do NOT
+  conditionally render the Canvas itself — toggle visibility of scene contents instead.
+- On route exit, call `renderer.dispose()` and `.dispose()` on every Geometry, Material,
+  and Texture in the scene via a cleanup `useEffect` return function.
+- In R3F: use `<Stage visible={active} />` pattern rather than conditional mounting.
+- Use `useLoader` (not raw `THREE.TextureLoader`) — it caches by URL and prevents
+  redundant context allocations.
 
 ```tsx
-// WRONG: Non-semantic div soup
-<div onClick={handleClick}>Click me</div>
+// WRONG: Unmounts and remounts Canvas on every section change
+{activeSection === 'hero' && <Canvas><HeroScene /></Canvas>}
 
-// RIGHT: Semantic, accessible
-<button
-  onClick={handleClick}
-  aria-label="Open project details"
->
-  Click me
-</button>
-
-// WRONG: Image without alt
-<Image src="/project.jpg" />
-
-// RIGHT: Descriptive alt text
-<Image
-  src="/project.jpg"
-  alt="Analytics dashboard showing real-time user metrics with line charts and KPI cards"
-/>
+// RIGHT: Keep Canvas alive, toggle mesh visibility
+<Canvas>
+  <HeroScene visible={activeSection === 'hero'} />
+  <ProjectScene visible={activeSection === 'projects'} />
+</Canvas>
 ```
 
-**Detection:**
-- Run axe DevTools extension (free)
-- Manual keyboard navigation test (Tab through entire site)
-- Test with screen reader (VoiceOver on Mac, NVDA on Windows)
-- Color contrast checker in DevTools
+**Warning signs:**
+- Chrome console: "WARNING: Too many active WebGL contexts. Oldest context will be lost."
+- Canvas goes black after navigating back to /lab2.
+- `renderer.info.programs` count grows unbounded in DevTools.
 
-**Phase mapping:**
-- Phase 2 (Technical Setup): Configure ESLint with jsx-a11y plugin
-- Phase 3 (Core Features): Build accessible from start, not retrofit
-- Phase 5 (Polish): Manual accessibility audit required before launch
+**Phase to address:** Phase 1 (Foundation / Canvas setup). This architectural decision
+must be correct from the first commit — it cannot be refactored cheaply later.
 
 ---
 
-### Pitfall 9: Hidden or Inconvenient Contact Information
-**What goes wrong:** Contact details buried in footer, no clear CTA, multiple clicks to reach contact form, or empty social media links that go nowhere.
+### Pitfall 2: setState Inside useFrame Causes Cascading Re-renders
 
-**Why it happens:** Portfolio design prioritizes visual storytelling over conversion. Social media links added as decoration.
+**What goes wrong:**
+Calling `setState` inside `useFrame` (or inside scroll event handlers that feed 3D
+state) runs at 60fps, triggering 60 React reconciler cycles per second. Each cycle
+re-renders every child of the component that holds the state, including DOM overlays,
+Framer Motion components, and i18n text. The result is visible jank, dropped frames,
+and CPU overload — independent of GPU load.
 
-**Consequences:**
-- Interested recruiters can't easily reach you
-- Friction in hiring pipeline at worst possible moment
-- Empty social media profiles suggest inactive developer
-- Korean recruiters may prefer specific contact methods (email, LinkedIn)
+**Why it happens:**
+Developers naturally reach for React state to share scroll position between the scroll
+handler and the 3D scene, because that is how React data flow works. The existing /lab
+implementation passes `scrollProgress` as a prop to `LabScene`, which is correct at low
+update rates, but high-frequency animation state must bypass React entirely.
 
-**Prevention:**
-- Contact CTA visible on every page (header/footer)
-- Dedicated /contact page with multiple options
-- Email address directly visible (not just form)
-- Working contact form with clear success state
-- LinkedIn link (standard for Korean tech hiring)
-- GitHub link (essential for developer portfolios)
-- Only include social media you actively use for professional content
-- For Korean market: Consider adding note about preferred contact language
+**How to avoid:**
+- Store animation-driving values in refs, not state:
+  `const progressRef = useRef(0)`
+- Read refs directly in `useFrame`: `useFrame(() => { camera.position.lerp(target, progressRef.current) })`
+- For scroll progress that drives both DOM overlays AND 3D: throttle the React state
+  update (e.g. only call `setState` when entering a new section threshold), while the
+  ref always has the raw value for `useFrame`.
+- Use Zustand or Jotai with `useStore.getState()` inside `useFrame` if cross-component
+  access is needed — read from store imperatively, not as a hook.
 
-**Contact page must-haves:**
-```typescript
-// Minimum contact options
-- Email: visible email address (your.name@example.com)
-- LinkedIn: Professional profile link
-- GitHub: Active profile with pinned projects
-- Contact form: With validation and clear success message
-- Response time: Set expectations ("I typically respond within 24 hours")
+```tsx
+// WRONG: 60fps setState
+useFrame(() => {
+  setRotation(mesh.current.rotation.y + 0.01); // triggers React reconcile every frame
+});
 
-// Optional but valuable
-- Calendly: "Schedule a call" for busy recruiters
-- Location/Timezone: Useful for Korean companies assessing relocation/remote options
+// RIGHT: mutate ref directly
+useFrame((_, delta) => {
+  meshRef.current.rotation.y += delta; // zero React overhead
+});
 ```
 
-**Detection:**
-- Can recruiter contact you from homepage in < 2 clicks?
-- Are ALL contact links working and current?
-- Do social media profiles have recent activity?
+**Warning signs:**
+- React DevTools Profiler shows dozens of renders per second from a single component.
+- Chrome Performance tab shows long "Scripting" blocks in the main thread flame chart.
+- CPU usage climbs while GPU usage stays low.
 
-**Phase mapping:**
-- Phase 3 (Core Features): Contact form implemented early
-- Phase 5 (Polish): Test all contact methods, verify links
+**Phase to address:** Phase 1 (Foundation). Establish the ref-mutation pattern as the
+project standard before any scene content is added.
 
 ---
 
-### Pitfall 10: Treating Accessibility as One-Time Fix
-**What goes wrong:** Running accessibility audit once at launch, fixing issues, then never checking again as site evolves. New features introduce new violations.
+### Pitfall 3: Shader Compilation Stall on First Paint
 
-**Why it happens:** Viewing WCAG compliance as project milestone rather than ongoing standard.
+**What goes wrong:**
+Every unique GLSL shader (material + light configuration combination) must be compiled
+by the GPU driver on first render. With multiple custom ShaderMaterials, post-processing
+effects (bloom, depth-of-field), and environment maps, the first frame can freeze for
+2–10 seconds on mid-range hardware. The page appears hung.
 
-**Consequences:**
-- Accessibility regressions with each new feature
-- False sense of compliance
-- Demonstrates lack of professional maintenance practices
-- Korean companies increasingly value systematic quality processes
+**Why it happens:**
+Three.js compiles shaders lazily — only when an object is first rendered into the
+viewport. Media-art scenes typically introduce many unique material/light combos at
+once (e.g. a bloom pass + custom particle shader + environment), triggering a burst
+of synchronous GPU compilation.
 
-**Prevention:**
-- Integrate accessibility testing into development workflow
-- CI/CD pipeline includes automated a11y checks
-- Regular manual audits (quarterly minimum)
-- Keep accessibility checklist in issue templates
-- Document accessibility testing procedures
+**How to avoid:**
+- Pre-warm shaders off-screen: render the full scene once at `{ visible: false }` or
+  off-viewport during the loading phase, before showing the canvas to users.
+- Use `renderer.compile(scene, camera)` after all objects are added to force compilation
+  during the loading screen, not on first user-visible frame.
+- Minimize unique shader programs: reuse materials via `useMemo`, share a single
+  ShaderMaterial instance across instanced meshes.
+- Avoid synchronous WebGL calls (`gl.getError()`, `gl.getParameter()`) which serialize
+  the GPU pipeline.
+- Keep custom shaders simple — add complexity incrementally, testing frame time at
+  each step.
 
-```json
-// package.json - integrate a11y into workflow
-{
-  "scripts": {
-    "test": "jest",
-    "test:a11y": "jest-axe",
-    "lint": "next lint",
-    "build": "next build && npm run test:a11y"
-  }
-}
+```tsx
+// In R3F onCreated callback — compile before revealing scene
+const handleCreated = useCallback(({ gl, scene, camera }) => {
+  gl.compile(scene, camera); // force shader compilation during loading screen
+  setTimeout(() => setReady(true), 100); // reveal after compile
+}, []);
 ```
 
-**Detection:** Last accessibility audit was months ago, new features added since then.
+**Warning signs:**
+- First meaningful paint takes 3+ seconds after loading screen disappears.
+- Chrome GPU process shows a spike in shader compilation time.
+- Frame time measured in `useFrame` is 500ms+ on the first render call.
 
-**Phase mapping:**
-- Phase 2 (Technical Setup): Configure automated a11y testing
-- Phase 3-5: Continuous testing mindset, not one-time audit
+**Phase to address:** Phase 1 (Foundation) — set up the compile-before-reveal pattern.
+Phase 3 (Effects) — retest after each new post-process effect is added.
 
 ---
 
-## Minor Pitfalls
+### Pitfall 4: Scroll Jank from Main Thread Contention
 
-Mistakes that cause annoyance but are relatively easy to fix.
+**What goes wrong:**
+WebGL rendering and scroll event processing both run on the browser's main thread.
+When the render loop is doing expensive work (large particle updates, excessive draw
+calls, un-batched geometries), it starves scroll events, causing the page to feel
+unresponsive even at 60fps average framerate. Users experience "sticky" or "laggy"
+scroll that does not track finger/wheel movement accurately.
 
-### Pitfall 11: Poor SEO Implementation
-**What goes wrong:** Portfolio not discoverable in search, missing meta tags, no sitemap, poor structured data, weak page titles/descriptions.
+**Why it happens:**
+The sticky-canvas scroll pattern (used in the existing /lab) is correct — it avoids
+the `overflow: hidden` trap that locks the browser compositor. However, if `useFrame`
+work is expensive (>8ms at 120Hz, >16ms at 60Hz), the main thread cannot service
+scroll events between frames.
 
-**Why it happens:** Viewing portfolio as "link to send" rather than discoverable web property.
+**How to avoid:**
+- Always use `{ passive: true }` on scroll event listeners (already done in /lab).
+- Keep `useFrame` callbacks under 8ms: profile with Chrome DevTools "Frame Rendering
+  Stats" overlay.
+- Use `frameloop="demand"` on the Canvas when the scene is static (no animation),
+  invalidating manually on scroll input only. This frees the main thread completely
+  during static periods.
+- Offload CPU-heavy particle simulations to GPU via GPGPU / compute textures rather
+  than JavaScript array updates.
+- Batch geometry: use `InstancedMesh` for repeated objects (stars, particles, floating
+  geometry) — one draw call instead of N.
 
-**Consequences:**
-- Lost organic discovery opportunities
-- Google can't properly index or rank site
-- Social media shares display poorly (no OG tags)
-- Demonstrates incomplete web development knowledge
+```tsx
+// Demand rendering — only render when scroll changes
+<Canvas frameloop="demand">
+  <ScrollDrivenScene scrollRef={scrollRef} />
+</Canvas>
 
-**Prevention:**
-Next.js makes SEO straightforward:
-
-```typescript
-// app/layout.tsx or page.tsx
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: {
-    default: 'Your Name - Frontend Developer',
-    template: '%s | Your Name'
-  },
-  description: '5 years experience building performant web applications with Next.js, React, and TypeScript',
-  keywords: ['Frontend Developer', 'React Developer', 'Next.js', 'Korean', 'Seoul'],
-  authors: [{ name: 'Your Name' }],
-  openGraph: {
-    title: 'Your Name - Frontend Developer Portfolio',
-    description: 'Frontend developer specializing in React and Next.js',
-    url: 'https://yourportfolio.com',
-    siteName: 'Your Name Portfolio',
-    images: [{
-      url: 'https://yourportfolio.com/og-image.jpg',
-      width: 1200,
-      height: 630,
-      alt: 'Your Name - Frontend Developer'
-    }],
-    locale: 'ko_KR',
-    alternateLocale: ['en_US'],
-    type: 'website'
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Your Name - Frontend Developer',
-    description: 'Frontend developer portfolio',
-    images: ['https://yourportfolio.com/og-image.jpg']
-  },
-  robots: {
-    index: true,
-    follow: true
-  }
+// In scroll handler
+const handleScroll = () => {
+  invalidate(); // trigger exactly one frame
+  progressRef.current = el.scrollTop / max;
 };
 ```
 
-**Also implement:**
-- XML sitemap (next-sitemap package)
-- robots.txt with proper rules
-- Schema.org structured data for Person/ProfilePage
-- Semantic HTML with proper heading hierarchy
-- Alt text for images (also accessibility requirement)
+**Warning signs:**
+- Chrome Performance tab shows "Long Tasks" (orange bars >50ms) during scroll.
+- `useFrame` callback time > 16ms reported by `performance.now()` instrumentation.
+- GPU utilization < 30% but scroll still jank — indicates CPU bottleneck, not GPU.
 
-**Detection:**
-- Google "site:yourportfolio.com" shows no results
-- Social media link previews are broken/generic
-- Lighthouse SEO score < 90
-
-**Phase mapping:**
-- Phase 2 (Technical Setup): Configure base SEO metadata
-- Phase 4 (Projects): Add page-specific metadata
-- Phase 5 (Polish): Verify all meta tags, generate sitemap
+**Phase to address:** Phase 2 (Scroll Mechanics). Establish `frameloop="demand"` or
+continuous render with profiling gate before building scene content on top.
 
 ---
 
-### Pitfall 12: Generic Portfolio with No Focus
-**What goes wrong:** Portfolio tries to appeal to everyone - full-stack, mobile, backend, design - ultimately appealing to no one. Dilutes expertise message.
+### Pitfall 5: R3F + GSAP ScrollTrigger Double-Scroll Conflict
 
-**Why it happens:** Fear of limiting opportunities, showcasing breadth over depth.
+**What goes wrong:**
+GSAP ScrollTrigger and Drei's `<ScrollControls>` both try to own the scroll container.
+`<ScrollControls>` creates its own internal overflow div and intercepts wheel events.
+ScrollTrigger expects to observe `window.scrollY` or a specific element. When both
+are active, scroll position doubles, triggers fire at wrong offsets, and pinning
+breaks visually (content jumps up and down instead of staying pinned).
 
-**Consequences:**
-- Unclear positioning in job market
-- Can't compete with focused specialists
-- Korean big tech wants frontend experts, not generalists
-- Weak portfolio impact compared to targeted competitors
+**Why it happens:**
+Both systems solve the same problem (mapping scroll position to animation progress)
+but with incompatible DOM assumptions. Developers add GSAP for timeline control on
+top of an R3F scene that already uses ScrollControls, not realizing the two intercept
+events at different layers.
 
-**Prevention:**
-- Lead with core expertise: "Frontend Developer specializing in React/Next.js"
-- Projects demonstrate depth in frontend domain
-- Can mention complementary skills ("familiar with Node.js APIs") but don't dilute main message
-- For targeting Samsung/Naver/Kakao: Emphasize frontend technical depth
-- With 5 years experience: Depth beats breadth at this career stage
+**How to avoid:**
+- Choose ONE scroll driver. The existing /lab uses a custom scroll div (correct choice
+  for this project). Stick with that pattern in /lab2.
+- If GSAP timeline features are needed (staggered sequences, ease curves), use GSAP
+  to animate THREE.js object properties directly via refs inside `useFrame`, not via
+  ScrollTrigger's DOM observation.
+- For /lab2: use GSAP `gsap.to(ref.current.position, {...})` driven by the scroll
+  progress value, not ScrollTrigger's automatic DOM scroll observation.
+- Alternatively: replace GSAP entirely with `react-spring` or lerp functions inside
+  `useFrame` — fewer dependencies, no conflict.
 
-**Detection:** Portfolio headline says "Full Stack Developer" but role target is frontend.
+```tsx
+// WRONG: GSAP ScrollTrigger + drei ScrollControls simultaneously
+<ScrollControls pages={5}>
+  <ScrollTrigger>...</ScrollTrigger> // conflict!
+</ScrollControls>
 
-**Phase mapping:** Phase 1 (Content Strategy) - define clear positioning statement.
-
----
-
-### Pitfall 13: Outdated Portfolio Content
-**What goes wrong:** Projects from 2-3 years ago, technologies that are now legacy, outdated frameworks, no recent work visible.
-
-**Why it happens:** Portfolio neglect during busy work periods.
-
-**Consequences:**
-- Appears inactive or out-of-touch with current tech
-- Doesn't reflect current skill level
-- Korean tech companies want to see current capabilities
-- Shows lack of ongoing learning
-
-**Prevention:**
-- Quarterly portfolio review (calendar reminder)
-- Add at least 1 project per year
-- Update technologies to current versions
-- Archive old projects that no longer represent your skills
-- Show learning journey (blog posts about new techniques)
-- For Korean market: Recent work especially important in fast-moving tech culture
-
-**Detection:** Most recent project is > 1 year old, or using React 16/17 in 2026.
-
-**Phase mapping:** Post-launch maintenance - set quarterly review schedule.
-
----
-
-### Pitfall 14: Missing or Broken Live Demos
-**What goes wrong:** GitHub links only (no live demo), or live demos that are broken, expired (free Heroku dyno), or unusably slow.
-
-**Why it happens:** Deployment neglected or free hosting expires.
-
-**Consequences:**
-- Recruiters must imagine what project looks like
-- Can't interact with actual implementation
-- Broken demos worse than no demos (signals poor maintenance)
-- Korean recruiters want to see working products
-
-**Prevention:**
-- Deploy ALL major projects to free-tier hosting (Vercel, Netlify)
-- Monitor uptime (free UptimeRobot)
-- Choose hosting that doesn't expire (not Heroku free tier)
-- For projects you can't deploy: Use high-quality demo video
-- Test ALL demo links quarterly
-
-**Hosting recommendations for Next.js:**
-- Vercel (best Next.js support, free tier)
-- Netlify (good alternative)
-- Cloudflare Pages (fast, free)
-
-**Detection:** Clicking project links leads to 404 or error pages.
-
-**Phase mapping:**
-- Phase 4 (Projects): Deploy each project as built
-- Phase 5 (Polish): Verify all links working
-- Post-launch: Quarterly link check
-
----
-
-### Pitfall 15: Form Validation and Error Handling Issues
-**What goes wrong:** Contact forms without validation, poor error messages, no loading states, unclear success feedback, or forms that silently fail.
-
-**Why it happens:** Contact form treated as simple feature, not critical conversion point.
-
-**Consequences:**
-- Frustrated recruiters can't reach you
-- Lost opportunities from form abandonment
-- Unprofessional user experience
-- Shows poor attention to UX details
-
-**Prevention:**
-Proper form implementation:
-
-```typescript
-// React Hook Form + Zod validation
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-
-const contactSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Please enter a valid email'),
-  message: z.string().min(10, 'Message must be at least 10 characters')
+// RIGHT: One system drives scroll, GSAP animates properties
+useFrame(() => {
+  const t = progressRef.current;
+  gsap.set(meshRef.current.position, { y: t * -10 }); // GSAP as property setter only
+  // or simply: meshRef.current.position.y = lerp(0, -10, t);
 });
+```
 
-function ContactForm() {
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
-    resolver: zodResolver(contactSchema)
-  });
+**Warning signs:**
+- Scroll position appears to move 2x faster than expected.
+- ScrollTrigger animations fire at wrong scroll offsets.
+- Pinned sections jump or oscillate.
 
-  const onSubmit = async (data) => {
-    try {
-      await fetch('/api/contact', {
-        method: 'POST',
-        body: JSON.stringify(data)
-      });
-      // Show success message
-    } catch (error) {
-      // Show error message with retry option
-    }
-  };
+**Phase to address:** Phase 2 (Scroll Mechanics). Decide the single scroll authority
+before wiring any animations.
+
+---
+
+### Pitfall 6: framer-motion-3d Is Discontinued and Incompatible with React 19
+
+**What goes wrong:**
+`framer-motion-3d` (the package for animating R3F meshes with Framer Motion) was
+deprecated in Motion v12.1.0 and does not support React 19. The portfolio uses
+React 19 (Next.js 16). Installing `framer-motion-3d` will cause peer dependency
+conflicts and runtime errors when animating Three.js objects.
+
+**Why it happens:**
+Documentation and tutorials for R3F + Framer Motion animation are written for React
+17/18 and reference `framer-motion-3d` or `MotionCanvas`. This package is no longer
+maintained. The replacement is `motion/react-three-fiber` from the Motion library,
+but its React 19 compatibility is not confirmed in current docs.
+
+**How to avoid:**
+- Use Framer Motion (`motion` package) ONLY for DOM/HTML overlay animations (section
+  titles, content panels, UI transitions). This is fully compatible with React 19.
+- For 3D mesh animations (position, rotation, scale), use `useFrame` + lerp, or
+  `react-spring` (which has confirmed React 19 support).
+- Do NOT install `framer-motion-3d` or `@react-three/fiber`-specific Framer packages.
+- Verify `motion` version compatibility before install: as of 2026-02, Motion v12+ is
+  required for React 19.
+
+```tsx
+// WRONG: framer-motion-3d on React 19 — peer dep error + runtime crash
+import { motion } from 'framer-motion-3d';
+<motion.mesh animate={{ y: 1 }} /> // breaks
+
+// RIGHT: Framer Motion for DOM overlays only
+import { motion } from 'motion/react';
+<motion.div animate={{ opacity: 1 }}>Section Title</motion.div>
+
+// RIGHT: useFrame + lerp for 3D mesh animation
+useFrame((_, delta) => {
+  meshRef.current.position.y = THREE.MathUtils.lerp(
+    meshRef.current.position.y, targetY, delta * 4
+  );
+});
+```
+
+**Warning signs:**
+- `npm install` shows peer dependency warnings for `framer-motion-3d`.
+- Runtime error: "Cannot read properties of undefined" in Three.js object motion.
+- Build fails with React 19 incompatibility warnings.
+
+**Phase to address:** Phase 1 (Foundation). Document the animation library boundary
+(Framer Motion = DOM only, useFrame/lerp = 3D) as an explicit architectural constraint.
+
+---
+
+### Pitfall 7: Bundle Size Explosion from Unguarded Three.js Imports
+
+**What goes wrong:**
+Three.js is ~600KB minified, R3F adds ~80KB, Drei adds up to ~200KB depending on what
+is imported. If Three.js is imported globally (e.g. in `layout.tsx`) instead of behind
+`dynamic(..., { ssr: false })`, it enters the main JavaScript bundle. Every page on
+the portfolio — including the lightweight main portfolio page — pays the full 3D
+library cost, destroying Lighthouse performance scores.
+
+**Why it happens:**
+Developers add shared utilities or types that indirectly import Three.js. A single
+`import * as THREE from 'three'` in a shared module is enough to include the entire
+library in the main bundle via Next.js module graph traversal.
+
+**How to avoid:**
+- All Three.js, R3F, Drei, and related imports must live only inside components that
+  are wrapped with `dynamic(..., { ssr: false })`. Never import them in Server
+  Components, layout files, or shared utility modules.
+- Audit with `@next/bundle-analyzer`: run `ANALYZE=true npm run build` and verify
+  Three.js appears only in the /lab2 route chunk.
+- Use named imports from Drei, not `import * from '@react-three/drei'` — tree-shaking
+  drops unused helpers.
+- Post-process libraries (`@react-three/postprocessing`) are large; import
+  conditionally and only when effects are actually used.
+
+```tsx
+// WRONG: Three.js in shared layout — contaminates all routes
+// app/layout.tsx
+import * as THREE from 'three'; // 600KB enters every page bundle
+
+// RIGHT: Only inside dynamically-imported component
+// app/[locale]/lab2/page.tsx
+const Lab2Scene = dynamic(() => import('@/components/lab2/Lab2Scene'), {
+  ssr: false,
+  loading: () => <LoadingScreen />,
+});
+```
+
+**Warning signs:**
+- `npm run build` output shows `/lab2` chunk is smaller than expected — Three.js may
+  have leaked into the shared chunk.
+- Lighthouse on the main portfolio page shows 600KB+ JS transfer.
+- `@next/bundle-analyzer` visualization shows `three` in the main or layout chunk.
+
+**Phase to address:** Phase 1 (Foundation). Set up `@next/bundle-analyzer` before any
+Three.js code is written and verify the bundle boundary is clean.
+
+---
+
+### Pitfall 8: GPU Overload from Post-Processing Without Adaptive Quality
+
+**What goes wrong:**
+Effects like UnrealBloom, depth-of-field, and chromatic aberration each require one
+or more full-resolution render passes. On a scene with bloom + dof + color grading,
+the GPU renders the scene 4–6 times per frame. On mid-range GPUs (integrated Intel,
+older AMD APUs — the kind used in office/café environments where portfolio reviewers
+often work), this pushes frame time above 33ms (30fps). The portfolio demos as
+"impressive but broken."
+
+**Why it happens:**
+Effects are developed on high-end development machines (e.g. MacBook Pro with M-series
+GPU) where 8 render passes at 120fps is trivial. The performance profile on a
+recruiter's work laptop is completely different.
+
+**How to avoid:**
+- Use R3F's `PerformanceMonitor` from Drei to measure average FPS and dynamically
+  disable effects if FPS drops below 45.
+- Default to minimum effects; enable premium effects only when `PerformanceMonitor`
+  confirms headroom.
+- Use `dpr={[1, 1.5]}` (already in /lab) — caps pixel ratio to prevent 4K rendering
+  on Retina displays.
+- For bloom: set `luminanceThreshold={0.9}` so only bright emissive surfaces bloom,
+  not the whole scene. Use `resolution={256}` for lower quality fallback.
+- Prioritize: bloom is the most impactful visual effect and least expensive if tuned.
+  Skip dof unless scene specifically requires it — it's expensive.
+
+```tsx
+import { PerformanceMonitor } from '@react-three/drei';
+
+function AdaptiveScene() {
+  const [dpr, setDpr] = useState(1.5);
+  const [bloomEnabled, setBloomEnabled] = useState(true);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input {...register('email')} />
-      {errors.email && <span className="text-red-500">{errors.email.message}</span>}
-
-      <button disabled={isSubmitting}>
-        {isSubmitting ? 'Sending...' : 'Send Message'}
-      </button>
-    </form>
+    <Canvas dpr={dpr}>
+      <PerformanceMonitor
+        onDecline={() => {
+          setDpr(1); // reduce resolution first
+          setBloomEnabled(false); // then disable effects
+        }}
+        onIncline={() => setDpr(1.5)}
+      />
+      {bloomEnabled && <Bloom luminanceThreshold={0.9} resolution={256} />}
+    </Canvas>
   );
 }
 ```
 
-**Must-have states:**
-- Default state (empty form)
-- Validation errors (inline, clear messages)
-- Loading state (button disabled, spinner)
-- Success state (clear confirmation, what happens next)
-- Error state (network error, with retry option)
+**Warning signs:**
+- Smooth on MacBook, choppy on Windows laptop with integrated graphics.
+- `gl.info.render.calls` > 50 per frame in browser console.
+- Chrome's "Frame Rendering Stats" overlay shows consistent >16ms frame times.
 
-**Detection:**
-- Submit empty form - are there helpful error messages?
-- Submit valid form - is there clear success feedback?
-- Slow network - is there loading indicator?
-
-**Phase mapping:** Phase 3 (Core Features) - implement contact form with full validation.
+**Phase to address:** Phase 3 (Effects). Add `PerformanceMonitor` from the first
+effect added — do not retrofit adaptive quality after all effects are built.
 
 ---
 
-## Phase-Specific Warnings
+### Pitfall 9: Asset Loading Blocking First Interaction
 
-| Phase Topic | Likely Pitfall | Mitigation |
-|-------------|---------------|------------|
-| Content Strategy | PM-centric narratives | Rewrite all projects with technical focus; emphasize frontend implementation |
-| Technical Setup | Missing i18n from start | Configure Next.js i18n routing and layout flexibility before building features |
-| Technical Setup | No performance monitoring | Set up Lighthouse CI and Core Web Vitals tracking from Day 1 |
-| Core Features | Animation overload | Establish animation budget (2-3 purposeful animations max) early |
-| Projects Section | Tutorial projects | Audit and exclude or heavily customize; 5-year developer shouldn't need tutorial projects |
-| Projects Section | Missing context | Create project documentation template before writing any project descriptions |
-| Projects Section | Skill percentage bars | Explicitly ban from design system; show skills through project outcomes |
-| Polish Phase | One-time accessibility audit | Integrate automated a11y testing into CI/CD, plan quarterly manual audits |
-| Polish Phase | Broken demo links | Test all external links and live demos before launch; set up monitoring |
-| Deployment | Missing SEO metadata | Complete metadata checklist per page, generate sitemap, verify OG tags |
+**What goes wrong:**
+GLTF models, HDR environment maps, and large textures are loaded asynchronously but
+if the scene does not render at all until every asset resolves, users see a black
+screen or indefinite loading spinner. If assets total 10–20MB (common for HDR + models),
+this can take 3–8 seconds on typical broadband, killing first impressions.
 
-## Korean Big Tech Specific Considerations
+**Why it happens:**
+Developers put all asset loading inside a single `<Suspense>` boundary without
+fallback content. The scene shows nothing until every `useLoader` call resolves.
 
-### Cultural and Technical Expectations
+**How to avoid:**
+- Use nested Suspense boundaries: render a low-detail scene (procedural geometry,
+  no textures) immediately, then progressively enhance as assets load.
+- For environment maps: start with a simple ambient light fallback, load the HDR
+  map in the background. R3F's `<Environment>` already handles this if Suspense is
+  structured correctly.
+- Limit total asset weight: compress GLTF with Draco (70–90% size reduction),
+  use KTX2 for textures, resize HDR to 1K for background use.
+- Use `<Preload all />` inside Suspense to begin loading all assets declared in the
+  scene graph before they are needed.
+- Show a meaningful loading progress indicator — not just a spinner. Use `useProgress`
+  from Drei.
 
-**Technical Excellence Emphasis:**
-- Samsung, Naver, Kakao are highly competitive employers with rigorous technical standards
-- Clean code, performance optimization, and architectural thinking highly valued
-- They have experience with KAIST alumni and top engineering talent - portfolio must demonstrate senior-level capability
+```tsx
+import { useProgress } from '@react-three/drei';
 
-**Bilingual Communication:**
-- Korean version must be equally polished (not machine-translated afterthought)
-- Use formal honorifics (존댓말) in professional contexts
-- Portfolio in Korean shows cultural fit and attention to detail
-- Consider Korean version as primary (companies may review Korean first)
+function LoadingUI() {
+  const { progress } = useProgress();
+  return <div>{Math.round(progress)}% loaded</div>;
+}
 
-**Infrastructure Context:**
-- Korean internet infrastructure is world-class (224 Mbps mobile, 233 Mbps fixed)
-- Poor performance is especially noticeable in Korean market
-- Companies expect technical optimization to match infrastructure quality
+// Layered Suspense: shell renders immediately, details load progressively
+<Canvas>
+  <ProceduralBackground /> {/* no assets, renders instantly */}
+  <Suspense fallback={<LoadingUI />}>
+    <DetailedScene /> {/* loads assets in background */}
+  </Suspense>
+</Canvas>
+```
 
-**Content Preferences:**
-- Emphasis on team collaboration and harmony (inhwa) alongside technical skills
-- Education and certifications carry weight (mention prestigious affiliations if any)
-- Recent work more important than older projects (fast-moving tech culture)
-- GitHub activity and open source contributions valued
+**Warning signs:**
+- Black canvas for >2 seconds after page navigation.
+- Network tab shows 15MB+ of assets loading in series (no parallelism).
+- `useProgress().progress` stays at 0 for a long time before jumping to 100.
 
-**Professional Presentation:**
-- Clean, minimalist design preferred over flashy/complex
-- Substance over style - focus on actual technical achievements
-- Professional photo often expected (unlike Western markets)
-- Detailed technical documentation shows thoroughness
+**Phase to address:** Phase 1 (Foundation) — establish the Suspense boundary
+structure. Phase 4 (Content) — audit asset sizes before adding each new asset.
+
+---
+
+### Pitfall 10: next-intl Locale State Causing Hydration Mismatch
+
+**What goes wrong:**
+The /lab2 page uses `'use client'` and R3F Canvas. If `useTranslations()` or locale
+detection runs on the server but the 3D canvas renders different content based on
+locale on the client, React's hydration will throw a mismatch error. More subtly:
+`setRequestLocale()` is required in page-level Server Components for static rendering
+— missing this call causes the middleware locale detection to fail, serving the wrong
+locale or throwing a runtime error.
+
+**Why it happens:**
+The /lab2 page must be a Client Component because of WebGL APIs. But next-intl v4
+requires `setRequestLocale()` in Server Components for static rendering. The natural
+fix is to make the page a Server Component wrapper that passes locale as a prop to
+the Client Canvas component — but this pattern requires careful prop threading.
+
+**How to avoid:**
+- Use the existing pattern from /lab: a Server Component page.tsx that calls
+  `setRequestLocale(locale)` and passes `locale` as a prop, then renders a Client
+  Component that is dynamically imported with `ssr: false`.
+- The Client Component uses `useTranslations()` normally — this works inside Client
+  Components wrapped by `NextIntlClientProvider` in the layout.
+- Never put `setRequestLocale()` in a Client Component.
+
+```tsx
+// app/[locale]/lab2/page.tsx — Server Component wrapper
+import { setRequestLocale } from 'next-intl/server';
+
+export default function Lab2Page({ params: { locale } }: { params: { locale: string } }) {
+  setRequestLocale(locale);
+  return <Lab2Client />; // dynamically imported with ssr: false
+}
+
+// components/lab2/Lab2Client.tsx — Client Component
+'use client';
+import { useTranslations } from 'next-intl';
+// R3F Canvas here
+```
+
+**Warning signs:**
+- "Text content does not match server-rendered HTML" error in console.
+- Static generation fails with locale-related error during `npm run build`.
+- Wrong language served on first load before client hydration.
+
+**Phase to address:** Phase 1 (Foundation). Copy the existing /lab Server/Client
+wrapper pattern exactly — it already handles this correctly.
+
+---
+
+## Technical Debt Patterns
+
+Shortcuts that seem reasonable but create long-term problems.
+
+| Shortcut | Immediate Benefit | Long-term Cost | When Acceptable |
+|----------|-------------------|----------------|-----------------|
+| Hardcode scroll thresholds (0.25, 0.5, 0.75) as magic numbers | Fast to implement | Section timing breaks whenever content count changes | Never — extract to a `SECTIONS` config constant from day 1 |
+| `new THREE.Vector3()` inside `useFrame` | Readable code | GC pressure at 60fps; causes stutters on long sessions | Never — pre-allocate and reuse via `.set()` |
+| Single `<Suspense>` wrapping all scene assets | Simple | Black screen until all assets load | Only for sub-100KB total assets |
+| Skip `renderer.dispose()` cleanup | Saves 5 lines | GPU context leak on route exit | Never |
+| `antialias: true` without DPR cap | Sharper visuals | 4x rendering cost on Retina at full DPR | Use `dpr={[1, 1.5]}` always |
+| Import all of Drei via `import * from '@react-three/drei'` | Convenient | Three.js tree-shaking disabled; +200KB bundle | Never — use named imports |
+| Mount multiple `<Canvas>` elements (one per section) | Isolated scenes | Hits browser context limit at 8–16 canvases | Never — one Canvas, multiple scenes |
+
+---
+
+## Integration Gotchas
+
+Common mistakes when connecting systems in this specific stack.
+
+| Integration | Common Mistake | Correct Approach |
+|-------------|----------------|------------------|
+| R3F + Tailwind CSS | Applying Tailwind classes to R3F mesh objects | Tailwind only works on DOM elements; use Three.js material properties for 3D styling |
+| R3F + next-themes dark mode | Checking `data-theme` attribute in `useFrame` which reads DOM | Read theme from a ref set in a `useEffect`, not from DOM in the render loop |
+| R3F + Framer Motion | Using `framer-motion-3d` for mesh animation | Framer Motion for DOM overlays only; `useFrame` + lerp for 3D |
+| GSAP + R3F | Using ScrollTrigger to observe scroll position | Let custom scroll div own scroll; use GSAP `.set()` as property writer inside `useFrame` |
+| next-intl + Canvas | Calling `useTranslations()` inside a component rendered inside `<Canvas>` | Move translated strings to DOM overlays outside Canvas; pass primitive values as props |
+| Drei `<Html>` inside Canvas | Attaching complex interactive DOM inside Canvas via `<Html>` | Use for simple labels only; complex overlays (ContentPanel) should be positioned fixed in DOM |
+| `useLoader` + HMR | Cached loaders not invalidating during development | Add `loader.manager.onLoad` callback; accept that HMR reload clears cache |
+
+---
+
+## Performance Traps
+
+Patterns that work well during development but fail in production.
+
+| Trap | Symptoms | Prevention | When It Breaks |
+|------|----------|------------|----------------|
+| Uninstanced repeated geometry (particles, stars, floating shapes) | Frame time grows linearly with object count | Use `InstancedMesh` for any object count >10 | ~50 objects on mid-range GPU |
+| New `THREE.Color` / `THREE.Vector3` allocation per frame | GC stutters after 30–60 seconds of interaction | Pre-allocate; reuse with `.set()` | After ~5 min session |
+| Post-processing with full-res render targets | GPU memory exhaustion on integrated graphics | Use `resolution={256}` for bloom; cap at 2–3 effects | 2+ effects on integrated GPU |
+| Large particle system updated in JavaScript | CPU bottleneck at 10K+ particles | GPGPU / compute texture for position updates | >10K particles at 60fps |
+| Uncompressed GLTF models (MB-range) | Long load times; asset parsing stalls main thread | Draco compression; split large models | >500KB GLTF on typical broadband |
+| `addEventListener` without cleanup in R3F components | Memory leak after route change | Always return cleanup function from `useEffect` | After first route navigation |
+| `console.log` or `renderer.info` access inside `useFrame` | Extreme slowdown due to GPU sync | Remove all debug output from hot path | Any debug access per frame |
+
+---
+
+## UX Pitfalls
+
+Common user experience mistakes specific to 3D interactive portfolios.
+
+| Pitfall | User Impact | Better Approach |
+|---------|-------------|-----------------|
+| No scroll affordance (no "scroll to explore" hint) | Users do not discover scroll interaction; bounce immediately | Show animated scroll hint that disappears after first scroll |
+| Scroll progress resets on browser back | Users lose their place; jarring experience | Preserve scroll position with `sessionStorage` |
+| 3D animation blocks reading text | Content unreadable while animation plays | Complete major camera moves before fading in text overlays |
+| No fallback for WebGL unavailable | Blank page on Safari with hardware acceleration disabled | Detect WebGL support; redirect to main portfolio `/` with a notice |
+| Content accessible only via 3D interaction | Screen reader users get nothing | All project content in semantic DOM (can be `sr-only` / visually hidden) |
+| Scroll speed too fast | Content flashes past; no time to read | Add easing / lerp to camera moves; test with actual content text |
+| No visual feedback for section transitions | Users cannot tell when section changed | Fade in section labels / dot navigation with CSS transitions |
+
+---
+
+## "Looks Done But Isn't" Checklist
+
+Things that appear complete during development but are missing critical pieces.
+
+- [ ] **WebGL cleanup:** Does navigating away from /lab2 and back not cause canvas blackout? Verify `renderer.dispose()` fires and contexts do not accumulate.
+- [ ] **Shader warm-up:** Is the first frame after loading screen instant (<100ms) or does it freeze for 1–3 seconds? Run `renderer.compile()` before revealing scene.
+- [ ] **Bundle isolation:** Does `ANALYZE=true npm run build` show Three.js only in the /lab2 chunk, not in the shared layout chunk?
+- [ ] **Scroll passive listeners:** Does `addEventListener('scroll', handler, { passive: true })` appear on all scroll listeners? Non-passive blocks compositor.
+- [ ] **prefers-reduced-motion:** Does the experience degrade gracefully when `window.matchMedia('(prefers-reduced-motion: reduce)').matches` is true? Stop auto-playing animations; keep scene static.
+- [ ] **WebGL unavailable:** What happens on a machine with WebGL disabled? Is there a meaningful fallback redirect, not a blank page?
+- [ ] **Mid-range GPU test:** Does the scene maintain >45fps on a laptop with Intel Iris / AMD Vega integrated graphics?
+- [ ] **useFrame profiling:** Is every `useFrame` callback completing in <8ms? Instrument with `performance.now()` during development.
+- [ ] **framer-motion version:** Is the installed `motion` version React 19-compatible? Run `npm ls motion react` and verify no peer dep warnings.
+- [ ] **Asset sizes:** Are all GLTF files Draco-compressed? Is the HDR environment map ≤1K resolution? Total asset budget for /lab2 should be <5MB.
+- [ ] **`setRequestLocale` in page.tsx:** Is the Server Component wrapper calling `setRequestLocale(locale)` before rendering the Client Canvas? Verify static generation works for both `ko` and `en`.
+
+---
+
+## Recovery Strategies
+
+When pitfalls occur despite prevention, how to recover.
+
+| Pitfall | Recovery Cost | Recovery Steps |
+|---------|---------------|----------------|
+| WebGL context leak discovered after sections are built | HIGH | Audit all Canvas mount points; consolidate to single Canvas; add `useEffect` cleanup to every scene component |
+| setState-in-useFrame causing jank | MEDIUM | Profile with React DevTools Profiler; replace state with refs + Zustand; no component rewrites needed if refs are threading |
+| Shader stall on first paint | LOW | Add `renderer.compile(scene, camera)` in `onCreated`; move assets behind Suspense so compile runs during existing loading screen |
+| Bundle bloat from Three.js in main chunk | MEDIUM | Trace import graph with bundle analyzer; move offending imports behind `dynamic()` boundary; no logic change required |
+| GSAP + ScrollControls conflict discovered mid-development | HIGH | Rip out one system; if GSAP ScrollTrigger is entangled in many components, switching to custom scroll div is the cheaper fix |
+| framer-motion-3d peer dep failure | LOW | Uninstall package; replace mesh animations with `useFrame` + `THREE.MathUtils.lerp`; DOM animations unaffected |
+| Post-processing GPU overload on mid-range hardware | MEDIUM | Add `PerformanceMonitor`; wrap each effect in a conditional; disable bloom first as highest GPU cost recovery |
+
+---
+
+## Pitfall-to-Phase Mapping
+
+How roadmap phases should address these pitfalls.
+
+| Pitfall | Prevention Phase | Verification |
+|---------|------------------|--------------|
+| WebGL context leak | Phase 1: Foundation | Navigate /lab2 ↔ / 10 times; no canvas blackout; check `renderer.info` |
+| setState in useFrame | Phase 1: Foundation | React Profiler shows <2 renders/sec during animation |
+| Shader compilation stall | Phase 1: Foundation | First frame after loading screen < 100ms |
+| Scroll jank / main thread contention | Phase 2: Scroll Mechanics | Chrome Performance tab: no Long Tasks during scroll |
+| GSAP + ScrollTrigger conflict | Phase 2: Scroll Mechanics | Scroll position maps 1:1 to animation progress; no doubling |
+| framer-motion-3d incompatibility | Phase 1: Foundation | `npm ls motion` shows no peer dep warnings; 3D animations use useFrame |
+| Bundle size explosion | Phase 1: Foundation | `ANALYZE=true npm run build` confirms Three.js in /lab2 chunk only |
+| GPU overload from post-processing | Phase 3: Effects | `PerformanceMonitor` callback never fires; consistent >45fps on test laptop |
+| Asset loading blocking interaction | Phase 1: Foundation, Phase 4: Content | Loading progress visible; first scene element renders within 1s |
+| next-intl hydration mismatch | Phase 1: Foundation | `npm run build` succeeds for both ko and en; no console hydration errors |
+
+---
 
 ## Sources
 
-### Portfolio Mistakes (General)
-- [Five Common Mistakes Found on Frontend Portfolio Sites - Medium](https://medium.com/illumination/five-common-mistakes-found-on-frontend-portfolio-sites-687b74063f9d)
-- [5 Mistakes Developers Make in Their Portfolio Websites - DevPortfolioTemplates](https://www.devportfoliotemplates.com/blog/5-mistakes-developers-make-in-their-portfolio-websites)
-- [Developer portfolio do's & don'ts - Kieran Roberts](https://blog.kieranroberts.dev/developer-portfolio-dos-and-donts)
-- [5 Most Common Developer Portfolio Mistakes - David Walsh](https://davidwalsh.name/5-most-common-developer-portfolio-mistakes)
+- [React Three Fiber: Performance Pitfalls (official docs)](https://r3f.docs.pmnd.rs/advanced/pitfalls) — HIGH confidence
+- [React Three Fiber: Scaling Performance (official docs)](https://r3f.docs.pmnd.rs/advanced/scaling-performance) — HIGH confidence
+- [Three.js Discourse: Dispose things correctly](https://discourse.threejs.org/t/dispose-things-correctly-in-three-js/6534) — HIGH confidence
+- [R3F GitHub issue #514: Leaking WebGLRenderer on unmount](https://github.com/pmndrs/react-three-fiber/issues/514) — HIGH confidence
+- [R3F GitHub Discussion #2457: Too many WebGL contexts on Safari](https://github.com/pmndrs/react-three-fiber/discussions/2457) — HIGH confidence
+- [GSAP Forum: ScrollTrigger pin and drei ScrollControls conflict](https://gsap.com/community/forums/topic/40114-scrolltrigger-pin-and-dreis-scrollcontrols-dont-play-well-together/) — HIGH confidence
+- [Motion docs: React Three Fiber integration](https://motion.dev/docs/react-three-fiber) — HIGH confidence
+- [npm: framer-motion-3d — discontinued, no React 19 support](https://www.npmjs.com/package/framer-motion-3d) — HIGH confidence
+- [Three.js Discourse: Reducing shader compile time](https://discourse.threejs.org/t/reducing-shader-compile-time-on-scene-initialization/56572) — MEDIUM confidence
+- [Three.js Discourse: Custom shader slow to initialize first frame](https://discourse.threejs.org/t/custom-shader-slow-to-initialize-first-frame/5910) — MEDIUM confidence
+- [14islands/r3f-scroll-rig GitHub Discussion: ScrollControls vs r3f-scroll-rig](https://github.com/14islands/r3f-scroll-rig/discussions/29) — MEDIUM confidence
+- [WebGL Best Practices — MDN](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/WebGL_best_practices) — HIGH confidence
+- [100 Three.js Tips That Actually Improve Performance (2026)](https://www.utsubo.com/blog/threejs-best-practices-100-tips) — MEDIUM confidence
+- [WCAG 2.3.3: Animation from Interactions — W3C](https://www.w3.org/WAI/WCAG21/Understanding/animation-from-interactions.html) — HIGH confidence
+- [Next.js Lazy Loading docs](https://nextjs.org/docs/app/guides/lazy-loading) — HIGH confidence
+- [Motion & Framer Motion upgrade guide (React 19 notes)](https://motion.dev/docs/react-upgrade-guide) — HIGH confidence
 
-### Design and UX Pitfalls
-- [Website Design Trends Most Brands Are Still Getting Wrong in 2026 - Line and Dot Studio](https://lineanddotstudio.com/blog/website-design-trends-2026/)
-- [Common Portfolio Mistakes and How to Avoid Them - Wix](https://www.wix.com/blog/common-portfolio-mistakes)
-- [10 Website Design Mistakes You Need to Stop Making in 2026 - Grayscale360](https://grayscale360.my/blog/10-website-design-mistakes-you-need-to-stop-making-in-2026/)
+---
 
-### Performance and Technical SEO
-- [SEO Mistakes and Common Errors to Avoid in 2026 - Content Whale](https://content-whale.com/blog/seo-mistakes-and-common-errors-to-avoid-in-2026/)
-- [Technical SEO Mistakes to Avoid in 2026 - Whitehat SEO](https://whitehat-seo.co.uk/blog/technical-seo-mistakes-to-avoid)
-- [30 SEO Mistakes to Avoid in 2026 - WP Rocket](https://wp-rocket.me/blog/seo-mistakes/)
-- [7 SEO Mistakes That Kill Website Rankings in 2026 - Medium](https://webdesignerindia.medium.com/seo-mistakes-that-kill-rankings-2026-6f4fd03b2a6f)
-- [5 Common Web Design Mistakes That Quietly Kill Your SEO Performance - OCNJ Daily](https://ocnjdaily.com/news/2026/jan/13/5-common-web-design-mistakes-that-quietly-kill-your-seo-performance/)
-
-### Next.js Performance Optimization
-- [7 Common Performance Mistakes in Next.js and How to Fix Them - Medium](https://medium.com/full-stack-forge/7-common-performance-mistakes-in-next-js-and-how-to-fix-them-edd355e2f9a9)
-- [React & Next.js Best Practices in 2026 - FAB Web Studio](https://fabwebstudio.com/blog/react-nextjs-best-practices-2026-performance-scale)
-- [Next.js Performance Optimisation in 9 Steps - Pagepro](https://pagepro.co/blog/nextjs-performance-optimization-in-9-steps/)
-- [5 Lessons For Next.js Performance Optimization - Pagepro](https://pagepro.co/blog/5-lessons-for-next-js-performance-optimization-in-large-projects/)
-- [10 Performance Mistakes in Next.js 16 - Medium](https://medium.com/@sureshdotariya/10-performance-mistakes-in-next-js-16-that-are-killing-your-app-and-how-to-fix-them-2facfab26bea)
-- [Next.js Image Component: Performance and CWV - Pagepro](https://pagepro.co/blog/nextjs-image-component-performance-cwv/)
-- [Next.js Production Checklist - Official Docs](https://nextjs.org/docs/app/guides/production-checklist)
-
-### Korean Tech Market Hiring
-- [Top 10 Tips for Building a Stand-Out Tech Portfolio in South Korea - Nucamp](https://www.nucamp.co/blog/coding-bootcamp-south-korea-kor-top-10-tips-for-building-a-standout-tech-portfolio-in-south-korea)
-- [Preparing for Korea's 2026 Recruitment Season - Kowork](https://kowork.kr/en/blog/2026-Korea-recruitment-season-prep-en)
-- [Korean Resume Guideline & Samples - Chapter Korean](https://chapterkorean.com/en/korean-resume-guideline-7-things/)
-- [How to Write a Professional CV for South Korea Jobs - ResumeFlex](https://resumeflex.com/how-to-write-a-professional-cv-for-south-korea-job-market/)
-- [Digital 2026: South Korea - DataReportal](https://datareportal.com/reports/digital-2026-south-korea)
-
-### Accessibility (WCAG)
-- [WCAG 2.1 & 2.2 Compliance Checklist 2026 - Mivi](https://mivibzzz.com/resources/accessibility/wcag-checklist)
-- [A Detailed Guide to WCAG Compliance in 2026 - AccessibilityChecker](https://www.accessibilitychecker.org/guides/wcag/)
-- [Avoiding Accessibility Mistakes in 2026 - The Drum](https://www.thedrum.com/industry-insight/avoiding-accessibility-mistakes-three-actions-that-will-help-you-win-in-2026)
-- [WCAG 2.2 Accessibility Checklist 2026 - The Clay Media](https://theclaymedia.com/wcag-2-2-accessibility-checklist-2026/)
-
-### Animation and Visual Design
-- [Website Animations in 2026: Pros, Cons & Best Practices - Shadow Digital](https://www.shadowdigital.cc/resources/do-you-need-website-animations)
-- [Mastering Web Animations: Common Mistakes and Best Practices - OpenReplay](https://blog.openreplay.com/mastering-web-animations/)
-- [Web Interface Animation Mistakes to Avoid - Pixel Free Studio](https://blog.pixelfreestudio.com/web-interface-animation-mistakes-to-avoid/)
-- [The Web Animation Performance Tier List - Motion Magazine](https://motion.dev/blog/web-animation-performance-tier-list)
-- [Common Website Animations Mistakes - Strikingly](https://www.strikingly.com/blog/posts/common-website-animations-mistakes)
-
-### Content and Project Documentation
-- [Web Developer Portfolio Examples - Middlehost](https://middlehost.com/blog/web-developer-portfolio-examples/)
-- [What to Include in Your 2026 Junior Dev Portfolio - Codeworks](https://codeworks.me/blog/junior-dev-portfolio-projects-coding-5-skills/)
-- [28 Things to Put on Your Web Developer Portfolio - Learn to Code With Me](https://learntocodewith.me/posts/portfolio-tips/)
-
-### Contact Forms and CTAs
-- [Why Your Contact Page is the Most Important Part of Your Portfolio - Shopify](https://www.shopify.com/partners/blog/why-your-contact-page-is-the-most-important-part-of-your-portfolio-website)
-- [15 Best Contact Form Design Examples of 2026 - Venture Harbour](https://ventureharbour.com/15-contact-form-examples-help-design-ultimate-contact-page/)
-- [Using Call-to-Action Buttons to Guide People - FGWeb](https://www.foregroundweb.com/call-to-action-buttons/)
-
-**Confidence Level:** MEDIUM - Findings based on multiple WebSearch sources from 2026, cross-referenced across 40+ articles and resources. Korean market specifics have LOWER confidence (fewer specific sources), general portfolio and technical pitfalls have HIGHER confidence (widespread agreement across sources).
+*Pitfalls research for: media-art 3D interactive portfolio (/lab2) added to Next.js 16 portfolio*
+*Researched: 2026-02-28*

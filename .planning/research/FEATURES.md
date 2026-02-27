@@ -1,230 +1,326 @@
-# Feature Landscape: Frontend Developer Portfolio
+# Feature Research
+
+**Domain:** Media-art style interactive portfolio (/lab2 route) — v3.0 milestone
+**Researched:** 2026-02-28
+**Confidence:** HIGH (verified against Codrops 2025 case studies, Awwwards SOTD analysis, official library docs)
+
+---
+
+> **NOTE:** This file was updated for the v3.0 milestone. The original research (v1/v2 main portfolio features) is preserved at the bottom as a reference. The /lab2 media-art research is the primary content.
+
+---
+
+## Context for /lab2
+
+The `/lab2` route is a **single-route interactive experience** — desktop-only, no separate project detail pages. The experience must:
+
+1. Prove frontend engineering depth through the experience itself (the portfolio IS the demo)
+2. Showcase 5 projects inline without separate pages
+3. Feel like a media-art installation, not a scrollable webpage
+4. Target Korean big-tech hiring managers who will recognize technical sophistication
+
+**Existing assets to use:**
+- 13 optimized WebP images (hero, architecture, thumbnail per project) — already in `/public/images/`
+- ~20,000 words bilingual project content — already authored, available via next-intl translations
+- Existing `/lab` patterns (scroll-driven canvas, sticky 3D scene, dot nav) — extend, don't reinvent
+
+---
+
+## Feature Landscape
+
+### Table Stakes (Users Expect These)
+
+Features that award-winning interactive portfolios must have. Missing any of these makes the experience feel unfinished or broken.
+
+| Feature | Why Expected | Complexity | Notes |
+|---------|--------------|------------|-------|
+| **Scroll-driven progression** | Core mechanic of media-art portfolios — scroll controls the narrative timeline | MEDIUM | Map scroll 0–1 to scene chapters. Pattern already wired in `/lab`. GSAP ScrollSmoother or Lenis + `useScroll` from R3F. |
+| **Smooth scroll / scroll lerp** | Native browser scroll feels mechanical; premium feel requires interpolation | LOW | Lenis (2.3kB gzip) or GSAP ScrollSmoother. Single setup call, massive perceived quality gain. |
+| **Loading screen with asset progress** | 3D assets and textures take time; blank canvas = broken perception | MEDIUM | R3F/drei `useProgress` hook + GSAP-animated overlay. Fade-out at 100%. Minimal, calm design — two lines of text, a progress line. |
+| **Cinematic scene transitions** | Camera moving between chapters must feel deliberate, not snapping | MEDIUM | GSAP timeline per chapter, scrubbed by scroll. `customEase` curves (e.g. "cinematicSilk": 0.45,0.05,0.55,0.95). |
+| **Text animations (character-level)** | Static text in a motion-heavy experience reads as incomplete and cheapens everything | MEDIUM | GSAP SplitText or manual char splitting (SplitText is now free in GSAP 3.x). Stagger 0.02–0.05s per character. |
+| **Chapter navigation / orientation** | User must know where they are in the experience — disorientation kills engagement | LOW | Dot nav (already in `/lab`), or "2 / 5" chapter counter. Chapter name shown on active section. |
+| **Back-to-main link** | User must be able to exit the experience cleanly | LOW | Fixed position, subtle. Already implemented in `/lab` — port directly. |
+| **Project information readability** | Hiring managers must actually be able to read project details | MEDIUM | HTML overlay panels positioned over canvas (not 3D text). High contrast, clean typography. |
+| **60fps baseline** | Below 60fps, the experience reads as broken rather than artistic | HIGH | R3F `PerformanceMonitor` + adaptive pixel ratio. Disable expensive post-processing below 30fps. |
+| **Graceful mobile message** | Desktop-only is in scope; mobile users need a clear explanation | LOW | Detect viewport < 1024px, show a simple "best viewed on desktop" message. No attempt to make 3D work on mobile. |
+
+### Differentiators (Competitive Advantage)
+
+What separates a "Three.js sphere in a dark room" from an Awwwards SOTD. These are where engineering talent becomes visible.
+
+| Feature | Value Proposition | Complexity | Notes |
+|---------|-------------------|------------|-------|
+| **Camera path storytelling** | Camera flies through a continuous 3D space; each project is a new "shot" — creates cinematic progression | HIGH | GSAP timeline scrubbed by scroll progress. `camera.position.set()` + `lookAt()` per chapter. The most critical differentiator — this IS the experience structure. |
+| **Scroll-velocity reactive text stretch** | Text geometry that distorts in proportion to scroll speed — immediately "feels alive" to technical viewers | MEDIUM | Track scroll delta between frames. Pass as `uniform float uVelocity` to GLSL vertex shader. Stefan Vitasović and Roman Jean-Elie both use this. Highest ROI effect. |
+| **Kinetic character-level typography** | Characters that assemble, disperse, or morph rather than fade — the single biggest perceptual differentiator at low cost | MEDIUM | GSAP SplitText + staggered x-axis motion with masked overflow. Stefan Vitasović's "characters-to-word" assembly. Combine with `clip-path: inset()` for glass-parallax feel. |
+| **Project images as 3D texture planes** | Existing WebP images mapped onto planes in 3D space — turns static assets into dynamic scene elements | LOW | `PlaneGeometry` with `TextureLoader`. Can add subtle displacement shader on hover. All 13 images already exist as WebP. |
+| **Particle field as environment** | A background particle system creates sense of being somewhere rather than floating in void | MEDIUM | Three.js `Points` + `BufferGeometry`. Keep < 3k particles. Velocity-responsive opacity or drift. Environment, not centerpiece. |
+| **Post-processing effects** | Bloom + film grain transform the rendering from "3D viewport" to "cinematic experience" | MEDIUM | `@react-three/postprocessing` EffectComposer. Bloom on emissive meshes. FilmGrain adds analog texture. Must be conditionally disabled via PerformanceMonitor. |
+| **Mouse parallax on idle** | Camera or scene reacts subtly to cursor position when user is not actively scrolling — creates "alive" feeling | LOW | Interpolated `camera.rotation.x/y` toward mouse target. Already implemented in `/lab` — port directly. Very low cost, high perceived quality. |
+| **Transition wipes between chapters** | Geometric wipe (not a fade) marks major section shifts clearly and intentionally | MEDIUM | CSS clip-path animated via GSAP, or a fullscreen quad mesh in WebGL. Makes the "chapter" metaphor tangible. |
+| **Entry intro sequence** | After loading completes, 2–3 second animated intro before scroll-driven content starts — sets tone | MEDIUM | Camera starts zoomed out / abstract. Text assembles. Environment fades in. GSAP timeline, not scroll-driven. |
+| **Per-project visual signature** | Each of 5 project chapters has a slightly different color temperature or shader effect — prevents visual monotony | HIGH | Swap `THREE.Color` for ambient/directional lights per chapter. Or pass a per-chapter `uColor` uniform to shared shaders. Can be added incrementally. |
+| **Custom cursor** | Replaces browser cursor with a minimal dot that reacts to hover states — standard on Awwwards-quality sites | LOW | 40px circle, `mix-blend-mode: difference`. Enlarges on hover over interactive elements. CSS + GSAP, no Three.js. |
+
+### Anti-Features (Commonly Requested, Often Problematic)
+
+| Feature | Why Requested | Why Problematic | Alternative |
+|---------|---------------|-----------------|-------------|
+| **Ambient audio / autoplay sound** | Cinematic, media-art feel | Browsers block autoplay; unexpected sound is hostile; hiring managers view in offices or with headphones on calls | If audio is desired: explicit opt-in mute/unmute toggle with clear iconography. Never autoplay. Realistically, skip audio entirely for hiring context. |
+| **Full mobile support** | Portfolio should work everywhere | 3D on mobile: thermal throttling, 60fps impossible on mid-range phones, WebGL context loss is common. Attempting mobile degrades the desktop experience too. | Show "best experienced on desktop" message. /lab2 is explicitly desktop-only in the project spec. |
+| **Excessive particle counts (> 10k)** | More particles = more "media art" impressiveness | Single `Points` pass > 10k stalls GPU on integrated graphics (MacBook Air is common in Korean offices). Laptop fans spin up during hiring manager demo. | Keep particles < 3k. Use instanced meshes for repeated elements. Scale count with `dpr`. |
+| **Simultaneous independent GSAP tweens** | Rich, layered motion | Multiple concurrent tweens on the same element cause style conflicts and jank; common 30fps culprit | Consolidate all animation for a chapter into one GSAP timeline. One master timeline per scroll chapter, scrubbed by progress. |
+| **Video backgrounds / autoplay video** | Dramatic and cinematic | Large file size, bandwidth cost, battery drain, codec inconsistencies, conflicts with WebGL canvas | Use static images with shader-based animation: noise displacement, scanline overlay, subtle vertex drift. Equally cinematic, 10x lighter. |
+| **Physics simulation (Matter.js / Cannon.js)** | "Alive" feel, memorable interactions | Physics at 60Hz + GSAP + WebGL = triple simultaneous CPU load. Even Stas Bondar, who uses physics for character dropping, limits it to a single isolated moment. | Fake physics with spring-eased GSAP: `elastic.out(1, 0.3)` easing. Same perceived feel, zero runtime cost. |
+| **3D text for readable body copy** | Shows technical depth, "look what I can do" | `TextGeometry` is expensive (high poly count); 3D text anti-aliases poorly at small sizes; completely unreadable in dark environments. | 3D text only for hero moments (1–2 large words). All project descriptions in HTML overlay with proper typography. |
+| **Infinite scroll / no defined endpoint** | "Premium scrolly" pattern | Hiring managers don't explore endlessly. If they don't know when they've seen everything, they assume they've missed something and give up. | Define clear chapter count (5–7). Show progress. "4 of 5" indicator tells them they're almost done. |
+| **Preloading all assets before start** | Prevents missing textures mid-experience | If total assets > 3–5MB, user waits > 3s before seeing anything. Perceived as broken or stuck. | Load entry state assets immediately. Load per-chapter textures just-in-time as chapters approach. Drei `useTexture` with Suspense. |
+| **Portal / FBO render pipeline (initially)** | Maximum visual differentiation, Roman Jean-Elie's signature technique | Requires a fundamentally different render pipeline (render-to-texture, mask geometry). Cannot be added later without major refactor. | Build with standard scene first. Plan the architecture to accommodate FBO as a future upgrade if the simpler approach works. |
+
+---
+
+## Feature Dependencies
+
+```
+[Smooth Scroll / Lenis]
+    └──required by──> [Scroll Progression System]
+
+[Scroll Progression System]  (core spine — everything depends on this)
+    └──required by──> [Camera Path Storytelling]
+    └──required by──> [Chapter State Machine]
+    └──required by──> [Scroll-velocity reactive effects]
+    └──required by──> [Text animation triggers]
+    └──required by──> [Transition wipes]
+
+[Camera Path Storytelling]
+    └──required by──> [Per-project visual signature]
+    └──required by──> [Project panel reveal]
+
+[Chapter State Machine]
+    └──required by──> [Project information display]
+    └──required by──> [Chapter progress indicator]
+
+[R3F / Three.js Canvas]
+    └──required by──> [Particle field]
+    └──required by──> [Project images as 3D textures]
+    └──required by──> [Post-processing effects]
+    └──required by──> [Custom GLSL shaders]
+
+[Post-Processing Effects]
+    └──requires──> [PerformanceMonitor] to disable gracefully
+
+[Loading Screen]
+    └──precedes──> [Entry intro sequence]
+    └──precedes──> [Scroll-driven content]
+
+[Asset preloading strategy]
+    └──required by──> [Loading Screen with progress]
+
+[GSAP SplitText]
+    └──required by──> [Kinetic character typography]
+    └──enhances──> [Text animations]
+
+[Scroll delta tracking]
+    └──required by──> [Scroll-velocity text stretch shader]
+    └──feeds──> [Custom GLSL uniform uVelocity]
+
+[Custom GLSL shaders]
+    └──enhances──> [Particle systems] (velocity-based opacity)
+    └──enhances──> [Project image planes] (displacement on hover)
+
+[Mouse position tracking]
+    └──required by──> [Mouse parallax]
+    └──required by──> [Custom cursor]
+```
+
+### Dependency Notes
+
+- **Scroll Progression is the spine.** Everything else is a function of the 0–1 scroll value. Build this first, test it, then layer features on top.
+- **Camera Path requires Scroll Progression.** Camera position is computed as a chapter-keyed function of global scroll. This cannot be retrofitted — design the chapter count and camera waypoints before building anything else.
+- **Post-Processing requires PerformanceMonitor.** Without adaptive disabling, bloom + grain will tank integrated GPU laptops (MacBook Air, common in Korean office environments). PerformanceMonitor is not optional if post-processing is in scope.
+- **Loading Screen precedes everything visible.** Nothing should render in the canvas until critical assets are ready. GSAP overlay with `useProgress` from drei is the standard pattern.
+- **FBO / Portal conflicts with standard scene.** The portal mask technique requires render-to-texture pipeline. Decide architecture in Phase 1. Adding it later requires a meaningful refactor.
+- **Custom cursor is independent.** Zero Three.js involvement. Can be added at any phase. Low cost, adds significant polish.
+
+---
+
+## MVP Definition
+
+### Launch With (v1 — Credible media-art showcase)
+
+The minimum set that proves this is an intentional, technically sophisticated experience:
+
+- [ ] **Scroll-driven 3D environment** — Camera moves through a continuous space as user scrolls. 6 chapters: intro + one per project. Establishes the core mechanic. No scroll = no experience.
+- [ ] **Loading screen with progress bar** — `useProgress` + GSAP fade-out. Non-negotiable for any 3D site.
+- [ ] **Smooth scroll (Lenis)** — Eliminates mechanical scroll feel. Single setup call.
+- [ ] **Character-level text reveals** — Each chapter has a headline that assembles character by character. The single highest-ROI differentiator.
+- [ ] **Project showcase panels (HTML overlay)** — When scrolling to each project chapter, project name, tech stack, and 2–3 sentence summary are readable. HTML positioned over canvas — not 3D text.
+- [ ] **Existing project images as 3D texture planes** — Map the 13 existing WebP images onto planes in the scene. All images exist; zero new asset creation needed.
+- [ ] **Particle field environment** — Background particle system (< 3k) creates sense of inhabiting a space. Ties chapters together visually.
+- [ ] **Performance monitor + adaptive DPR** — R3F `PerformanceMonitor`. Must not crash integrated GPU.
+- [ ] **Chapter progress indicator** — "3 / 5" counter or dot nav. User must know they've seen all projects.
+- [ ] **Back-to-main navigation** — Fixed link, same as `/lab`. Port directly.
+- [ ] **Desktop-only gate** — Viewport < 1024px shows a clean "best experienced on desktop" message. No broken 3D on mobile.
+
+### Add After Core Works (v1.x — Polish layer)
+
+- [ ] **Scroll-velocity text stretch shader** — Pass scroll `delta` as `uVelocity` uniform to headline geometry. Adds immediate "wow" without architecture changes. Trigger: core scroll + 3D working at stable 60fps.
+- [ ] **Post-processing: bloom + film grain** — `@react-three/postprocessing` EffectComposer. Trigger: PerformanceMonitor shows render budget headroom on target hardware.
+- [ ] **Entry intro sequence** — 2–3 second animated intro after loading completes before scroll-driven content begins. GSAP timeline. Sets tone for entire experience.
+- [ ] **Mouse parallax on idle** — Interpolated camera drift toward cursor. Port from `/lab` directly.
+- [ ] **Transition wipes between chapters** — CSS clip-path animated by GSAP at chapter boundaries.
+- [ ] **Custom cursor** — 40px circle, `mix-blend-mode: difference`, grows on hover. Pure CSS + GSAP.
+- [ ] **Per-project color temperature** — Shift ambient/directional light colors per chapter. Prevents visual monotony across 5 projects.
+
+### Future Consideration (v2+ — If time and budget allow)
+
+- [ ] **Portal / FBO masked reveals** — Bounded WebGL plane using render-to-texture mask. Maximum visual impact. Requires architecture decision upfront even if deferred.
+- [ ] **Per-project GLSL shader signature** — Unique fragment shader per project chapter (dither effect, scanlines, noise pattern). Requires shader authoring per project.
+- [ ] **Audio opt-in** — A single ambient drone with mute toggle. Only after accessibility review. Probably not appropriate for Korean hiring context.
+- [ ] **3D extruded text for hero moments** — `troika-three-text` for 1–2 key title moments. Only if performance headroom is confirmed.
+- [ ] **Physics-driven elements** — GSAP spring easing as fake physics for most things. Real physics (Rapier) only if a specific interaction justifiably requires it.
+
+---
+
+## Feature Prioritization Matrix
+
+| Feature | User Value | Implementation Cost | Priority |
+|---------|------------|---------------------|----------|
+| Scroll-driven camera path storytelling | HIGH | HIGH | P1 (it is the experience) |
+| Loading screen with progress | HIGH | LOW | P1 |
+| Smooth scroll (Lenis) | HIGH | LOW | P1 |
+| Chapter text reveals (SplitText) | HIGH | LOW | P1 |
+| Project panels (HTML overlay) | HIGH | LOW | P1 |
+| Existing images as 3D textures | HIGH | LOW | P1 |
+| Particle field environment | MEDIUM | LOW | P1 |
+| Performance monitor + adaptive DPR | HIGH | LOW | P1 |
+| Chapter progress indicator | MEDIUM | LOW | P1 |
+| Desktop-only gate | HIGH | LOW | P1 |
+| Scroll-velocity text stretch shader | HIGH | MEDIUM | P2 |
+| Post-processing bloom + grain | HIGH | MEDIUM | P2 |
+| Entry intro sequence | HIGH | MEDIUM | P2 |
+| Mouse parallax | MEDIUM | LOW | P2 |
+| Transition wipes | MEDIUM | MEDIUM | P2 |
+| Custom cursor | MEDIUM | LOW | P2 |
+| Per-project color temperature | MEDIUM | LOW | P2 |
+| Portal / FBO masked reveals | HIGH | HIGH | P3 |
+| Per-project GLSL shader signature | HIGH | HIGH | P3 |
+| Audio opt-in | LOW | MEDIUM | P3 |
+| 3D extruded text (troika) | MEDIUM | HIGH | P3 |
+
+**Priority key:**
+- P1: Must have for launch
+- P2: Should have, add when possible
+- P3: Nice to have, future consideration
+
+---
+
+## Competitor Feature Analysis
+
+Reference portfolios analyzed for this research (all Codrops case studies or Awwwards SOTD, 2025):
+
+| Feature | Stas Bondar '25 | Roman Jean-Elie '25 | Stefan Vitasović '25 | /lab2 Approach |
+|---------|-----------------|---------------------|----------------------|----------------|
+| Scroll mechanism | GSAP ScrollTrigger + scrub | Custom scroll engine + Virtual Scroll | Custom scroll + Lethargy | Lenis + GSAP ScrollTrigger (proven combo for Next.js) |
+| Text animation | SplitText stagger + scramble | Kinetic character assembly on x-axis | x-axis char movement, masked overflow | GSAP SplitText — character-level stagger, clip-path mask |
+| 3D engine | Three.js | Three.js | Three.js | R3F (React wrapper, easier Next.js integration) |
+| Project showcase | WebGL grid + hover | Portal mask + DOM sync | WebGL textures on planes | HTML overlay panels synchronized with scroll chapter state |
+| Scroll-velocity effect | Not specified | Velocity-stretch on project titles | Displacement on project thumbnails | Velocity stretch on chapter headlines via `uVelocity` uniform |
+| Loading experience | Not detailed | AnimatePresence fade between pages | CDN-hosted media | drei `useProgress` + GSAP overlay — single preload, clean fade |
+| Post-processing | Ordered dithering on all images | Not described | LED overlay + noise grain on video | Bloom on emissive elements + FilmGrain for analog texture |
+| Cursor | Custom (not detailed) | Not detailed | Not detailed | 40px circle, mix-blend-mode difference |
+| Audio | None | None | None | None (anti-feature for hiring context) |
+| Mobile | Desktop-focused | Desktop-focused | Desktop-focused | Explicit "desktop only" message |
+| Unique signature | Dithering as consistent visual language | Portal morphing across all sections | Swiss-style grid + fluid digital | Scroll-velocity as consistent motion language |
+
+---
+
+## What Makes Awwwards-Quality Interactive Portfolio
+
+Based on analysis of SOTD winners and 2025 Codrops case studies, the difference between "Three.js demo" and "award-winning" is:
+
+**1. Cohesion over feature count.** Every visual element serves one conceptual direction. Stas Bondar's dithering appears on every image — not one. Roman Jean-Elie's portal morphs in every section transition. Pick one visual language and apply it consistently. More effects with less consistency = worse result.
+
+**2. Motion that carries meaning.** Scroll-velocity text stretch MEANS "you're moving fast through this." Camera pulling back MEANS "zooming out to see the larger picture." Effects must have narrative logic — not just look cool. If you can't explain why an effect exists, cut it.
+
+**3. 60fps is the baseline, not a goal.** All SOTD winners use adaptive performance systems. `PerformanceMonitor` that backs off DPR and disables post-processing below 30fps is table stakes, not optional.
+
+**4. Typography is the highest-ROI investment.** In every case study, character-level text animation creates the strongest "this was made carefully" signal. GSAP SplitText correctly eased (not just fading) is what separates mediocre from memorable.
+
+**5. Loading screen is part of the product.** A minimal, beautiful preloader signals intent. A blank screen with a browser spinner signals "this wasn't thought through."
+
+**6. Restraint at the end.** Roman Jean-Elie: "what I initially thought would be the centerpiece almost became optional." Stas Bondar removed effects that detracted from the physics typography. The best work REMOVES features. Every element in /lab2 should earn its presence.
+
+---
+
+## Content Dependencies (from Existing Portfolio)
+
+No new content creation required. All narrative content comes from existing bilingual portfolio data.
+
+| Feature in /lab2 | Depends On | Status |
+|-----------------|-----------|--------|
+| Project panels (name, summary, tech) | 5 project descriptions (KO + EN) | EXISTS in main site translations |
+| Project images as 3D textures | 13 WebP images in `/public/images/` | EXISTS |
+| Tech stack display per project | Tech stack per project (PROJECT.md) | EXISTS |
+| Bilingual text animations | next-intl translation files | EXISTS — must wire locale to lab2 |
+| Back-to-main navigation | Main route `/{locale}` | EXISTS |
+| Existing scroll + 3D patterns | `/lab` codebase | EXISTS — reference and extend |
+
+---
+
+## Sources
+
+- [Stas Bondar '25: Code and Techniques Behind a Next-Level Portfolio](https://tympanus.net/codrops/2025/03/25/stas-bondar-25-the-code-techniques-behind-a-next-level-portfolio/) — HIGH confidence (Codrops case study, March 2025)
+- [Letting the Creative Process Shape a WebGL Portfolio (Roman Jean-Elie)](https://tympanus.net/codrops/2025/11/27/letting-the-creative-process-shape-a-webgl-portfolio/) — HIGH confidence (Codrops case study, November 2025)
+- [Case Study: Stefan Vitasovic Portfolio 2025](https://tympanus.net/codrops/2025/03/05/case-study-stefan-vitasovic-portfolio-2025/) — HIGH confidence (Codrops case study, March 2025)
+- [How to Build Cinematic 3D Scroll Experiences with GSAP](https://tympanus.net/codrops/2025/11/19/how-to-build-cinematic-3d-scroll-experiences-with-gsap/) — HIGH confidence (Codrops tutorial, November 2025)
+- [Building Efficient Three.js Scenes: Optimize Performance While Maintaining Quality](https://tympanus.net/codrops/2025/02/11/building-efficient-three-js-scenes-optimize-performance-while-maintaining-quality/) — HIGH confidence (Codrops tutorial, February 2025)
+- [Building a Scroll-Revealed WebGL Gallery with GSAP, Three.js](https://tympanus.net/codrops/2026/02/02/building-a-scroll-revealed-webgl-gallery-with-gsap-three-js-astro-and-barba-js/) — HIGH confidence (Codrops tutorial, February 2026)
+- [Cyd Stumpel Portfolio 2025 — Awwwards SOTD](https://www.awwwards.com/sites/cyd-stumpel-portfolio-2025) — HIGH confidence (Awwwards, 2025)
+- [Portfolio 25 — Awwwards SOTD (Roman Jean-Elie)](https://www.awwwards.com/sites/portfolio-25-1) — HIGH confidence (Awwwards, 2025)
+- [Three.js Journey: Performance Tips](https://threejs-journey.com/lessons/performance-tips) — HIGH confidence (official Three.js Journey, Bruno Simon)
+- [GSAP ScrollTrigger Docs](https://gsap.com/docs/v3/Plugins/ScrollTrigger/) — HIGH confidence (official GSAP docs)
+- [WebGL Refraction hover effect — Awwwards inspiration](https://www.awwwards.com/inspiration/webgl-refraction-hover-effect-dorian-lods-portfolio-2025) — MEDIUM confidence (Awwwards, 2025)
+
+---
+
+*Feature research for: media-art style interactive portfolio (/lab2 route), v3.0 milestone*
+*Researched: 2026-02-28*
+
+---
+
+## Archived: v1/v2 Main Portfolio Feature Research
+
+> The research below covers the main portfolio site (v1/v2 — already shipped). Retained for reference.
 
 **Domain:** Frontend Developer Portfolio Website
 **Target Audience:** Korean Big Tech Recruiters (Samsung, Naver, Kakao)
 **Researched:** 2026-02-11
-**Confidence:** MEDIUM (verified with multiple sources, Korean-specific context is LOW)
+**Confidence:** MEDIUM (Korean-specific context is LOW)
 
-## Executive Summary
+### Table Stakes (Main Portfolio — SHIPPED)
 
-Frontend developer portfolios in 2026 are evaluated in **90 seconds** by recruiters. The portfolio must be fast (sub-3s load), mobile-first, and showcase 3-5 polished projects with clear technical context. For Korean big tech, bilingual support (KO/EN) is table stakes, with quantifiable metrics proving impact more valuable than flashy animations.
+| Feature | Why Expected | Complexity | Status |
+|---------|--------------|------------|--------|
+| Fast Load Time (<3s) | Recruiters leave slow sites | Medium | DONE — WebP images, static export |
+| Mobile-First Design | 50%+ traffic is mobile | Medium | DONE |
+| 3-5 Polished Projects | Quality over quantity | High | DONE — 5 projects |
+| Project Case Studies | Problem → Solution → Results | High | DONE — ~20,000 words |
+| Korean/English Toggle | Korean big tech expects bilingual | Medium | DONE — next-intl |
+| Live Demo Links | Proves deployment skills | Low | DONE |
+| GitHub Profile Link | Validates code quality | Low | DONE |
+| Clear Tech Stack per Project | Keyword matching for JDs | Low | DONE |
+| Contact Section | Must be easy to reach | Low | DONE |
+| About Section | Humanizes candidate | Low | DONE |
+| Skills Overview | Quick capability scan | Low | DONE |
 
-## Table Stakes
+### Anti-Features (Main Portfolio — Applied)
 
-Features users expect. Missing these = recruiters leave immediately.
-
-| Feature | Why Expected | Complexity | Implementation Notes | Sources |
-|---------|--------------|------------|---------------------|----------|
-| **Fast Load Time (<3s)** | 80% of recruiters check portfolios; slow = unprofessional | Medium | Image optimization (WebP/AVIF), lazy loading, code splitting, CDN. Lighthouse score >90. | [Elementor](https://elementor.com/blog/best-web-developer-portfolio-examples/), [Nucamp](https://www.nucamp.co/blog/top-10-full-stack-portfolio-projects-for-2026-that-actually-get-you-hired) |
-| **Mobile-First Design** | 50%+ global traffic is mobile; recruiters check on phone | Medium | Responsive breakpoints, touch-friendly targets (44px min), test on actual devices | [Dev Portfolio Templates](https://www.devportfoliotemplates.com/blog/5-mistakes-developers-make-in-their-portfolio-websites) |
-| **3-5 Polished Projects** | Quality > quantity; shows curation judgment | High | Each project: live demo, GitHub link, tech stack, metrics, 1-liner value prop | [Pesto](https://pesto.tech/resources/what-recruiters-look-for-in-developer-portfolios), [Middlehost](https://middlehost.com/blog/web-developer-portfolio-examples/) |
-| **Project Case Studies** | Recruiters want problem-solving process, not just screenshots | High | Format: Problem → Approach → Solution → Results (800-1500 words + visuals) | [Format Magazine](https://www.format.com/magazine/resources/design/how-to-write-design-case-study), [UXFol](https://blog.uxfol.io/ux-case-study-template/) |
-| **Korean/English Toggle** | Korean big tech expects bilingual fluency | Medium | i18n implementation (react-i18next, next-intl), UTF-8 encoding, locale-specific formatting | [GloryWebs](https://www.glorywebs.com/blog/internationalization-in-react), [Pixpa](https://www.pixpa.com/blog/how-to-create-a-multilingual-portfolio-website) |
-| **Live Demo Links** | Deployed projects prove completion and deployment skills | Low | Vercel/Netlify deployments, "View Live" CTAs, uptime monitoring | [Pesto](https://pesto.tech/resources/what-recruiters-look-for-in-developer-portfolios) |
-| **GitHub Profile Link** | Validates code quality and contribution consistency | Low | Prominent header/footer placement, optimized GitHub README | [Nucamp](https://www.nucamp.co/blog/top-10-full-stack-portfolio-projects-for-2026-that-actually-get-you-hired) |
-| **Clear Tech Stack per Project** | Recruiters search for keywords matching job descriptions (React, TypeScript, etc.) | Low | Badge icons (shields.io), categorized by frontend/backend/tools | [Pesto](https://pesto.tech/resources/what-recruiters-look-for-in-developer-portfolios) |
-| **Contact Section with Multiple Methods** | Must be easy to reach; friction = lost opportunity | Low | Email, LinkedIn, GitHub at minimum; form optional | [Hostinger](https://www.hostinger.com/tutorials/web-developer-portfolio) |
-| **About Section (Brief)** | Humanizes candidate; shows communication skills | Low | 2-3 paragraphs: who you are, what you do, what you're looking for | [Hostinger](https://www.hostinger.com/tutorials/web-developer-portfolio) |
-| **Skills Overview** | Quick scan of technical capabilities | Low | Categorized list (Languages, Frameworks, Tools); avoid rating bars | [Middlehost](https://middlehost.com/blog/web-developer-portfolio-examples/) |
-
-## Differentiators
-
-Features that set portfolio apart. Not expected, but highly valued for competitive advantage.
-
-| Feature | Value Proposition | Complexity | Implementation Notes | Sources |
-|---------|-------------------|------------|---------------------|----------|
-| **Quantifiable Metrics in Projects** | Proves business impact: "Reduced load time from 3.2s to 1.1s" or "30% build time reduction" | Low | Before/after Lighthouse scores, % improvements, user engagement metrics | [Gwak Tae-wook Portfolio](https://gwak2837.vercel.app/ko), [Pesto](https://pesto.tech/resources/what-recruiters-look-for-in-developer-portfolios) |
-| **Performance Documentation** | Shows engineering maturity: "what I optimized and why" | Medium | Lighthouse reports, bundle analysis screenshots, optimization decision log | [Zencoder](https://zencoder.ai/blog/how-to-create-software-engineer-portfolio) |
-| **Architecture Diagrams** | Demonstrates system thinking beyond coding | Medium | Simple component diagrams (Excalidraw), data flow, tech stack layers | [Pesto](https://pesto.tech/resources/what-recruiters-look-for-in-developer-portfolios) |
-| **"What I'd Do Next" Section** | Shows growth mindset and product thinking | Low | 2-3 bullet points per project: scalability, features, refactoring ideas | [Pesto](https://pesto.tech/resources/what-recruiters-look-for-in-developer-portfolios) |
-| **Demo Videos or GIFs** | Interactive features hard to showcase via screenshots | Medium | 10-20s Loom videos, optimized GIFs (<500KB), auto-play on scroll | [Pesto](https://pesto.tech/resources/what-recruiters-look-for-in-developer-portfolios), [Nucamp](https://www.nucamp.co/blog/top-10-full-stack-portfolio-projects-for-2026-that-actually-get-you-hired) |
-| **Accessibility Compliance Details** | 2026 trend: EAA compliance mandatory in EU; shows awareness | Medium | WCAG 2.1 AA compliance, screen reader testing notes, keyboard navigation | [Syncfusion](https://www.syncfusion.com/blogs/post/frontend-development-trends), [Swiftorial](https://www.swiftorial.com/swiftlessons/internationalization-localization/advanced-i18n-strategies/accessibility-considerations-in-i18n) |
-| **AI Tool Integration Examples** | 2026 expected: shows modern workflow (Copilot, ChatGPT assistance) | Low | Brief mention in case studies: "Used AI for X, refined for Y" | [Syncfusion](https://www.syncfusion.com/blogs/post/frontend-development-trends) |
-| **Real-World Problem Solving** | Portfolio projects address actual needs (not just tutorials) | High | Local business apps, productivity tools with user metrics | [Nucamp](https://www.nucamp.co/blog/top-10-full-stack-portfolio-projects-for-2026-that-actually-get-you-hired) |
-| **Open Source Contributions** | Demonstrates collaboration and code review skills | High | Link to meaningful PRs (not typo fixes); explain contribution impact | [Hostinger](https://www.hostinger.com/tutorials/web-developer-portfolio) |
-| **Localized URLs with hreflang** | SEO best practice for bilingual sites; shows technical depth | Low | `/ko/`, `/en/` routes with proper hreflang tags | [POEditor](https://poeditor.com/blog/internationalization-best-practices/) |
-| **Semantic HTML & Clean Code** | Inspectable code = confidence builder for technical recruiters | Low | Proper heading hierarchy, ARIA labels, readable class names | [Optimational](https://optimational.com/blog/multilingual-accessibility/) |
-
-## Anti-Features
-
-Features to explicitly NOT build. Common mistakes in portfolio domain.
-
-| Anti-Feature | Why Avoid | What to Do Instead | Sources |
-|--------------|-----------|-------------------|----------|
-| **Overly Complex Animations** | Distracts from content; often hurts performance; recruiters value clarity over flashiness | Use subtle micro-interactions (hover states, smooth scrolling). Lighthouse score > aesthetics. | [Dev Portfolio Templates](https://www.devportfoliotemplates.com/blog/5-mistakes-developers-make-in-their-portfolio-websites) |
-| **Splash/Loading Screens** | Adds friction; users close tabs | Show content immediately; progressive loading if needed | [Dev Portfolio Templates](https://www.devportfoliotemplates.com/blog/5-mistakes-developers-make-in-their-portfolio-websites) |
-| **Too Many Projects (>6)** | Dilutes quality; overwhelms viewer; appears unfocused | Curate 3-5 best projects. Quality > quantity. Outdated work hurts more than helps. | [Wix](https://www.common-portfolio-mistakes), [Pesto](https://pesto.tech/resources/7-deadly-sins-of-developer-portfolios-and-how-to-avoid-them) |
-| **Generic Content** | "I'm a passionate developer" = everyone says this; no differentiation | Specific skills, target companies, unique projects. Show, don't tell. | [Dev Portfolio Templates](https://www.devportfoliotemplates.com/blog/5-mistakes-developers-make-in-their-portfolio-websites) |
-| **Skill Rating Bars** | Subjective, meaningless (what's "80% React"?); wastes space | List skills by category. Let projects demonstrate proficiency. | Common practice |
-| **Auto-Playing Music/Videos** | Annoying; accessibility fail; user expects control | User-initiated playback only | [ZachSean](https://www.zachsean.com/post/8-common-website-design-mistakes-to-avoid-in-2026-for-better-conversions-and-user-experience) |
-| **PDF Resume Download as Primary Content** | Portfolios should be web-first; PDFs feel outdated | Web-native content first. PDF as supplementary download if needed. | [Nitor](https://nitor.com/en/articles/five-development-portfolio-anti-patterns-and-how-to-avoid-them) |
-| **Every Project You've Ever Done** | Tutorial clones, school projects dilute real work | Only production-quality projects. If unsure, leave it out. | [Wix](https://www.common-portfolio-mistakes) |
-| **Outdated Projects** | 2022 tech stack = red flag in 2026; suggests stagnation | Refresh projects annually. Archive old work. Show current skills. | [Dev Portfolio Templates](https://www.devportfoliotemplates.com/blog/5-mistakes-developers-make-in-their-portfolio-websites) |
-| **No Mobile Testing** | Half of recruiters view on mobile; broken mobile = rejected | Test on real devices (iOS Safari, Android Chrome). Not just desktop responsive. | [Dev Portfolio Templates](https://www.devportfoliotemplates.com/blog/5-mistakes-developers-make-in-their-portfolio-websites) |
-| **Complex Navigation** | Recruiters spend 90 seconds; confusion = exit | Simple top nav: Projects, About, Contact. That's it. | [Hostinger](https://www.hostinger.com/tutorials/web-developer-portfolio) |
-| **Modals/Pop-ups for Core Content** | Friction; accessibility issues; mobile UX nightmare | Inline content. Modals only for supplementary actions. | [ZachSean](https://www.zachsean.com/post/8-common-website-design-mistakes-to-avoid-in-2026-for-better-conversions-and-user-experience) |
-
-## Feature Dependencies
-
-Critical sequencing for implementation:
-
-```
-Performance Foundation (FIRST)
-  ├── Image optimization (WebP/AVIF conversion)
-  ├── Code splitting setup
-  └── CDN configuration
-
-Content Structure (SECOND)
-  ├── 3-5 Projects selected and documented
-  ├── Case study format defined
-  └── Metrics gathered (Lighthouse scores, analytics)
-
-i18n Infrastructure (THIRD - enables all content)
-  ├── Language toggle mechanism
-  ├── Translation files (KO/EN)
-  └── Locale routing (/ko/, /en/)
-
-Content Population (FOURTH)
-  ├── Bilingual content for all sections
-  ├── Projects with live demos
-  └── About/Skills/Contact sections
-
-Polish & Differentiation (FIFTH)
-  ├── Performance documentation
-  ├── Demo videos/GIFs
-  └── Architecture diagrams
-```
-
-**Key Dependencies:**
-- **i18n before content:** All sections need translation infrastructure first
-- **Performance optimization ongoing:** Not a one-time phase; validate throughout
-- **Live demos before case studies:** Need deployed projects to measure and document
-- **Projects selected before metrics:** Can't gather performance data without deployed projects
-
-## MVP Recommendation
-
-For MVP targeting Korean big tech recruiters, prioritize:
-
-### Phase 1: Foundation (Week 1)
-1. **Performance infrastructure** - Image optimization, lazy loading, code splitting
-2. **Mobile-first responsive layout** - Test on real devices
-3. **i18n setup (KO/EN toggle)** - Infrastructure before content
-4. **Simple navigation** - Projects, About, Contact only
-
-### Phase 2: Core Content (Week 2)
-1. **3-5 projects with live demos** - Deployed and functional
-2. **Project case studies** - Problem → Solution → Results format (800-1500 words each)
-3. **Tech stack badges per project** - Clear keyword visibility
-4. **About section (brief)** - 2-3 paragraphs, bilingual
-5. **Contact section** - Email, LinkedIn, GitHub minimum
-
-### Phase 3: Differentiators (Week 3)
-1. **Quantifiable metrics** - Before/after performance numbers, % improvements
-2. **Lighthouse scores documented** - Screenshots in case studies
-3. **"What I'd Do Next" sections** - Shows growth mindset
-4. **Demo GIFs** - For interactive features (10-20s, <500KB)
-
-### Defer to Post-MVP
-
-**Defer these until core portfolio proves value:**
-- Architecture diagrams (Medium complexity; add when applying to senior roles)
-- Open source contribution section (High complexity; requires meaningful contributions)
-- AI tool integration mentions (Low value until standard practice)
-- Demo videos (Medium complexity; GIFs suffice for MVP)
-- Advanced accessibility documentation (Medium complexity; compliance first, documentation later)
-
-**Explicitly skip:**
-- Complex animations (anti-pattern)
-- Skill rating bars (anti-pattern)
-- More than 5 projects (anti-pattern)
-
-## Korean Big Tech Specific Considerations
-
-**LOW CONFIDENCE:** Based on limited Korean-specific sources. Recommendations extrapolated from general Korean tech hiring practices.
-
-### Likely Important
-- **Bilingual fluency demonstration** - Not just toggle, but quality translations showing language proficiency
-- **Education section prominence** - Korean culture values educational background; make visible
-- **Experience timeline** - Clear chronological work history expected
-- **Formal tone in Korean** - Use 존댓말 (formal language) in Korean version; can be casual in English
-- **Quantifiable achievements** - Korean corporate culture values measurable results
-
-### Validation Needed
-- Whether GitHub contributions matter as much in Korea (Western norm)
-- Preference for PDF resume vs web-only (Korean hiring often PDF-centric)
-- Design aesthetic preferences (minimal Western style vs more elaborate Korean web design trends)
-- Importance of certifications (Korean tech may value formal credentials more)
-
-### Sources for Korean Context
-- [GitHub: Awesome Korean Resume](https://github.com/9j/awesome-korean-resume) - Korean resume best practices
-- [Gwak Tae-wook Portfolio](https://gwak2837.vercel.app/ko) - Real 2026 Korean developer portfolio
-- [GitHub: Awesome Resume Portfolio](https://github.com/codingmonster-tv/Awesome_Resume_Portfolio) - Korean developer resume guide
-
-## Validation Protocol
-
-Before considering research complete, validate:
-
-- [ ] Performance targets realistic for tech stack (Next.js can achieve <3s)
-- [ ] i18n complexity assessment accurate (Medium = 2-3 days work)
-- [ ] Case study format matches recruiter expectations (verify with hiring managers)
-- [ ] Korean-specific features validated (consult Korean developers at target companies)
-- [ ] Anti-features list complete (review portfolio anti-pattern articles)
-
-## Research Gaps
-
-**Areas needing deeper investigation:**
-
-1. **Korean big tech hiring norms** - What do Naver/Kakao/Samsung recruiters actually prioritize? (Need informational interviews)
-2. **Portfolio vs PDF resume balance** - Korean hiring may expect both; clarify workflow
-3. **Design aesthetic preferences** - Korean web design trends may differ from Western minimal style
-4. **Certification importance** - Do Korean companies value AWS/GCP certs on portfolio?
-5. **GitHub profile optimization for Korea** - Are Korean recruiters checking GitHub activity?
-
-**Sources to pursue:**
-- Korean developer communities (velog, okky)
-- Korean tech company job postings (requirements analysis)
-- Korean developer portfolio showcases (Behance Korea, Korean dev blogs)
-
-## Sources
-
-### Portfolio Best Practices
-- [25 Web Developer Portfolio Examples](https://www.hostinger.com/tutorials/web-developer-portfolio)
-- [17 Inspiring Web Developer Portfolio Examples for 2026](https://templyo.io/blog/17-best-web-developer-portfolio-examples-for-2024)
-- [Best Web Developer Portfolio Examples from Top Developers in 2026](https://elementor.com/blog/best-web-developer-portfolio-examples/)
-- [Build an Effective Frontend Developer Portfolio](https://www.frontendmentor.io/articles/building-an-effective-frontend-developer-portfolio--7cE8BfMG_)
-
-### Recruiter Expectations
-- [What Recruiters Look for in Developer Portfolios](https://pesto.tech/resources/what-recruiters-look-for-in-developer-portfolios)
-- [Top 10 Full Stack Portfolio Projects for 2026 That Actually Get You Hired](https://www.nucamp.co/blog/top-10-full-stack-portfolio-projects-for-2026-that-actually-get-you-hired)
-- [Web Developer Portfolio Examples: 12 Styles You Can Copy](https://middlehost.com/blog/web-developer-portfolio-examples/)
-
-### Anti-Patterns
-- [5 Mistakes Developers Make in Their Portfolio Websites](https://www.devportfoliotemplates.com/blog/5-mistakes-developers-make-in-their-portfolio-websites)
-- [Common Mistakes When Creating a Portfolio](https://www.wix.com/blog/common-portfolio-mistakes)
-- [7 Deadly Sins of Developer Portfolios](https://pesto.tech/resources/7-deadly-sins-of-developer-portfolios-and-how-to-avoid-them)
-- [Five Development Portfolio Anti-Patterns and How to Avoid Them](https://nitor.com/en/articles/five-development-portfolio-anti-patterns-and-how-to-avoid-them)
-
-### Case Study Format
-- [The Ultimate UX Case Study Template & Structure (2026 Guide)](https://blog.uxfol.io/ux-case-study-template/)
-- [How To Write A Case Study For Your Design Portfolio](https://www.format.com/magazine/resources/design/how-to-write-design-case-study)
-- [How to Write Project Case Studies for Your Portfolio](https://vanschneider.com/blog/portfolio-tips/write-project-case-studies-portfolio/)
-
-### i18n and Accessibility
-- [Internationalization (i18n) in React: Complete Guide 2026](https://www.glorywebs.com/blog/internationalization-in-react)
-- [How to Create a Multilingual Portfolio Website](https://www.pixpa.com/blog/how-to-create-a-multilingual-portfolio-website)
-- [15 Internationalization Best Practices](https://poeditor.com/blog/internationalization-best-practices/)
-- [Multilingual Accessibility—Key Steps to a Truly Inclusive Website](https://optimational.com/blog/multilingual-accessibility/)
-- [Accessibility Considerations in i18n](https://www.swiftorial.com/swiftlessons/internationalization-localization/advanced-i18n-strategies/accessibility-considerations-in-i18n)
-
-### Performance
-- [How to Build Developer Portfolio & Get a Dream Job](https://www.actitime.com/productivity/how-to-build-a-great-developer-portfolio)
-
-### 2026 Trends
-- [Frontend Development Trends 2026](https://www.syncfusion.com/blogs/post/frontend-development-trends)
-- [8 Common Website Design Mistakes to Avoid in 2026](https://www.zachsean.com/post/8-common-website-design-mistakes-to-avoid-in-2026-for-better-conversions-and-user-experience)
-
-### Korean Context
-- [GitHub: Awesome Korean Resume](https://github.com/9j/awesome-korean-resume)
-- [GitHub: Awesome Resume Portfolio (Korean)](https://github.com/codingmonster-tv/Awesome_Resume_Portfolio)
-- [Gwak Tae-wook 2026 Portfolio](https://gwak2837.vercel.app/ko)
-- [Top 10 Tips for Building a Stand-Out Tech Portfolio in South Korea](https://www.nucamp.co/blog/coding-bootcamp-south-korea-kor-top-10-tips-for-building-a-standout-tech-portfolio-in-south-korea)
+| Anti-Feature | Decision |
+|--------------|----------|
+| Overly Complex Animations | Avoided in main site — deferred to /lab2 |
+| Splash/Loading Screens | Not on main site |
+| Skill Rating Bars | Explicitly excluded |
+| Auto-Playing Media | Not implemented |
+| More than 5 projects | Capped at 5 |

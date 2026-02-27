@@ -1,1140 +1,673 @@
-# Architecture Patterns: Next.js Portfolio Site
+# Architecture Research: /lab2 Scroll-Driven 3D Interactive Portfolio
 
-**Domain:** Frontend Developer Portfolio Website
-**Researched:** 2026-02-11
-**Confidence:** HIGH
-
-## Executive Summary
-
-Next.js App Router portfolio sites with i18n follow a hybrid architecture combining:
-- **Server-first rendering** for static content with optimal performance
-- **Locale-based routing** via `[locale]` dynamic segment
-- **Atomic component hierarchy** for maintainable UI organization
-- **Static data management** via JSON files in lib folder
-- **Tailwind CSS** for utility-first styling
-
-This architecture supports the hybrid single-page + detail pages pattern with minimal complexity.
+**Domain:** Media-art style 3D interactive portfolio integrated into Next.js App Router
+**Researched:** 2026-02-28
+**Confidence:** HIGH (existing /lab codebase verified; R3F, GSAP, Three.js official docs cross-referenced)
 
 ---
 
-## Recommended Folder Structure
+## Context: What Already Exists
+
+The project already ships a working `/lab` route with a proven scroll-driven 3D pattern. `/lab2` must extend and improve on this — not reinvent it. Understanding what `/lab` does is essential before designing `/lab2`.
+
+**Current /lab architecture (verified in codebase):**
+- `app/[locale]/lab/page.tsx` — `'use client'` page, owns a `scrollRef` div and tracks scroll progress via `onScroll`
+- `app/[locale]/lab/layout.tsx` — thin layout that calls `setRequestLocale()` and passes `children` through; suppresses the locale layout's Header/Footer because the page uses `fixed inset-0 z-[60]` to overlay everything
+- `components/lab/LabScene.tsx` — `dynamic()` imported with `ssr: false`; wraps R3F `<Canvas>`
+- `components/lab/CameraRig.tsx` — lives inside Canvas, reads `scrollProgress` prop, lerps camera between 5 waypoints each `useFrame`
+- `components/lab/Room.tsx` — loads `room.glb` via `useGLTF`, renders as `<primitive>`
+- `components/lab/ContentPanel.tsx` — fixed DOM overlay panel driven by `activeSection` derived from `scrollProgress`
+
+**Key pattern already proven:** scroll container → progress float [0,1] → prop into Canvas → `useFrame` lerp. This is the correct architecture. `/lab2` uses the same spine with new scenes.
+
+---
+
+## System Overview
 
 ```
-portfolio/
-├── public/
-│   ├── images/
-│   │   ├── projects/
-│   │   ├── profile/
-│   │   └── skills/
-│   └── resume.pdf
+┌─────────────────────────────────────────────────────────────────────┐
+│  NEXT.JS APP ROUTER  src/app/[locale]/lab2/                         │
+│                                                                     │
+│  layout.tsx  ←── setRequestLocale() only, no Header/Footer          │
+│  page.tsx    ←── 'use client', owns scroll container + state        │
+└────────────────────────────┬────────────────────────────────────────┘
+                             │  scrollProgress: number [0..1]
+                             │  activeScene: SceneKey
+                             ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│  SCROLL MANAGEMENT LAYER                                            │
+│                                                                     │
+│  <div ref={scrollRef} style="overflow-y:scroll; height:100vh">      │
+│    <div style="height: Nvh" />   ← scroll spacer, N = scene count   │
+│  </div>                                                             │
+│                                                                     │
+│  Derives: scrollProgress, activeScene, sceneLocalProgress           │
+└────────────────────────────┬────────────────────────────────────────┘
+                             │ props
+                             ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│  R3F CANVAS LAYER  (dynamic import, ssr:false)                      │
+│                                                                     │
+│  <Canvas sticky top-0 h-screen>                                     │
+│    <Suspense>                                                        │
+│      <SceneRouter scrollProgress sceneKey />   ← switches scenes    │
+│      <PostProcessing />                         ← bloom, vignette   │
+│    </Suspense>                                                       │
+│    <CameraRig scrollProgress />                 ← outside Suspense  │
+│  </Canvas>                                                          │
+└────────────────────────────┬────────────────────────────────────────┘
+                             │ activeScene, localProgress
+                             ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│  DOM OVERLAY LAYER  (fixed, z-[80], pointer-events-none container)  │
+│                                                                     │
+│  <HUD />                ← back link, scroll hint, section dots      │
+│  <ContentPanel          ← glassmorphism card, animates with FM       │
+│    activeScene          ← from scroll progress derivation            │
+│    localProgress />     ← for within-scene animations               │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### Component Responsibilities
+
+| Component | Responsibility | Typical Implementation |
+|-----------|----------------|------------------------|
+| `lab2/layout.tsx` | `setRequestLocale()` + passthrough | Server component, identical to existing `lab/layout.tsx` |
+| `lab2/page.tsx` | Scroll container, progress derivation, scene routing | `'use client'`, owns `scrollRef`, derives `scrollProgress` + `activeScene` |
+| `Lab2Scene` | R3F Canvas wrapper, scene composition | `dynamic(() => import(...), {ssr:false})`, wraps Canvas + all R3F children |
+| `SceneRouter` | Mounts/unmounts per-scene geometry | Renders scene component matching `sceneKey`, transitions via opacity/shader |
+| `CameraRig` | Camera position animation on scroll | `useFrame` lerp between waypoints, lives inside Canvas |
+| `scenes/IntroScene` | Opening particle/shader scene | R3F group, self-contained geometry + shaders |
+| `scenes/ProjectsScene` | Project showcase 3D elements | Instanced meshes or floating cards in 3D |
+| `scenes/SkillsScene` | Skills visualization | Particle system or data-driven geometry |
+| `scenes/ContactScene` | Closing scene | Minimal, atmospheric |
+| `ContentPanel` | DOM content overlay | Framer Motion `AnimatePresence` + `motion.div` |
+| `HUD` | Navigation dots, back link, hints | Fixed positioned, z-[80] |
+| `PostProcessing` | Bloom, vignette, chromatic aberration | `@react-three/postprocessing` |
+| `shaders/` | GLSL vertex/fragment files | `.glsl` files, imported as strings via raw-loader |
+
+---
+
+## Recommended Project Structure
+
+```
+src/
+├── app/
+│   └── [locale]/
+│       ├── lab/                     # EXISTING — do not touch
+│       └── lab2/
+│           ├── layout.tsx           # NEW: setRequestLocale passthrough only
+│           └── page.tsx             # NEW: scroll container + orchestration
 │
-├── messages/
-│   ├── ko.json          # Korean translations (default)
-│   └── en.json          # English translations
-│
-├── src/
-│   ├── app/
-│   │   ├── [locale]/
-│   │   │   ├── layout.tsx           # Root layout with i18n provider
-│   │   │   ├── page.tsx             # Main single-page portfolio
-│   │   │   ├── projects/
-│   │   │   │   └── [slug]/
-│   │   │   │       └── page.tsx     # Project detail pages
-│   │   │   └── not-found.tsx
-│   │   └── globals.css
-│   │
-│   ├── components/
-│   │   ├── ui/                      # Atoms: Button, Card, Badge, etc.
-│   │   ├── sections/                # Organisms: Hero, About, Skills, etc.
-│   │   ├── layout/                  # Header, Footer, LocaleSwitcher
-│   │   └── projects/                # ProjectCard, ProjectGallery
-│   │
-│   ├── lib/
-│   │   ├── data/
-│   │   │   ├── projects.ts          # Project data & types
-│   │   │   ├── skills.ts            # Skills data & types
-│   │   │   ├── experience.ts        # Experience data & types
-│   │   │   └── education.ts         # Education data & types
-│   │   └── utils.ts                 # Shared utilities (cn, etc.)
-│   │
-│   ├── i18n/
-│   │   ├── routing.ts               # Locale configuration
-│   │   ├── navigation.ts            # i18n navigation wrappers
-│   │   └── request.ts               # Request-scoped config
-│   │
-│   └── proxy.ts                     # Middleware for locale detection
-│
-├── tailwind.config.ts
-├── next.config.ts
-└── tsconfig.json
+├── components/
+│   ├── lab/                         # EXISTING — do not touch
+│   └── lab2/
+│       ├── Lab2Scene.tsx            # Canvas wrapper (dynamic import target)
+│       ├── CameraRig2.tsx           # Camera interpolation for lab2 waypoints
+│       ├── SceneRouter.tsx          # Mounts active scene by key
+│       ├── scenes/
+│       │   ├── IntroScene.tsx       # Scene 0: atmospheric opener
+│       │   ├── AboutScene.tsx       # Scene 1: identity/bio visualization
+│       │   ├── ProjectsScene.tsx    # Scene 2: project showcase
+│       │   ├── SkillsScene.tsx      # Scene 3: tech stack visualization
+│       │   └── ContactScene.tsx     # Scene 4: closing
+│       ├── materials/
+│       │   ├── ParticleMaterial.tsx # Custom shaderMaterial via drei extend
+│       │   ├── WaveMaterial.tsx     # Scroll-reactive wave shader
+│       │   └── GlowMaterial.tsx     # Post-processing glow material
+│       ├── effects/
+│       │   ├── Lighting2.tsx        # Scene lighting
+│       │   └── PostProcessing.tsx   # @react-three/postprocessing effects
+│       ├── ui/
+│       │   ├── LoadingScreen2.tsx   # Loading overlay (reuse lab/ style)
+│       │   ├── ContentPanel2.tsx    # Framer Motion animated content overlay
+│       │   └── HUD.tsx              # Fixed UI: back link, dots, scroll hint
+│       └── hooks/
+│           ├── useScrollProgress.ts # Scroll → progress derivation
+│           └── useSceneState.ts     # activeScene + localProgress derivation
 ```
 
-### Folder Organization Rationale
+### Structure Rationale
 
-**Route Groups NOT Used:** Since this portfolio has minimal routes (home + project details), route groups like `(marketing)` add unnecessary complexity. The `[locale]` segment provides sufficient organization.
-
-**Private Folders NOT Used:** Components are organized in `src/components/` outside the app directory following the "store project files outside of app" pattern, which Next.js explicitly supports and recommends for cleaner separation.
-
-**src Folder:** Used to separate application code from project configuration files (next.config.ts, tailwind.config.ts, etc.) at the root.
+- **`lab2/` isolated from `lab/`:** No shared components between them — /lab is stable, /lab2 is the new build. Accidental coupling causes regressions.
+- **`hooks/` inside `lab2/`:** Scroll and scene logic are tightly coupled to this route only. Scoping them here prevents leaking into the main site.
+- **`materials/` separate from `scenes/`:** Shader materials are reusable across scenes; scenes compose materials, not the reverse.
+- **`SceneRouter` not a switch/case in page.tsx:** Keeps page.tsx focused on scroll management. SceneRouter is a boundary for code splitting (each scene can be `React.lazy()`).
 
 ---
 
-## Component Architecture
+## Architectural Patterns
 
-### Component Hierarchy (Atomic Design)
+### Pattern 1: Sticky Canvas + Scroll Spacer
 
-```
-┌─────────────────────────────────────────────────────┐
-│ ATOMS (ui/)                                         │
-│ - Button, Link, Badge, Card, Typography, Input      │
-└─────────────────────────────────────────────────────┘
-                        ↓
-┌─────────────────────────────────────────────────────┐
-│ MOLECULES (ui/)                                     │
-│ - SkillBadge, ExperienceCard, EducationCard         │
-│ - SectionTitle, ContactForm                         │
-└─────────────────────────────────────────────────────┘
-                        ↓
-┌─────────────────────────────────────────────────────┐
-│ ORGANISMS (sections/ & projects/)                   │
-│ - Hero, About, Skills, Projects, Experience,        │
-│   Education, Contact                                │
-│ - ProjectCard, ProjectGallery                       │
-└─────────────────────────────────────────────────────┘
-                        ↓
-┌─────────────────────────────────────────────────────┐
-│ LAYOUT (layout/)                                    │
-│ - Header (with LocaleSwitcher)                      │
-│ - Footer                                            │
-└─────────────────────────────────────────────────────┘
-                        ↓
-┌─────────────────────────────────────────────────────┐
-│ PAGES (app/[locale]/)                               │
-│ - page.tsx (composes all sections)                  │
-│ - projects/[slug]/page.tsx                          │
-└─────────────────────────────────────────────────────┘
-```
+**What:** The Canvas element is `position:sticky; top:0; height:100vh` inside a parent that overflows. The parent has a `height: N*100vh` spacer that creates scroll travel. The R3F scene reads scroll progress as a plain float, never animates DOM.
 
-### Component Boundaries
+**When to use:** Always. This is the proven pattern from `/lab`. The Canvas never scrolls — it stays fixed in the viewport while the scroll container below creates the illusion of "moving through" scenes.
 
-| Component | Responsibility | Communicates With | Type |
-|-----------|---------------|-------------------|------|
-| **ui/Button** | Base button with variants | None (pure UI) | Client |
-| **ui/Card** | Container with consistent styling | None (pure UI) | Server |
-| **ui/Badge** | Skill/tag display | None (pure UI) | Server |
-| **layout/Header** | Navigation, branding | LocaleSwitcher | Server |
-| **layout/LocaleSwitcher** | Language toggle | i18n navigation | Client |
-| **sections/Hero** | Hero section with CTA | Button, data/lib | Server |
-| **sections/About** | About section | Card, data/lib | Server |
-| **sections/Skills** | Skills grid | Badge, data/lib | Server |
-| **sections/Projects** | Projects showcase | ProjectCard, data/lib | Server |
-| **sections/Experience** | Work history timeline | ExperienceCard, data/lib | Server |
-| **sections/Education** | Education history | EducationCard, data/lib | Server |
-| **sections/Contact** | Contact form | Input, Button | Client |
-| **projects/ProjectCard** | Single project preview | Card, Badge | Server |
-| **projects/ProjectGallery** | Image gallery for detail | Images (interactive) | Client |
-| **app/[locale]/page.tsx** | Main page composition | All sections | Server |
-| **app/[locale]/projects/[slug]/page.tsx** | Project detail | ProjectGallery, data/lib | Server |
+**Trade-offs:** Scroll is captured by a custom container div, not `window`. This means `useScroll` from Framer Motion and Lenis both need to target the ref, not `window`. The existing `/lab` code uses this correctly — replicate that pattern.
 
-### Server vs Client Components
+**Example:**
+```tsx
+// lab2/page.tsx
+export default function Lab2Page() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
-**Default: Server Components**
-- All components are Server Components by default in App Router
-- Renders on server, sends static HTML to client
-- Can directly access data files, no API routes needed
-
-**Use Client Components ("use client") for:**
-1. **LocaleSwitcher** - Uses hooks (usePathname, useRouter) for navigation
-2. **Contact Form** - Uses useState for form handling
-3. **ProjectGallery** - Interactive image carousel/lightbox
-4. **Any component using:**
-   - Event handlers (onClick, onChange, etc.)
-   - React hooks (useState, useEffect, useContext)
-   - Browser APIs (localStorage, window, etc.)
-
-**Performance principle:** Keep as much as possible in Server Components, only mark interactive portions as Client Components.
-
----
-
-## Data Management Strategy
-
-### Data Storage Pattern
-
-**Location:** `src/lib/data/`
-
-**Why not database/CMS:**
-- Static content that changes infrequently
-- No dynamic user-generated content
-- Simplifies deployment (no database setup)
-- Version controlled with code
-- Type-safe with TypeScript
-
-**Why not JSON files:**
-While JSON files work, TypeScript files provide:
-- Type safety and autocompletion
-- No parsing overhead
-- Direct imports
-- Compile-time validation
-
-### Data Organization
-
-**src/lib/data/projects.ts**
-```typescript
-export interface Project {
-  slug: string;
-  title: {
-    ko: string;
-    en: string;
-  };
-  description: {
-    ko: string;
-    en: string;
-  };
-  tags: string[];
-  images: string[];
-  github?: string;
-  demo?: string;
-  featured: boolean;
-}
-
-export const projects: Project[] = [
-  // ... project data
-];
-
-export function getProject(slug: string): Project | undefined {
-  return projects.find(p => p.slug === slug);
-}
-
-export function getFeaturedProjects(): Project[] {
-  return projects.filter(p => p.featured);
-}
-```
-
-**Pattern for other data:**
-- `skills.ts` - Skill categories and items
-- `experience.ts` - Work history entries
-- `education.ts` - Education entries
-
-### Data Access Pattern
-
-**In Server Components (Direct Import):**
-```typescript
-import { projects, getProject } from '@/lib/data/projects';
-
-export default function ProjectsSection() {
-  const featuredProjects = projects.filter(p => p.featured);
-  return (
-    // render projects
-  );
-}
-```
-
-**No API Routes Needed** - Server Components can directly import data since they run on the server.
-
-### i18n Translation Management
-
-**Location:** `messages/` (root level)
-
-**Structure:**
-```json
-// messages/ko.json
-{
-  "nav": {
-    "home": "홈",
-    "about": "소개",
-    "projects": "프로젝트",
-    "contact": "연락"
-  },
-  "hero": {
-    "title": "프론트엔드 개발자",
-    "subtitle": "사용자 경험을 중시하는"
-  },
-  "sections": {
-    "about": "소개",
-    "skills": "기술 스택",
-    "projects": "프로젝트",
-    "experience": "경력",
-    "education": "학력",
-    "contact": "연락하기"
-  }
-}
-```
-
-**Usage in components:**
-```typescript
-import { useTranslations } from 'next-intl';
-
-export default function Hero() {
-  const t = useTranslations('hero');
-  return <h1>{t('title')}</h1>;
-}
-```
-
-**Content vs UI Translations:**
-- **UI translations** (nav, buttons, labels) → `messages/*.json`
-- **Content data** (project titles, descriptions) → embedded in data files with locale keys
-
----
-
-## i18n Architecture
-
-### Locale-Based Routing Structure
-
-```
-URL Pattern              File Location
-/                     →  /app/[locale]/page.tsx (Korean default)
-/en                   →  /app/[locale]/page.tsx (English)
-/projects/my-project  →  /app/[locale]/projects/[slug]/page.tsx (Korean)
-/en/projects/my-project → /app/[locale]/projects/[slug]/page.tsx (English)
-```
-
-### i18n Configuration Files
-
-**src/i18n/routing.ts**
-```typescript
-import { defineRouting } from 'next-intl/routing';
-
-export const routing = defineRouting({
-  locales: ['ko', 'en'],
-  defaultLocale: 'ko'
-});
-```
-
-**src/i18n/navigation.ts**
-```typescript
-import { createNavigation } from 'next-intl/navigation';
-import { routing } from './routing';
-
-export const { Link, redirect, usePathname, useRouter } =
-  createNavigation(routing);
-```
-
-**src/i18n/request.ts**
-```typescript
-import { getRequestConfig } from 'next-intl/server';
-import { routing } from './routing';
-
-export default getRequestConfig(async ({ requestLocale }) => {
-  let locale = await requestLocale;
-
-  if (!locale || !routing.locales.includes(locale as any)) {
-    locale = routing.defaultLocale;
-  }
-
-  return {
-    locale,
-    messages: (await import(`../../messages/${locale}.json`)).default
-  };
-});
-```
-
-**src/proxy.ts (Middleware)**
-```typescript
-import createMiddleware from 'next-intl/middleware';
-import { routing } from './i18n/routing';
-
-export default createMiddleware(routing);
-
-export const config = {
-  matcher: ['/', '/(ko|en)/:path*']
-};
-```
-
-**src/app/[locale]/layout.tsx**
-```typescript
-import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
-
-export default async function LocaleLayout({
-  children,
-  params: { locale }
-}: {
-  children: React.ReactNode;
-  params: { locale: string };
-}) {
-  const messages = await getMessages();
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      const max = el.scrollHeight - el.clientHeight;
+      setScrollProgress(max > 0 ? el.scrollTop / max : 0);
+    };
+    el.addEventListener('scroll', onScroll, { passive: true });
+    return () => el.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
-    <html lang={locale}>
-      <body>
-        <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
-      </body>
-    </html>
-  );
-}
-
-export function generateStaticParams() {
-  return [{ locale: 'ko' }, { locale: 'en' }];
-}
-```
-
-### i18n Data Flow
-
-```
-Request
-  ↓
-Middleware (proxy.ts)
-  ↓ (detects/validates locale)
-[locale]/layout.tsx
-  ↓ (loads messages)
-NextIntlClientProvider
-  ↓ (provides translations)
-Components (useTranslations hook)
-  ↓
-Rendered UI
-```
-
----
-
-## Styling Architecture
-
-### Tailwind CSS Organization
-
-**Global Styles: src/app/globals.css**
-```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    /* ... color tokens */
-  }
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    /* ... dark mode tokens */
-  }
-}
-
-@layer components {
-  /* Custom component classes if needed */
-  .section-container {
-    @apply max-w-6xl mx-auto px-4 py-16;
-  }
-}
-```
-
-**tailwind.config.ts**
-```typescript
-import type { Config } from 'tailwindcss';
-
-const config: Config = {
-  content: [
-    './src/app/**/*.{js,ts,jsx,tsx}',
-    './src/components/**/*.{js,ts,jsx,tsx}',
-  ],
-  theme: {
-    extend: {
-      colors: {
-        // Custom color system
-      },
-      fontFamily: {
-        // Custom fonts
-      },
-    },
-  },
-  plugins: [],
-};
-```
-
-### Component Styling Pattern
-
-**Utility-First Approach:**
-```typescript
-// components/ui/Button.tsx
-export function Button({ variant = 'primary', children }) {
-  const variants = {
-    primary: 'bg-blue-600 hover:bg-blue-700 text-white',
-    secondary: 'bg-gray-200 hover:bg-gray-300 text-gray-900',
-    outline: 'border-2 border-blue-600 text-blue-600 hover:bg-blue-50'
-  };
-
-  return (
-    <button className={`px-4 py-2 rounded-lg font-medium ${variants[variant]}`}>
-      {children}
-    </button>
-  );
-}
-```
-
-**Dynamic Class Management:**
-Use `clsx` or `tailwind-merge` for conditional classes:
-```typescript
-import { cn } from '@/lib/utils';
-
-export function Card({ className, children }) {
-  return (
-    <div className={cn('rounded-lg border bg-card p-6', className)}>
-      {children}
+    <div ref={scrollRef} className="fixed inset-0 z-[60] overflow-y-auto bg-black">
+      {/* Canvas: sticky, always covers viewport */}
+      <div className="sticky top-0 h-screen w-full">
+        <Lab2Scene scrollProgress={scrollProgress} />
+      </div>
+      {/* Scroll travel: 5 scenes × 100vh each */}
+      <div className="h-[500vh]" />
+      {/* Fixed UI elements */}
+      <HUD scrollProgress={scrollProgress} />
+      <ContentPanel activeScene={activeScene} />
     </div>
   );
 }
 ```
 
-**src/lib/utils.ts**
-```typescript
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+---
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+### Pattern 2: Ref-Based State Inside useFrame (No React State for Animation)
+
+**What:** Values that change every frame (camera lerp targets, shader uniforms, particle offsets) live in `useRef`, never `useState`. React state triggers re-renders; `useRef` updates happen inside the R3F render loop without React involvement.
+
+**When to use:** Any value that needs to update at 60fps. Only use `useState`/`useReducer` for discrete scene transitions or content panel switching.
+
+**Trade-offs:** Refs are not reactive — components cannot "watch" a ref change. This is correct for animation values; use state only for the high-level scene key derived from scroll thresholds.
+
+**Example:**
+```tsx
+// CameraRig2.tsx
+export function CameraRig2({ scrollProgress }: { scrollProgress: number }) {
+  const { camera } = useThree();
+  const targetPos = useRef(new THREE.Vector3());
+  const targetLook = useRef(new THREE.Vector3());
+
+  useFrame(() => {
+    // Compute target from scrollProgress
+    interpolateWaypoints(scrollProgress, WAYPOINTS, targetPos.current, targetLook.current);
+    // Smooth damping — never setState here
+    camera.position.lerp(targetPos.current, 0.06);
+    currentLook.current.lerp(targetLook.current, 0.06);
+    camera.lookAt(currentLook.current);
+  });
+
+  return null;
 }
 ```
 
 ---
 
-## Build Order and Dependencies
+### Pattern 3: Scroll Progress → Scene Key Derivation (Outside Canvas)
 
-### Phase 1: Foundation Setup
-**No dependencies - can build in parallel**
+**What:** Convert raw `scrollProgress` [0..1] into discrete `activeScene: SceneKey` and `localProgress: number` [0..1] in the page component, before passing to either Canvas or ContentPanel. Both layers consume the same derived state.
 
-1. **Project scaffolding**
-   - Initialize Next.js with App Router
-   - Install dependencies (next-intl, Tailwind, TypeScript)
-   - Configure tailwind.config.ts and next.config.ts
+**When to use:** Every time you need to know "which scene are we in" or "how far through this scene are we."
 
-2. **i18n configuration**
-   - Create i18n/ folder with routing, navigation, request files
-   - Set up proxy.ts middleware
-   - Create messages/ko.json and messages/en.json
-
-3. **Base layout structure**
-   - Create [locale]/layout.tsx with NextIntlClientProvider
-   - Add globals.css with Tailwind imports
-   - Set up generateStaticParams for locales
-
-**Rationale:** These are independent setup tasks with no interdependencies.
-
----
-
-### Phase 2: Design System Foundation
-**Depends on: Phase 1 (Tailwind config)**
-
-4. **Utility function**
-   - Create lib/utils.ts with cn() function
-
-5. **Atomic components (ui/)**
-   - Button (variants: primary, secondary, outline)
-   - Card (container with consistent styling)
-   - Badge (for skill tags)
-   - Typography components (if needed)
-
-**Rationale:** These primitives are used by all higher-level components. Must be built before molecules/organisms.
-
----
-
-### Phase 3: Data Layer
-**Depends on: None (can run parallel to Phase 2)**
-
-6. **Data structure**
-   - Define TypeScript interfaces for Project, Skill, Experience, Education
-   - Create lib/data/projects.ts with sample data
-   - Create lib/data/skills.ts
-   - Create lib/data/experience.ts
-   - Create lib/data/education.ts
-
-7. **Translation content**
-   - Populate messages/ko.json with UI translations
-   - Populate messages/en.json with UI translations
-
-**Rationale:** Data layer is independent of UI components. Can be developed/populated in parallel.
-
----
-
-### Phase 4: Layout Components
-**Depends on: Phase 2 (ui components), Phase 3 (i18n messages)**
-
-8. **Header component**
-   - Uses i18n navigation Links
-   - Uses Button for mobile menu
-
-9. **LocaleSwitcher component**
-   - Client Component ("use client")
-   - Uses usePathname, useRouter from i18n navigation
-   - Uses Button for locale toggle
-
-10. **Footer component**
-    - Uses i18n Links
-
-**Rationale:** Layout components use both UI primitives and i18n, so they depend on both Phase 2 and Phase 3.
-
----
-
-### Phase 5: Section Components (Main Page)
-**Depends on: Phase 2 (ui), Phase 3 (data), Phase 4 (layout)**
-
-11. **Hero section**
-    - Server Component
-    - Uses Button, useTranslations
-    - Minimal interactivity
-
-12. **About section**
-    - Server Component
-    - Uses Card, useTranslations
-
-13. **Skills section**
-    - Server Component
-    - Uses Badge
-    - Imports skills data from lib/data
-
-14. **Projects section**
-    - Server Component
-    - Renders ProjectCard components
-    - Imports projects data
-
-15. **Experience section**
-    - Server Component
-    - Uses ExperienceCard
-    - Imports experience data
-
-16. **Education section**
-    - Server Component
-    - Uses EducationCard
-    - Imports education data
-
-17. **Contact section**
-    - Client Component ("use client")
-    - Uses Input, Button
-    - Form state management
-
-**Build order within Phase 5:** Hero → About → Skills → Projects → Experience → Education → Contact
-
-**Rationale:** Sections are independent of each other but depend on ui components (Phase 2), data (Phase 3), and layout (Phase 4). Order follows top-to-bottom page flow for logical development.
-
----
-
-### Phase 6: Main Page Assembly
-**Depends on: Phase 4 (layout), Phase 5 (sections)**
-
-18. **app/[locale]/page.tsx**
-    - Compose all sections in order
-    - Server Component
-    - Single-page scroll layout
-
-**Rationale:** Main page is pure composition - needs all sections complete.
-
----
-
-### Phase 7: Project Detail Components
-**Depends on: Phase 2 (ui), Phase 3 (data)**
-
-19. **ProjectGallery component**
-    - Client Component (interactive image carousel)
-    - Uses state for current image
-
-20. **app/[locale]/projects/[slug]/page.tsx**
-    - Server Component
-    - Imports getProject from lib/data
-    - Uses ProjectGallery
-    - Uses Badge for tags
-    - generateStaticParams for all project slugs
-
-**Rationale:** Project detail page is independent of main page sections. Can be built after main page OR in parallel during Phase 5/6.
-
----
-
-### Phase 8: Polish and Optimization
-**Depends on: All previous phases**
-
-21. **Metadata**
-    - Add generateMetadata to pages for SEO
-    - Open Graph images
-
-22. **Loading states**
-    - Add loading.tsx for sections if needed
-
-23. **Error boundaries**
-    - Add error.tsx for graceful failures
-
-24. **404 page**
-    - Add not-found.tsx with i18n
-
-**Rationale:** Polish comes after core functionality is working.
-
----
-
-### Dependency Graph (Text)
-
-```
-Phase 1 (Foundation)
-  ├─→ Phase 2 (UI Atoms) ──────┐
-  │                             ├─→ Phase 4 (Layout) ──┐
-  └─→ Phase 3 (Data + i18n) ───┘                       │
-                                                        ├─→ Phase 5 (Sections) ──┐
-                                                        │                         │
-                                                        └─────────────────────────┼─→ Phase 6 (Main Page)
-                                                                                  │
-Phase 3 (Data) ──→ Phase 7 (Project Details) ────────────────────────────────────┤
-Phase 2 (UI) ────┘                                                                │
-                                                                                  │
-                                                                                  └─→ Phase 8 (Polish)
-```
-
----
-
-## Patterns to Follow
-
-### Pattern 1: Server Component Default
-**What:** Make all components Server Components unless they need interactivity.
-
-**When:** Always start with Server Component, only add "use client" when you hit a limitation.
-
-**Why:** Better performance (less JavaScript shipped), direct data access, improved SEO.
+**Trade-offs:** Derivation happens in React render, not in `useFrame`. This is fine — scene transitions are infrequent (once per scroll quarter). The Canvas receives the raw `scrollProgress` for smooth animation; the DOM overlay receives the derived `activeScene` for discrete content switches.
 
 **Example:**
-```typescript
-// sections/Projects.tsx - Server Component
-import { projects } from '@/lib/data/projects';
-import { ProjectCard } from '@/components/projects/ProjectCard';
+```tsx
+// hooks/useSceneState.ts
+const SCENES: SceneKey[] = ['intro', 'about', 'projects', 'skills', 'contact'];
 
-export function Projects() {
-  const featured = projects.filter(p => p.featured);
+export function useSceneState(scrollProgress: number) {
+  const sceneCount = SCENES.length;
+  const rawScene = scrollProgress * (sceneCount - 1);
+  const sceneIndex = Math.min(Math.floor(rawScene), sceneCount - 2);
+  const localProgress = rawScene - sceneIndex;
 
-  return (
-    <section>
-      {featured.map(project => (
-        <ProjectCard key={project.slug} project={project} />
-      ))}
-    </section>
-  );
+  return {
+    activeScene: SCENES[Math.round(rawScene)] as SceneKey,
+    sceneIndex,
+    localProgress, // 0..1 within current scene
+  };
 }
 ```
 
 ---
 
-### Pattern 2: Direct Data Import in Server Components
-**What:** Import data files directly in Server Components, no API routes needed.
+### Pattern 4: Custom ShaderMaterial via drei `extend`
 
-**When:** Accessing static data that doesn't require authentication or database queries.
+**What:** Use drei's `shaderMaterial` helper to create typed, JSX-ready shader materials. Declare uniforms, vertex shader, and fragment shader. Call `extend({ MyMaterial })` to register as a JSX element. Update uniforms each frame via `materialRef.current.uTime = clock.elapsedTime`.
 
-**Why:** Simpler architecture, no unnecessary API layer, type-safe imports.
+**When to use:** Any time you need visual effects beyond standard PBR materials — particle systems, wave deformations, glow, noise-based animation.
 
-**Example:**
-```typescript
-// app/[locale]/projects/[slug]/page.tsx
-import { getProject } from '@/lib/data/projects';
-
-export default function ProjectPage({ params }: { params: { slug: string } }) {
-  const project = getProject(params.slug);
-  if (!project) notFound();
-
-  return <div>{project.title.ko}</div>;
-}
-```
-
----
-
-### Pattern 3: Composition Over Configuration
-**What:** Build pages by composing small, focused components.
-
-**When:** Creating pages and complex UI sections.
-
-**Why:** Easier to test, reuse, and maintain.
+**Trade-offs:** GLSL must be managed as separate `.glsl` files or inline template literals. Inline is simpler for prototyping but harder to maintain. External `.glsl` files require a webpack raw-loader or vite plugin. Given the existing setup uses Next.js with Turbopack dev, test `.glsl` import approach early.
 
 **Example:**
-```typescript
-// app/[locale]/page.tsx
-import { Hero } from '@/components/sections/Hero';
-import { About } from '@/components/sections/About';
-import { Skills } from '@/components/sections/Skills';
+```tsx
+// materials/ParticleMaterial.tsx
+import { shaderMaterial } from '@react-three/drei';
+import { extend } from '@react-three/fiber';
 
-export default function HomePage() {
-  return (
-    <main>
-      <Hero />
-      <About />
-      <Skills />
-      {/* ... more sections */}
-    </main>
-  );
-}
-```
-
----
-
-### Pattern 4: i18n Navigation Wrappers
-**What:** Use next-intl's navigation wrappers instead of Next.js primitives.
-
-**When:** Any navigation (Link, useRouter, redirect).
-
-**Why:** Automatically handles locale prefixes and maintains locale context.
-
-**Example:**
-```typescript
-// ❌ Don't use Next.js Link directly
-import Link from 'next/link';
-
-// ✅ Use next-intl's Link wrapper
-import { Link } from '@/i18n/navigation';
-
-export function Header() {
-  return (
-    <nav>
-      <Link href="/projects">Projects</Link>
-    </nav>
-  );
-}
-```
-
----
-
-### Pattern 5: Locale-Aware Content
-**What:** Structure content data with locale keys for direct access.
-
-**When:** Content that differs by language (not just UI labels).
-
-**Why:** Type-safe, no translation lookup needed for content, easier to manage.
-
-**Example:**
-```typescript
-// lib/data/projects.ts
-export const projects = [
-  {
-    slug: 'my-project',
-    title: {
-      ko: '내 프로젝트',
-      en: 'My Project'
-    },
-    description: {
-      ko: '프로젝트 설명',
-      en: 'Project description'
+const ParticleMaterial = shaderMaterial(
+  { uTime: 0, uScrollProgress: 0, uColor: new THREE.Color('#ffffff') },
+  // vertex shader
+  `
+    uniform float uTime;
+    uniform float uScrollProgress;
+    void main() {
+      vec3 pos = position;
+      pos.y += sin(pos.x * 3.0 + uTime) * 0.1 * uScrollProgress;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+      gl_PointSize = 2.0;
     }
-  }
-];
-
-// Usage in component
-export function ProjectCard({ project, locale }) {
-  return <h2>{project.title[locale]}</h2>;
-}
-```
-
----
-
-### Pattern 6: Static Generation with Dynamic Routes
-**What:** Use generateStaticParams to pre-render dynamic routes at build time.
-
-**When:** Dynamic routes that can be known at build time (projects, locales).
-
-**Why:** Static HTML generation for better performance, no runtime rendering.
-
-**Example:**
-```typescript
-// app/[locale]/projects/[slug]/page.tsx
-import { projects } from '@/lib/data/projects';
-
-export function generateStaticParams() {
-  const locales = ['ko', 'en'];
-  const params = [];
-
-  for (const locale of locales) {
-    for (const project of projects) {
-      params.push({ locale, slug: project.slug });
+  `,
+  // fragment shader
+  `
+    uniform vec3 uColor;
+    void main() {
+      gl_FragColor = vec4(uColor, 0.8);
     }
-  }
+  `
+);
 
-  return params;
-}
+extend({ ParticleMaterial });
+
+// Usage in scene:
+// <points>
+//   <particleMaterial ref={matRef} uTime={0} uScrollProgress={0} />
+// </points>
 ```
 
 ---
 
-## Anti-Patterns to Avoid
+### Pattern 5: Framer Motion AnimatePresence for Content Panel Transitions
 
-### Anti-Pattern 1: Over-Using Client Components
-**What:** Marking entire sections or pages as Client Components unnecessarily.
+**What:** Wrap content sections in `<AnimatePresence mode="wait">` with `<motion.div>` children keyed by `activeScene`. When scene changes, the exiting element animates out before the entering one animates in.
 
-**Why bad:** Ships more JavaScript to browser, loses Server Component benefits, slower page loads.
+**When to use:** ContentPanel2 switching between About/Projects/Skills/Contact content. This is the DOM layer — no R3F needed here.
 
-**Instead:** Keep Server Components at top level, only mark interactive leaf components as Client Components.
+**Trade-offs:** Framer Motion adds ~50kb to the bundle. For /lab2 (already a heavy 3D route), this cost is acceptable since the route already loads Three.js (~500kb). Framer Motion is NOT acceptable on the main portfolio route.
 
 **Example:**
-```typescript
-// ❌ Bad - entire section is Client Component
-'use client';
-export function Contact() {
-  const [email, setEmail] = useState('');
-  return (
-    <section>
-      <h2>Contact</h2>
-      <form>
-        <input value={email} onChange={e => setEmail(e.target.value)} />
-      </form>
-    </section>
-  );
-}
+```tsx
+// ui/ContentPanel2.tsx
+import { AnimatePresence, motion } from 'framer-motion';
 
-// ✅ Good - only form is Client Component
-export function Contact() {
-  return (
-    <section>
-      <h2>Contact</h2>
-      <ContactForm />
-    </section>
-  );
-}
+export function ContentPanel2({ activeScene }: { activeScene: SceneKey }) {
+  if (!activeScene || activeScene === 'intro') return null;
 
-'use client';
-function ContactForm() {
-  const [email, setEmail] = useState('');
   return (
-    <form>
-      <input value={email} onChange={e => setEmail(e.target.value)} />
-    </form>
+    <div className="fixed inset-y-0 right-0 z-[80] w-full max-w-md pointer-events-none">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeScene}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          className="pointer-events-auto ..."
+        >
+          {activeScene === 'about' && <AboutContent />}
+          {activeScene === 'projects' && <ProjectsContent />}
+          {activeScene === 'skills' && <SkillsContent />}
+          {activeScene === 'contact' && <ContactContent />}
+        </motion.div>
+      </AnimatePresence>
+    </div>
   );
 }
 ```
 
 ---
 
-### Anti-Pattern 2: Creating Unnecessary API Routes
-**What:** Creating API routes just to read static data.
+### Pattern 6: Progressive Asset Loading with Suspense Boundaries
 
-**Why bad:** Adds unnecessary complexity, slower (extra network request), no type safety across boundary.
+**What:** Wrap expensive scene components in nested `<Suspense>` inside the Canvas. Use `useGLTF.preload()` at module level for critical assets. Less critical scenes load on demand.
 
-**Instead:** Import data directly in Server Components.
+**When to use:** Any scene that loads `.glb` models or large textures. The intro scene should load first; project scenes can be lazy-loaded.
+
+**Trade-offs:** Multiple Suspense boundaries mean multiple loading states. Use a single top-level loading screen that waits for the intro scene, then let subsequent scenes load silently behind the camera.
 
 **Example:**
-```typescript
-// ❌ Bad
-// app/api/projects/route.ts
-export async function GET() {
-  return Response.json(projects);
-}
-
-// page.tsx
-const res = await fetch('/api/projects');
-const projects = await res.json();
-
-// ✅ Good
-// page.tsx
-import { projects } from '@/lib/data/projects';
-// Use directly
-```
-
----
-
-### Anti-Pattern 3: Locale Detection from Client
-**What:** Using browser APIs (navigator.language) to detect locale on client side.
-
-**Why bad:** Causes hydration mismatches, flash of wrong language, inconsistent with server rendering.
-
-**Instead:** Let middleware handle locale detection and routing.
-
----
-
-### Anti-Pattern 4: Mixing Translation Approaches
-**What:** Using both next-intl and manual translation objects inconsistently.
-
-**Why bad:** Confusing, hard to maintain, translations scattered across codebase.
-
-**Instead:**
-- **UI labels/messages** → next-intl (messages/*.json)
-- **Content data** → Locale keys in data objects
-
----
-
-### Anti-Pattern 5: Deep Component Nesting
-**What:** Nesting components many levels deep without clear boundaries.
-
-**Why bad:** Hard to understand data flow, difficult to refactor, props drilling hell.
-
-**Instead:** Follow atomic design hierarchy, compose at page level, use clear component boundaries.
-
----
-
-### Anti-Pattern 6: Inline Tailwind Classes Everywhere
-**What:** Writing long className strings inline without abstraction.
-
-**Why bad:** Hard to maintain, duplicated styles, difficult to ensure consistency.
-
-**Instead:** Extract to variant objects for complex components, use cn() utility for dynamic classes.
-
-**Example:**
-```typescript
-// ❌ Bad - repeated inline classes
-<button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
-<button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
-
-// ✅ Good - extracted to component with variants
-<Button variant="primary">
-<Button variant="primary">
-```
-
----
-
-## Performance Considerations
-
-### Static Site Generation (SSG)
-
-This portfolio is ideal for full static export:
-
-**next.config.ts**
-```typescript
-const nextConfig = {
-  output: 'export', // Enable static export
-};
-```
-
-**Benefits:**
-- Zero server cost (deploy to GitHub Pages, Vercel, Netlify, etc.)
-- Maximum performance (pure static files)
-- Better reliability (no server to go down)
-
-**Trade-offs:**
-- No dynamic features (but portfolio doesn't need them)
-- No Image Optimization API (use next-export-image or manual optimization)
-
-### Image Optimization
-
-Since portfolio uses static export, handle images carefully:
-
-**Option 1: Manual optimization**
-- Optimize images before adding to public/
-- Use WebP/AVIF formats
-- Provide multiple sizes for responsive images
-
-**Option 2: next-export-image**
-- Library that provides Image component for static export
-- Generates optimized images at build time
-
-### Code Splitting
-
-App Router automatically code-splits by route:
-- Main page bundle
-- Each project/[slug] page bundle
-- Shared component chunks
-
-**No action needed** - Next.js handles this automatically.
-
-### Font Optimization
-
-Use next/font for optimized font loading:
-
-```typescript
-// app/[locale]/layout.tsx
-import { Inter } from 'next/font/google';
-
-const inter = Inter({ subsets: ['latin'] });
-
-export default function RootLayout({ children }) {
+```tsx
+// Lab2Scene.tsx
+export function Lab2Scene({ scrollProgress }: { scrollProgress: number }) {
   return (
-    <html className={inter.className}>
-      <body>{children}</body>
-    </html>
+    <Canvas dpr={[1, 1.5]} camera={{ fov: 50 }}>
+      <color attach="background" args={['#050508']} />
+      <Suspense fallback={null}>
+        {/* Intro always loaded */}
+        <IntroScene scrollProgress={scrollProgress} />
+
+        {/* Subsequent scenes: lazy-load as user scrolls */}
+        <Suspense fallback={null}>
+          <AboutScene scrollProgress={scrollProgress} />
+        </Suspense>
+        <Suspense fallback={null}>
+          <ProjectsScene scrollProgress={scrollProgress} />
+        </Suspense>
+
+        <Preload all />
+        <PostProcessing />
+      </Suspense>
+      <CameraRig2 scrollProgress={scrollProgress} />
+    </Canvas>
   );
 }
 ```
 
 ---
 
-## Testing Strategy
+## Data Flow
 
-### Component Testing
+### Scroll → 3D State Flow
 
-**Unit tests for:**
-- Utility functions (lib/utils.ts)
-- Data access functions (getProject, getFeaturedProjects)
-
-**Component tests for:**
-- UI atoms (Button, Card, Badge) - render correctly with variants
-- Sections - render with correct data
-- i18n - translations load correctly
-
-**Tools:**
-- Jest + React Testing Library
-- next-intl testing utilities
-
-### E2E Testing
-
-**Test scenarios:**
-- Main page loads and scrolls correctly
-- Project detail pages render
-- Locale switching works
-- Navigation between pages
-- Contact form submission (if implemented)
-
-**Tools:**
-- Playwright or Cypress
-
----
-
-## Deployment Considerations
-
-### Static Export Requirements
-
-1. **All routes must be static** - No dynamic rendering
-2. **Use generateStaticParams** for dynamic routes
-3. **No runtime Server Components features** (cookies, headers in components)
-4. **Image optimization** must be handled manually or with compatible library
-
-### Build Command
-
-```bash
-npm run build
+```
+User scrolls div#lab2-scroll-container
+          │
+          ▼
+onScroll handler (passive listener on scrollRef)
+          │
+          ▼ setScrollProgress(el.scrollTop / max)
+          │
+┌─────────┴──────────────────────────┐
+│         React re-render             │
+│  scrollProgress: 0.0 → 1.0         │
+│  activeScene = deriveScene(sp)      │
+│  localProgress = deriveLocal(sp)    │
+└─────────┬──────────────────────────┘
+          │
+    ┌─────┴──────────────────────────┐
+    │                                │
+    ▼                                ▼
+Lab2Scene (Canvas)            ContentPanel2 + HUD (DOM)
+    │                                │
+    ▼                                ▼
+scrollProgress prop           activeScene prop
+passed to CameraRig2          AnimatePresence key
+and each Scene component      triggers content switch
+    │
+    ▼
+useFrame() loop (60fps)
+  - camera.position.lerp(...)
+  - materialRef.current.uScrollProgress = scrollProgress
+  - No React re-renders
 ```
 
-Output: `out/` directory with static HTML/CSS/JS
+### State Ownership
 
-### Deployment Targets
-
-**GitHub Pages:**
-- Free hosting
-- Custom domain support
-- Requires basePath in next.config.ts if not at root
-
-**Vercel:**
-- Automatic deployments from Git
-- Zero configuration
-- Free tier sufficient for portfolio
-
-**Netlify:**
-- Similar to Vercel
-- Drag-and-drop deployment option
+| State | Owner | Type | Why |
+|-------|-------|------|-----|
+| `scrollProgress` | `page.tsx` | `useState<number>` | Needs to trigger re-render to pass to Canvas |
+| `activeScene` | `page.tsx` (derived) | `SceneKey` | Derived from scrollProgress each render |
+| `localProgress` | `page.tsx` (derived) | `number` | Scene-internal progress for fine animations |
+| Camera lerp target | `CameraRig2.tsx` | `useRef<Vector3>` | Animation value, must not trigger re-render |
+| Shader uniforms | Each Scene component | `useRef` | Animation values, updated in useFrame |
+| Content panel visibility | Derived from `activeScene` | None (pure derivation) | No separate state needed |
 
 ---
 
-## Scalability Path
+## Integration Points with Existing Architecture
 
-### If Portfolio Grows Beyond Static
+### New Files (create these)
 
-**Move to dynamic rendering when:**
-- Adding blog with frequent updates
-- Adding CMS for content management
-- Adding real-time features (view counts, comments)
-- Adding authentication
+| File | Status | Notes |
+|------|--------|-------|
+| `src/app/[locale]/lab2/layout.tsx` | NEW | Copy from `lab/layout.tsx` exactly — same `setRequestLocale` pattern |
+| `src/app/[locale]/lab2/page.tsx` | NEW | `'use client'`, owns scroll container |
+| `src/components/lab2/**` | NEW | All lab2 components |
 
-**Migration path:**
-1. Remove `output: 'export'` from next.config.ts
-2. Deploy to platform supporting Node.js (Vercel, Railway, etc.)
-3. Data can stay in lib/ or migrate to CMS/database
-4. Components remain mostly unchanged
+### Modified Files (none expected)
 
-**Cost:** Portfolio remains simple enough that this shouldn't be needed for years.
+The `/lab2` route should not modify any existing files. The locale layout at `[locale]/layout.tsx` renders `Header` and `Footer`, but `lab2/page.tsx` will use `fixed inset-0 z-[60]` to overlay them — the same technique used by `/lab`.
+
+### Shared Infrastructure (reuse as-is)
+
+| Existing | How /lab2 Uses It |
+|----------|-------------------|
+| `app/[locale]/layout.tsx` | Provides `NextIntlClientProvider` and `ThemeProvider` — used unchanged |
+| `i18n/navigation.ts` | `Link` for the "back to home" button in HUD |
+| `useTranslations()` | Content in `ContentPanel2` uses existing translation keys |
+| `messages/ko.json` + `en.json` | Lab2 content added under new `Lab2` namespace |
+| `public/projects/*/thumbnail.webp` | Project thumbnails reused in ProjectsScene DOM overlay |
+
+### Next.js-Specific Integration Notes
+
+1. **`dynamic()` with `ssr: false` is mandatory** — Three.js + R3F use browser globals (`window`, `WebGLRenderingContext`). Without `ssr: false`, the build fails. This is proven in `/lab`. Do the same for `/lab2`.
+
+2. **`setRequestLocale()` in layout.tsx** — Required for static rendering with next-intl v4. Without it, the page falls back to dynamic rendering. Copy `lab/layout.tsx` verbatim.
+
+3. **`generateStaticParams()` in layout.tsx** — Must export both `ko` and `en` params. Already shown in `lab/layout.tsx`.
+
+4. **No `output: 'export'` conflict** — The project does not use static export mode (it uses Vercel). R3F with `dynamic` import works normally under standard Next.js build.
+
+5. **Turbopack dev mode** — The project uses `next dev --turbopack`. GLSL file imports as raw strings may require Turbopack config. Prefer inline template literals for shader strings to avoid this complexity.
+
+---
+
+## Performance Optimization Patterns
+
+### DPR Capping
+
+```tsx
+<Canvas dpr={[1, 1.5]}>
+```
+
+Caps at 1.5x pixel ratio. On 3x Retina displays, this halves GPU work with minimal visual quality loss. The existing `/lab` uses this correctly.
+
+### On-Demand Rendering for Static Scenes
+
+```tsx
+<Canvas frameloop="demand">
+```
+
+Only renders when `invalidate()` is called. Use for scenes with no continuous animation. For scroll-driven scenes with constant `useFrame` activity, keep `frameloop="always"` (default). Evaluate per-scene: particle scenes always need frames; a static "contact" scene could use demand.
+
+### PerformanceMonitor for Adaptive Quality
+
+```tsx
+import { PerformanceMonitor } from '@react-three/drei';
+
+function Scene() {
+  const [dpr, setDpr] = useState(1.5);
+  return (
+    <Canvas dpr={dpr}>
+      <PerformanceMonitor
+        onDecline={() => setDpr(1)}
+        onIncline={() => setDpr(1.5)}
+      />
+      {/* ... */}
+    </Canvas>
+  );
+}
+```
+
+Automatically reduces pixel ratio when FPS drops below threshold. Recommended for 3D-heavy scenes.
+
+### Geometry and Material Disposal
+
+R3F does not auto-dispose Three.js objects when components unmount. Scenes that unmount must dispose their geometries and materials:
+
+```tsx
+useEffect(() => {
+  return () => {
+    geometry.dispose();
+    material.dispose();
+  };
+}, []);
+```
+
+Failure to dispose causes VRAM leaks when scenes transition. This is the most common memory bug in multi-scene R3F apps.
+
+### `useLoader` Caching
+
+```tsx
+const { scene } = useGLTF('/models/scene.glb');
+useGLTF.preload('/models/scene.glb'); // Module-level preload
+```
+
+`useGLTF` (via `useLoader` internally) caches by URL. The same model loaded in two components returns the same cached object. Call `.preload()` at module level to begin loading before the component mounts.
+
+---
+
+## Anti-Patterns
+
+### Anti-Pattern 1: Passing Animation State Through React State
+
+**What people do:** Use `useState` for values that change every frame (camera rotation, shader uniforms, particle positions).
+
+**Why it's wrong:** Each `setState` triggers a React re-render. At 60fps, this means 60 re-renders per second, causing severe jank and React scheduler pressure.
+
+**Do this instead:** Use `useRef` for all animation values. Only use `useState` for discrete events (scene changed, loading complete, content panel visible/hidden).
+
+---
+
+### Anti-Pattern 2: R3F Components Outside Canvas
+
+**What people do:** Attempt to render `<mesh>`, `<pointLight>`, or other R3F components outside the `<Canvas>` context.
+
+**Why it's wrong:** R3F components require the Three.js renderer context provided by `<Canvas>`. Outside it, they throw "R3F: Hooks can only be used within the Canvas component!" errors.
+
+**Do this instead:** All Three.js objects live inside `<Canvas>`. DOM elements live outside. Use `useThree()` inside Canvas, never outside.
+
+---
+
+### Anti-Pattern 3: Creating New THREE Objects in useFrame
+
+**What people do:** `useFrame(() => { const v = new THREE.Vector3(...); camera.lookAt(v); })`
+
+**Why it's wrong:** Allocates a new object on every frame (60 times/second). This triggers garbage collection, causing frame drops and memory pressure.
+
+**Do this instead:** Create objects outside `useFrame` with `useRef`, mutate them in-place each frame:
+```tsx
+const lookTarget = useRef(new THREE.Vector3());
+useFrame(() => {
+  lookTarget.current.set(x, y, z);
+  camera.lookAt(lookTarget.current);
+});
+```
+
+---
+
+### Anti-Pattern 4: Disabling SSR Without dynamic()
+
+**What people do:** Import Three.js or R3F directly at the top of a server-rendered component without `dynamic()`.
+
+**Why it's wrong:** Three.js accesses `window` and `WebGLRenderingContext` during import. Server rendering has no browser globals — the build crashes with "window is not defined."
+
+**Do this instead:**
+```tsx
+// page.tsx or a server-compatible wrapper
+const Lab2Scene = dynamic(() => import('./Lab2Scene'), { ssr: false });
+```
+
+---
+
+### Anti-Pattern 5: One Giant Scene Component
+
+**What people do:** Put all scene geometry, lighting, shaders, and animations in a single `LabScene.tsx` file.
+
+**Why it's wrong:** Monolithic scenes become unmaintainable at 300+ lines. Adding new scenes requires touching the same file. No code splitting possible.
+
+**Do this instead:** `SceneRouter` pattern — each scene is its own component. `SceneRouter` mounts/unmounts based on `activeScene`. Each scene can be `React.lazy()`-loaded.
+
+---
+
+### Anti-Pattern 6: Framer Motion on the Main Portfolio Route
+
+**What people do:** Install Framer Motion globally and use it across all pages.
+
+**Why it's wrong:** Framer Motion adds ~50kb to the JavaScript bundle. The main portfolio route targets performance (Lighthouse >90). This cost is unacceptable on routes that don't need complex animations.
+
+**Do this instead:** Import Framer Motion only inside `components/lab2/` components. Never import it in `components/sections/`, `components/layout/`, or any main-route component.
+
+---
+
+## Build Order (Dependency-Aware)
+
+Dependencies flow strictly downward. Each step can start only when its inputs are complete.
+
+```
+Step 1: Route scaffold (no deps)
+  └─ app/[locale]/lab2/layout.tsx   ← copy from lab/layout.tsx
+  └─ app/[locale]/lab2/page.tsx     ← shell, no scene yet
+
+Step 2: Canvas wrapper (depends on: Step 1)
+  └─ components/lab2/Lab2Scene.tsx  ← Canvas + Suspense + placeholder
+  └─ components/lab2/ui/LoadingScreen2.tsx
+
+Step 3: Camera + scroll logic (depends on: Step 2)
+  └─ components/lab2/hooks/useScrollProgress.ts
+  └─ components/lab2/hooks/useSceneState.ts
+  └─ components/lab2/CameraRig2.tsx
+  └─ Wire scrollProgress from page.tsx → Lab2Scene → CameraRig2
+
+Step 4: HUD + Content Panel shell (depends on: Step 3)
+  └─ components/lab2/ui/HUD.tsx           ← back link, scroll hint
+  └─ components/lab2/ui/ContentPanel2.tsx ← AnimatePresence shell (Framer Motion install here)
+
+Step 5: Shader materials (depends on: Step 2)
+  └─ components/lab2/materials/ParticleMaterial.tsx
+  └─ components/lab2/materials/WaveMaterial.tsx
+
+Step 6: Individual scenes (depends on: Steps 3 + 5)
+  Build in scroll order. Each scene is independently deployable.
+  └─ scenes/IntroScene.tsx    ← verify scroll→camera works
+  └─ scenes/AboutScene.tsx    ← verify scene transition
+  └─ scenes/ProjectsScene.tsx
+  └─ scenes/SkillsScene.tsx
+  └─ scenes/ContactScene.tsx
+
+Step 7: SceneRouter (depends on: Step 6)
+  └─ components/lab2/SceneRouter.tsx  ← mount/unmount scenes by key
+
+Step 8: Post-processing (depends on: Step 6)
+  └─ components/lab2/effects/PostProcessing.tsx
+  └─ Install @react-three/postprocessing
+
+Step 9: Content panel content (depends on: Steps 4 + 6)
+  └─ Add actual About/Projects/Skills/Contact content to ContentPanel2
+  └─ Add Lab2 namespace to messages/ko.json + messages/en.json
+
+Step 10: Polish + performance audit
+  └─ PerformanceMonitor integration
+  └─ Geometry disposal on scene unmount
+  └─ Lighthouse check (main route must not regress)
+```
+
+**Critical path:** Steps 1 → 2 → 3 are linear (each depends on previous). Steps 5, 4 can run in parallel with Step 3. Steps 6a (IntroScene) verifies the whole pipeline before building remaining scenes.
+
+---
+
+## Scaling Considerations
+
+| Scale | Architecture Adjustments |
+|-------|--------------------------|
+| 5 scenes (current plan) | Current architecture sufficient. Single Canvas, no instancing needed. |
+| 10+ scenes | Add `React.lazy()` to SceneRouter for each scene. Load only active ± 1 scenes. |
+| Complex GLB models per scene | Add `useGLTF.preload()` at the top of each scene file. Use `Detailed` (LOD) for objects > 10k triangles. |
+| Mobile support (out of scope) | Would require PerformanceMonitor + drastic quality reduction + fallback 2D layout. Desktop-only is the correct call. |
 
 ---
 
 ## Sources
 
-### Official Documentation (HIGH Confidence)
-- [Next.js Project Structure](https://nextjs.org/docs/app/getting-started/project-structure) - Official Next.js folder conventions
-- [next-intl App Router Setup](https://next-intl.dev/docs/getting-started/app-router) - Official i18n setup guide
-- [next-intl Locale-Based Routing](https://next-intl.dev/docs/routing/setup) - Locale routing configuration
-- [Next.js Static Exports](https://nextjs.org/docs/app/guides/static-exports) - Static site generation guide
-- [Tailwind CSS with Next.js](https://tailwindcss.com/docs/guides/nextjs) - Official Tailwind integration
+- **Existing /lab codebase** (verified): `src/app/[locale]/lab/`, `src/components/lab/` — HIGH confidence, directly inspected
+- **R3F Performance Docs** (official): [r3f.docs.pmnd.rs/advanced/scaling-performance](https://r3f.docs.pmnd.rs/advanced/scaling-performance) — HIGH confidence
+- **drei shaderMaterial** (official): [drei.docs.pmnd.rs/shaders/shader-material](https://drei.docs.pmnd.rs/shaders/shader-material) — HIGH confidence
+- **r3f-scroll-rig architecture** (GitHub): [github.com/14islands/r3f-scroll-rig](https://github.com/14islands/r3f-scroll-rig) — MEDIUM confidence (validates sticky canvas pattern but library itself not needed here)
+- **Codrops scroll-driven R3F tutorial** (Feb 2026): [tympanus.net/codrops/2026/02/17/reactive-depth](https://tympanus.net/codrops/2026/02/17/reactive-depth-building-a-scroll-driven-3d-image-tube-with-react-three-fiber/) — HIGH confidence (validates ref-based state pattern, unified motion system)
+- **three.js forum — state management with R3F**: [discourse.threejs.org](https://discourse.threejs.org/t/how-to-use-state-management-with-react-three-fiber-without-performance-issues/61223) — MEDIUM confidence (validates useRef over useState for animation)
 
-### Best Practices Articles (MEDIUM Confidence)
-- [Next.js App Router Project Structure Guide](https://makerkit.dev/blog/tutorials/nextjs-app-router-project-structure) - 2026 folder organization
-- [Next.js Architecture 2026](https://www.yogijs.tech/blog/nextjs-project-architecture-app-router) - Server-first patterns
-- [Atomic Design + Next.js 2026](https://medium.com/@buwanekasumanasekara/atomic-design-meets-feature-based-architecture-in-next-js-a-practical-guide-c06ea56cf5cc) - Component architecture
-- [Next.js App Router Best Practices](https://thiraphat-ps-dev.medium.com/mastering-next-js-app-router-best-practices-for-structuring-your-application-3f8cf0c76580) - Structure patterns
-- [Next.js Data Fetching](https://nextjs.org/docs/app/getting-started/fetching-data) - Server Components data access
+---
 
-### Community Resources (LOW-MEDIUM Confidence)
-- [Next.js Portfolio Templates](https://github.com/topics/nextjs-portfolio) - Real-world examples
-- [Static JSON Data in Next.js](https://www.slingacademy.com/article/next-js-read-and-display-data-from-a-local-json-file/) - Data management patterns
-- [Tailwind + Next.js 2025 Guide](https://codeparrot.ai/blogs/nextjs-and-tailwind-css-2025-guide-setup-tips-and-best-practices) - Styling organization
+*Architecture research for: /lab2 scroll-driven 3D interactive portfolio*
+*Researched: 2026-02-28*
