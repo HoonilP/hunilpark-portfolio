@@ -2,19 +2,17 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-02-13)
+See: .planning/PROJECT.md (updated 2026-02-28)
 
 **Core value:** 프론트엔드 개발 역량을 깔끔하고 정교한 디자인으로 보여주는 포트폴리오 사이트 — 채용 담당자가 빠르게 핵심 역량과 프로젝트를 파악할 수 있어야 한다.
-**Current focus:** Planning next milestone
+**Current focus:** v3.0 Interactive Portfolio
 
 ## Current Position
 
-Phase: 5 of 5 (all phases complete)
-Plan: N/A
-Status: v2.0 milestone complete, awaiting next milestone
-Last activity: 2026-02-13 — v2.0 milestone complete
-
-Progress: [██████████] 100% (5/5 phases complete)
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-02-28 — Milestone v3.0 started
 
 ## Performance Metrics
 
