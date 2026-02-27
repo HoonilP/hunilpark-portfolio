@@ -44,7 +44,7 @@
 
 ---
 
-- [ ] **Phase 6: Foundation** - /lab2 라우트 + WebGL 인프라 + 로딩 화면 + HUD 기반
+- [x] **Phase 6: Foundation** - /lab2 라우트 + WebGL 인프라 + 로딩 화면 + HUD 기반 (completed 2026-02-27)
 - [ ] **Phase 7: Scroll Spine** - Lenis 스무스 스크롤 + 6-챕터 카메라 웨이포인트 시스템
 - [ ] **Phase 8: 3D Scenes** - IntroScene + 5개 프로젝트 씬 + 파티클 필드 + 텍스처 플레인
 - [ ] **Phase 9: Content Overlay** - HTML 오버레이 패널 + 한/영 콘텐츠 + 챕터 HUD
@@ -134,7 +134,7 @@
 | 3. Main Page | v1.0 | - | Complete | 2026-02-12 |
 | 4. Project Detail Pages | v1.0 | - | Complete | 2026-02-12 |
 | 5. Content Expansion | v2.0 | - | Complete | 2026-02-13 |
-| 6. Foundation | 1/2 | In Progress|  | - |
+| 6. Foundation | 2/2 | Complete   | 2026-02-27 | - |
 | 7. Scroll Spine | v3.0 | 0/TBD | Not started | - |
 | 8. 3D Scenes | v3.0 | 0/TBD | Not started | - |
 | 9. Content Overlay | v3.0 | 0/TBD | Not started | - |

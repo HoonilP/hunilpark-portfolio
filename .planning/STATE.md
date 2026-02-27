@@ -1,3 +1,16 @@
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: Interactive Portfolio
+status: unknown
+last_updated: "2026-02-27T18:21:31.784Z"
+progress:
+  total_phases: 6
+  completed_phases: 6
+  total_plans: 13
+  completed_plans: 13
+---
+
 # Project State
 
 ## Project Reference
@@ -47,6 +60,8 @@ Recent decisions affecting current work:
 - [06-01]: useViewportWidth returns null on server — prevents hydration mismatch on viewport gate
 - [06-01]: 800ms minimum loading screen display — ensures percentage briefly visible with empty scene
 - [06-01]: LoadingScreen shows number only, no label text — minimal aesthetic per plan
+- [Phase 06-02]: Box icon chosen for /lab2 nav link — 3D spatial concept, distinct from FlaskConical
+- [Phase 06-02]: Three.js confirmed bundle-isolated: 864K chunk not in main page, only on-demand for /lab2
 
 ### Pending Todos
 
