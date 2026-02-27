@@ -63,7 +63,9 @@
   3. 뷰포트 1024px 미만에서 "데스크톱에서 보세요" 메시지가 캔버스 대신 표시된다
   4. /lab2 ↔ / 간 10회 왕복 후에도 캔버스가 검게 되거나 오류가 없다
   5. `ANALYZE=true npm run build` 결과에서 Three.js 번들이 /lab2 청크에만 포함된다
-**Plans**: TBD
+**Plans**: 2 plans
+- [ ] 06-01-PLAN.md — /lab2 route infrastructure, WebGL canvas, loading screen, viewport gate
+- [ ] 06-02-PLAN.md — Header navigation link, bundle verification, WebGL lifecycle test
 
 ### Phase 7: Scroll Spine
 **Goal**: 스크롤이 6개 챕터 웨이포인트 사이를 부드럽게 이동하는 카메라 경로 스토리텔링의 척추(spine)가 완성된다 — 이것이 전체 경험의 핵심이며 나머지는 그 위의 장식이다
