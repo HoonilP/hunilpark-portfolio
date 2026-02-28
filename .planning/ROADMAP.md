@@ -45,7 +45,7 @@
 ---
 
 - [x] **Phase 6: Foundation** - /lab2 라우트 + WebGL 인프라 + 로딩 화면 + HUD 기반 (completed 2026-02-27)
-- [ ] **Phase 7: Scroll Spine** - Lenis 스무스 스크롤 + 6-챕터 카메라 웨이포인트 시스템
+- [x] **Phase 7: Scroll Spine** - Lenis 스무스 스크롤 + 6-챕터 카메라 웨이포인트 시스템 (completed 2026-02-28)
 - [ ] **Phase 8: 3D Scenes** - IntroScene + 5개 프로젝트 씬 + 파티클 필드 + 텍스처 플레인
 - [ ] **Phase 9: Content Overlay** - HTML 오버레이 패널 + 한/영 콘텐츠 + 챕터 HUD
 - [ ] **Phase 10: Typography** - GSAP SplitText 글자별 등장 + 스크롤 속도 반응 텍스트 셰이더
@@ -77,8 +77,8 @@
   3. Chrome Performance 탭에서 스크롤 중 Long Task가 없다 (60fps 유지)
   4. 챕터 경계가 config 상수에서 파생되며 코드 어느 곳에도 매직 넘버 없이 동작한다
 **Plans**: 2 plans
-- [ ] 07-01-PLAN.md — Lenis smooth scroll + useScrollProgress hook + CHAPTERS config + page scroll height
-- [ ] 07-02-PLAN.md — CameraRig waypoint interpolation + Lab2Scene integration + scroll verification
+- [x] 07-01-PLAN.md — Lenis smooth scroll + useScrollProgress hook + CHAPTERS config + page scroll height
+- [x] 07-02-PLAN.md — CameraRig waypoint interpolation + Lab2Scene integration + scroll verification
 
 ### Phase 8: 3D Scenes
 **Goal**: 6개 챕터(인트로 + 5개 프로젝트)에 고유한 3D 씬이 채워지고, 기존 WebP 이미지들이 텍스처 플레인으로 공간 안에 배치되며, 파티클 필드가 공간감을 제공한다
@@ -137,7 +137,7 @@
 | 4. Project Detail Pages | v1.0 | - | Complete | 2026-02-12 |
 | 5. Content Expansion | v2.0 | - | Complete | 2026-02-13 |
 | 6. Foundation | 2/2 | Complete   | 2026-02-27 | - |
-| 7. Scroll Spine | v3.0 | 1/2 | In Progress | - |
+| 7. Scroll Spine | v3.0 | 2/2 | Complete | 2026-02-28 |
 | 8. 3D Scenes | v3.0 | 0/TBD | Not started | - |
 | 9. Content Overlay | v3.0 | 0/TBD | Not started | - |
 | 10. Typography | v3.0 | 0/TBD | Not started | - |

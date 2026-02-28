@@ -6,9 +6,9 @@ status: unknown
 last_updated: "2026-02-27T19:04:26.308Z"
 progress:
   total_phases: 11
-  completed_phases: 6
+  completed_phases: 7
   total_plans: 14
-  completed_plans: 13
+  completed_plans: 14
 ---
 
 # Project State
@@ -23,9 +23,9 @@ See: .planning/PROJECT.md (updated 2026-02-28)
 ## Current Position
 
 Phase: 7 of 11 (Scroll Spine)
-Plan: 1 of 2 complete
-Status: In progress
-Last activity: 2026-02-28 — Phase 7 Plan 01 complete: Lenis scroll infrastructure, LenisProvider, useScrollProgress, CHAPTERS config
+Plan: 2 of 2 complete
+Status: Complete
+Last activity: 2026-02-28 — Phase 7 Plan 02 complete: CameraRig component, scroll-driven camera waypoint interpolation, human-verified in browser
 
 Progress: [█░░░░░░░░░] ~5% (v3.0)
 
@@ -66,6 +66,9 @@ Recent decisions affecting current work:
 - [07-01]: useRef for scroll progress — animation values never trigger React re-renders (STATE.md principle)
 - [07-01]: CHAPTERS.length as sole source of truth — CHAPTER_COUNT/STEP/helpers all derived, no magic numbers
 - [07-01]: Scroll spacer in document flow + fixed Canvas overlay pattern — Lenis needs DOM height to traverse
+- [07-02]: LERP_FACTOR 0.05 at module level — camera lag stacks on Lenis inertia for cinematic combined effect
+- [07-02]: Separate currentLookAt ref for camera.lookAt — prevents snapping when lookAt is un-lerped
+- [07-02]: LoadingScreen auto-dismiss when total === 0 — empty scene never triggers useProgress completion
 
 ### Pending Todos
 
@@ -79,5 +82,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-28
-Stopped at: Completed 07-01-PLAN.md — Lenis scroll infrastructure, LenisProvider with R3F addEffect sync, useScrollProgress hook, CHAPTERS config with 6 waypoints
+Stopped at: Completed 07-02-PLAN.md — CameraRig with Vector3 lerp for camera position and lookAt across 6 chapter waypoints, human-verified scroll-driven camera movement
 Resume file: None
