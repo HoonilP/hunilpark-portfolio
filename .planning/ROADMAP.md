@@ -76,7 +76,9 @@
   2. 스크롤 위치에 따라 카메라가 6개 웨이포인트를 부드럽게 이동하며 챕터가 전환된다
   3. Chrome Performance 탭에서 스크롤 중 Long Task가 없다 (60fps 유지)
   4. 챕터 경계가 config 상수에서 파생되며 코드 어느 곳에도 매직 넘버 없이 동작한다
-**Plans**: TBD
+**Plans**: 2 plans
+- [ ] 07-01-PLAN.md — Lenis smooth scroll + useScrollProgress hook + CHAPTERS config + page scroll height
+- [ ] 07-02-PLAN.md — CameraRig waypoint interpolation + Lab2Scene integration + scroll verification
 
 ### Phase 8: 3D Scenes
 **Goal**: 6개 챕터(인트로 + 5개 프로젝트)에 고유한 3D 씬이 채워지고, 기존 WebP 이미지들이 텍스처 플레인으로 공간 안에 배치되며, 파티클 필드가 공간감을 제공한다
