@@ -137,7 +137,7 @@
 | 4. Project Detail Pages | v1.0 | - | Complete | 2026-02-12 |
 | 5. Content Expansion | v2.0 | - | Complete | 2026-02-13 |
 | 6. Foundation | 2/2 | Complete   | 2026-02-27 | - |
-| 7. Scroll Spine | v3.0 | 0/TBD | Not started | - |
+| 7. Scroll Spine | v3.0 | 1/2 | In Progress | - |
 | 8. 3D Scenes | v3.0 | 0/TBD | Not started | - |
 | 9. Content Overlay | v3.0 | 0/TBD | Not started | - |
 | 10. Typography | v3.0 | 0/TBD | Not started | - |

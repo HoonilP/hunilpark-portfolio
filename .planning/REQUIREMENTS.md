@@ -17,10 +17,10 @@ Requirements for /lab2 media-art 3D interactive portfolio. Each maps to roadmap 
 
 ### Scroll & Camera
 
-- [ ] **SCRL-01**: Lenis 기반 스무스 스크롤이 전체 /lab2 페이지에 적용된다
-- [ ] **SCRL-02**: 스크롤 위치가 0~1 사이의 scrollProgress로 정규화되어 Canvas에 전달된다
+- [x] **SCRL-01**: Lenis 기반 스무스 스크롤이 전체 /lab2 페이지에 적용된다
+- [x] **SCRL-02**: 스크롤 위치가 0~1 사이의 scrollProgress로 정규화되어 Canvas에 전달된다
 - [ ] **SCRL-03**: 카메라가 6개 챕터 웨이포인트 사이를 스크롤에 따라 부드럽게 이동한다
-- [ ] **SCRL-04**: 챕터 전환이 스크롤 위치에서 자연스럽게 파생된다 (매직 넘버 없이 config 기반)
+- [x] **SCRL-04**: 챕터 전환이 스크롤 위치에서 자연스럽게 파생된다 (매직 넘버 없이 config 기반)
 
 ### 3D Scenes
 
@@ -79,10 +79,10 @@ Requirements for /lab2 media-art 3D interactive portfolio. Each maps to roadmap 
 | FOUND-03 | Phase 6 | Complete |
 | FOUND-04 | Phase 6 | Complete |
 | FOUND-05 | Phase 6 | Complete |
-| SCRL-01 | Phase 7 | Pending |
-| SCRL-02 | Phase 7 | Pending |
+| SCRL-01 | Phase 7 | Complete |
+| SCRL-02 | Phase 7 | Complete |
 | SCRL-03 | Phase 7 | Pending |
-| SCRL-04 | Phase 7 | Pending |
+| SCRL-04 | Phase 7 | Complete |
 | SCENE-01 | Phase 8 | Pending |
 | SCENE-02 | Phase 8 | Pending |
 | SCENE-03 | Phase 8 | Pending |

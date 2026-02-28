@@ -5,9 +5,9 @@ milestone_name: Interactive Portfolio
 status: unknown
 last_updated: "2026-02-27T19:04:26.308Z"
 progress:
-  total_phases: 6
+  total_phases: 11
   completed_phases: 6
-  total_plans: 13
+  total_plans: 14
   completed_plans: 13
 ---
 
@@ -18,16 +18,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-28)
 
 **Core value:** 프론트엔드 개발 역량을 깔끔하고 정교한 디자인으로 보여주는 포트폴리오 사이트 — 채용 담당자가 빠르게 핵심 역량과 프로젝트를 파악할 수 있어야 한다.
-**Current focus:** v3.0 Interactive Portfolio — Phase 6: Foundation
+**Current focus:** v3.0 Interactive Portfolio — Phase 7: Scroll Spine
 
 ## Current Position
 
-Phase: 6 of 11 (Foundation)
-Plan: 2 complete
+Phase: 7 of 11 (Scroll Spine)
+Plan: 1 of 2 complete
 Status: In progress
-Last activity: 2026-02-28 — Phase 6 Plan 02 complete: /lab2 Studio header link added, Three.js bundle isolation confirmed, WebGL lifecycle human-verified
+Last activity: 2026-02-28 — Phase 7 Plan 01 complete: Lenis scroll infrastructure, LenisProvider, useScrollProgress, CHAPTERS config
 
-Progress: [█░░░░░░░░░] ~4% (v3.0)
+Progress: [█░░░░░░░░░] ~5% (v3.0)
 
 ## Performance Metrics
 
@@ -62,6 +62,10 @@ Recent decisions affecting current work:
 - [06-01]: LoadingScreen shows number only, no label text — minimal aesthetic per plan
 - [Phase 06-02]: Box icon chosen for /lab2 nav link — 3D spatial concept, distinct from FlaskConical
 - [Phase 06-02]: Three.js confirmed bundle-isolated: 864K chunk not in main page, only on-demand for /lab2
+- [07-01]: autoRaf:false in LenisProvider — R3F addEffect drives Lenis RAF to prevent dual-loop 40fps drops
+- [07-01]: useRef for scroll progress — animation values never trigger React re-renders (STATE.md principle)
+- [07-01]: CHAPTERS.length as sole source of truth — CHAPTER_COUNT/STEP/helpers all derived, no magic numbers
+- [07-01]: Scroll spacer in document flow + fixed Canvas overlay pattern — Lenis needs DOM height to traverse
 
 ### Pending Todos
 
@@ -75,5 +79,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-28
-Stopped at: Completed 06-02-PLAN.md — /lab2 header navigation + WebGL lifecycle verification complete
+Stopped at: Completed 07-01-PLAN.md — Lenis scroll infrastructure, LenisProvider with R3F addEffect sync, useScrollProgress hook, CHAPTERS config with 6 waypoints
 Resume file: None
