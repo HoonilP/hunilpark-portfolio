@@ -5,6 +5,7 @@ import {Preload} from '@react-three/drei';
 import {Suspense} from 'react';
 import LoadingScreen from './ui/LoadingScreen';
 import EmptyScene from './EmptyScene';
+import CameraRig from './scene/CameraRig';
 
 export default function Lab2Scene() {
   return (
@@ -17,6 +18,7 @@ export default function Lab2Scene() {
       >
         <color attach="background" args={['#080808']} />
         <Suspense fallback={null}>
+          <CameraRig />
           <EmptyScene />
           <Preload all />
         </Suspense>
