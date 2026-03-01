@@ -4,8 +4,9 @@ import {Canvas} from '@react-three/fiber';
 import {Preload} from '@react-three/drei';
 import {Suspense} from 'react';
 import LoadingScreen from './ui/LoadingScreen';
-import EmptyScene from './EmptyScene';
 import CameraRig from './scene/CameraRig';
+import SceneManager from './scene/SceneManager';
+import ParticleField from './scene/ParticleField';
 
 export default function Lab2Scene() {
   return (
@@ -18,8 +19,10 @@ export default function Lab2Scene() {
       >
         <color attach="background" args={['#080808']} />
         <Suspense fallback={null}>
+          <ambientLight intensity={0.15} />
           <CameraRig />
-          <EmptyScene />
+          <SceneManager />
+          <ParticleField />
           <Preload all />
         </Suspense>
       </Canvas>
