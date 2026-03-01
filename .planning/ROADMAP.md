@@ -138,7 +138,7 @@
 | 5. Content Expansion | v2.0 | - | Complete | 2026-02-13 |
 | 6. Foundation | 2/2 | Complete   | 2026-02-27 | - |
 | 7. Scroll Spine | v3.0 | 2/2 | Complete | 2026-02-28 |
-| 8. 3D Scenes | v3.0 | 0/TBD | Not started | - |
+| 8. 3D Scenes | 1/2 | In Progress|  | - |
 | 9. Content Overlay | v3.0 | 0/TBD | Not started | - |
 | 10. Typography | v3.0 | 0/TBD | Not started | - |
 | 11. Effects Polish | v3.0 | 0/TBD | Not started | - |

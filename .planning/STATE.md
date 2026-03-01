@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: Interactive Portfolio
-status: unknown
-last_updated: "2026-02-28T16:48:44.296Z"
+status: in_progress
+last_updated: "2026-03-01T04:11:29Z"
 progress:
-  total_phases: 7
+  total_phases: 11
   completed_phases: 7
-  total_plans: 15
-  completed_plans: 15
+  total_plans: 17
+  completed_plans: 16
 ---
 
 # Project State
@@ -18,14 +18,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-28)
 
 **Core value:** 프론트엔드 개발 역량을 깔끔하고 정교한 디자인으로 보여주는 포트폴리오 사이트 — 채용 담당자가 빠르게 핵심 역량과 프로젝트를 파악할 수 있어야 한다.
-**Current focus:** v3.0 Interactive Portfolio — Phase 7: Scroll Spine
+**Current focus:** v3.0 Interactive Portfolio — Phase 8: 3D Scenes
 
 ## Current Position
 
-Phase: 7 of 11 (Scroll Spine)
-Plan: 2 of 2 complete
-Status: Complete
-Last activity: 2026-02-28 — Phase 7 Plan 02 complete: CameraRig component, scroll-driven camera waypoint interpolation, human-verified in browser
+Phase: 8 of 11 (3D Scenes)
+Plan: 1 of 2 complete
+Status: In Progress
+Last activity: 2026-03-01 — Phase 8 Plan 01 complete: SceneManager visibility-toggle architecture, ParticleField ambient particles, TexturePlane reusable component, chapters.ts extended with projectId/translationKey
 
 Progress: [█░░░░░░░░░] ~5% (v3.0)
 
@@ -69,6 +69,9 @@ Recent decisions affecting current work:
 - [07-02]: LERP_FACTOR 0.05 at module level — camera lag stacks on Lenis inertia for cinematic combined effect
 - [07-02]: Separate currentLookAt ref for camera.lookAt — prevents snapping when lookAt is un-lerped
 - [07-02]: LoadingScreen auto-dismiss when total === 0 — empty scene never triggers useProgress completion
+- [08-01]: bufferAttribute in R3F 9.5.0 requires args=[array, itemSize] constructor pattern — plain array/count/itemSize props cause TS2741 error
+- [08-01]: SceneManager groups positioned at lookAt focal centers (not camera positions) so scene content is centered in frame
+- [08-01]: ParticleField z-range 5 to -35 covers full camera path from chapter 0 (z=5) through chapter 5 (lookAt z=-29)
 
 ### Pending Todos
 
@@ -81,6 +84,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-28
-Stopped at: Completed 07-02-PLAN.md — CameraRig with Vector3 lerp for camera position and lookAt across 6 chapter waypoints, human-verified scroll-driven camera movement
+Last session: 2026-03-01
+Stopped at: Completed 08-01-PLAN.md — SceneManager visibility-toggle architecture, ParticleField 2000 ambient particles, TexturePlane reusable component, chapters.ts extended with projectId/translationKey metadata
 Resume file: None
