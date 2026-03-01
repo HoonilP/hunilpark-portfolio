@@ -1,5 +1,26 @@
 # Project Milestones: 박훈일 프론트엔드 포트폴리오
 
+## v3.0 Interactive Portfolio (Archived: 2026-03-02)
+
+**Delivered:** /lab2 라우트에 Three.js/R3F 기반 3D 인터랙티브 포트폴리오의 기반 인프라, 스크롤 카메라 시스템, 6개 챕터 3D 씬을 구축. Phases 9-11 (Content Overlay, Typography, Effects Polish)은 미완료 상태로 아카이브.
+
+**Phases completed:** 6-8 of 6-11 (17 plans total)
+
+**Key accomplishments:**
+- /lab2 라우트 WebGL 인프라 — Canvas, 로딩 화면, 뷰포트 게이트, 번들 격리
+- Lenis 스무스 스크롤 + 6-챕터 카메라 웨이포인트 시스템
+- IntroScene + 5개 프로젝트 3D 씬 + ParticleField + TexturePlane
+- SceneManager visibility-toggle 아키텍처
+- 단일 Canvas 생존 패턴, 스크롤 권한 단일화, useRef 애니메이션 값 패턴 확립
+
+**Stats:**
+- Phases 6-8, 17 plans
+- 2026-02-27 → 2026-03-01
+
+**Archived reason:** 프로젝트 상세 페이지 콘텐츠 고도화 우선으로 방향 전환. lab2 코드는 v4.0에서 완전 삭제.
+
+---
+
 ## v2.0 Content Expansion (Shipped: 2026-02-13)
 
 **Delivered:** 2개 신규 프로젝트(Scholarly Chain, Dino Go) 추가 및 전체 프로젝트 실제 이미지 적용으로 포트폴리오를 3→5개 프로젝트로 확장.
