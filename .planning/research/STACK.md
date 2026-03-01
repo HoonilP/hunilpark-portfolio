@@ -1,100 +1,116 @@
 # Stack Research
 
-**Domain:** Media-art style 3D interactive portfolio (/lab2 milestone)
-**Researched:** 2026-02-28
+**Domain:** Engineering-depth project detail pages — syntax highlighting, content visualization, typography
+**Researched:** 2026-03-02
 **Confidence:** HIGH (versions npm-verified; integration patterns confirmed via official sources)
 
 ---
 
 ## Scope
 
-This document covers only the **new additions** needed for v3.0 `/lab2`. The following are already
-installed and validated — do not re-research or reinstall:
+This document covers only the **new additions** needed for v4.0 project detail enhancement. The following
+are already installed and must NOT be re-researched or re-installed:
 
-| Already Installed | Version |
-|---|---|
-| `three` | ^0.182.0 |
-| `@react-three/fiber` (R3F) | ^9.5.0 |
-| `@react-three/drei` | ^10.7.7 |
-| `gsap` | ^3.14.2 |
-| `@gsap/react` | ^2.1.2 |
-| `@types/three` | ^0.182.0 |
+| Already Installed | Version | Status |
+|---|---|---|
+| `next` | ^16.1.6 | Installed |
+| `react` / `react-dom` | ^19.2.4 | Installed |
+| `typescript` | ^5.9.3 | Installed |
+| `tailwindcss` | ^4.1.18 | Installed |
+| `next-intl` | ^4.8.2 | Installed |
+| `next-themes` | ^0.4.6 | Installed |
+| `lucide-react` | ^0.563.0 | Installed |
+| `clsx` | ^2.1.1 | Installed |
+
+The v3.0 packages (`three`, `@react-three/fiber`, `@react-three/drei`, `gsap`, `@gsap/react`, `lenis`,
+`motion`, `@react-three/postprocessing`, `maath`) are being **deleted** in v4.0's lab2 cleanup task.
+Do not depend on them for the new feature set.
 
 ---
 
 ## Recommended Stack — New Additions
 
-### Core: Scroll & Motion Layer
+### Core: Syntax Highlighting
 
-| Technology | Version (verified) | Purpose | Why Recommended |
+| Technology | Version (npm-verified) | Purpose | Why Recommended |
 |---|---|---|---|
-| `motion` (formerly framer-motion) | ^12.34.3 | DOM micro-interactions, scroll-linked UI animations, page entrance sequences | The package was rebranded to `motion` at v12; imports from `motion/react`. Fully React 19 compatible at this version. Provides `useScroll`, `useTransform`, `useMotionValue` for scroll-driven DOM animations — the right tool for 2D overlay UI, project card reveals, and text animations layered on top of the 3D canvas. |
-| `lenis` | ^1.3.17 | Smooth scroll normalization | Replaces browser native scroll with eased, physics-based scroll that feeds consistently into both GSAP ScrollTrigger and R3F scroll progress. The `@studio-freight/lenis` package is deprecated — the canonical package is now just `lenis`. Use `lenis/react` sub-path for the `ReactLenis` wrapper. |
+| `shiki` | ^4.0.0 | Code block syntax highlighting | Zero client JS: runs as a Next.js Server Component, outputs pre-colored HTML with inline CSS variables. VS Code quality highlighting (same TextMate grammars). Dual-theme support maps cleanly to next-themes' `data-theme` attribute. v4.0 is the current stable, dropping only Node 18 support vs v3. |
 
-**Why GSAP ScrollTrigger (already installed) over CSS Scroll-Driven Animations API:** GSAP ScrollTrigger
-has broad browser support and integrates directly with both the R3F render loop and Lenis. The native
-CSS Scroll-Driven Animations API lacks sufficient browser coverage as of early 2026 and cannot drive
-Three.js scene state. Continue using GSAP 3 (already installed) — no version change needed.
+**Why shiki over alternatives:**
 
-**Why `motion` for DOM and GSAP for 3D/scroll pin:** They solve different problems and compose well.
-`motion` handles 2D DOM elements (text reveals, card fades, overlay transitions) with a declarative
-React API. GSAP ScrollTrigger handles scroll-pinning, scene sequencing, and Three.js uniform
-animation with timeline control. Mixing them is the de-facto pattern in 3D portfolio sites (confirmed
-by multiple community examples and official Motion docs).
+- **vs `react-syntax-highlighter`:** react-syntax-highlighter ships Prism/Highlight.js to the client as
+  JavaScript. Since this portfolio's code snippets are entirely static content (hardcoded in translation
+  files), there is zero reason to do client-side highlighting. Shiki runs server-side at zero client
+  bundle cost.
+
+- **vs Prism.js standalone:** Prism v2 development stalled; TypeScript grammar support is notably weak.
+  This portfolio shows TypeScript/Next.js code — Prism is a poor match.
+
+- **vs Highlight.js:** Better for auto-detection use cases. This portfolio knows exactly what language
+  each snippet is, making auto-detection overhead pointless. Shiki's VS Code quality output is
+  significantly superior for a developer portfolio.
+
+**Integration with next-themes (data-theme pattern):**
+
+The portfolio uses `data-theme="dark"` / `data-theme="light"` on the HTML element via next-themes.
+Shiki's dual-theme output uses CSS variables (`--shiki-dark` for dark theme colors). The integration
+requires one CSS rule block — no runtime JavaScript:
+
+```css
+/* In globals.css — add under existing theme definitions */
+[data-theme='dark'] .shiki,
+[data-theme='dark'] .shiki span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+```
+
+**Recommended theme pair:** `github-light` (light) + `github-dark` (dark) — clean, familiar, matches
+the portfolio's minimal aesthetic. Avoid `monokai` or cyberpunk themes that would clash with the
+minimalist design.
 
 ---
 
-### Core: R3F Post-Processing & Visual Effects
+### Patterns: No Additional Library Needed
 
-| Technology | Version (verified) | Purpose | Why Recommended |
-|---|---|---|---|
-| `@react-three/postprocessing` | ^3.0.4 | WebGL post-processing effects (bloom, depth-of-field, chromatic aberration, noise, vignette) | The canonical R3F post-processing wrapper around pmndrs/postprocessing. Version 3.x has peer deps `@react-three/fiber ^9.0.0` and `three >= 0.156.0` — both satisfied by the existing stack. Single `<EffectComposer>` wraps all effects; automatically merges passes for performance. Essential for the media-art aesthetic (bloom on particle glows, DoF for depth, vignette for cinematic framing). |
+The following requirements are **best solved with Tailwind CSS utilities alone**, without adding
+libraries:
 
-**Effects available in `@react-three/postprocessing` 3.x (use as needed):**
-- `<Bloom>` — glow on emissive materials and particles (core media-art effect)
-- `<DepthOfField>` — bokeh blur to focus/defocus scene elements
-- `<ChromaticAberration>` — RGB split for glitch/analog aesthetic
-- `<Vignette>` — dark edges for cinematic framing
-- `<Noise>` — film grain overlay for texture
-- `<SMAA>` — anti-aliasing (preferred over MSAA with post-processing)
+| Feature | Approach | Rationale |
+|---|---|---|
+| Comparison/tradeoff tables | Native HTML `<table>` + Tailwind classes | Portfolio content is static — tables are authored directly in TSX components. A table library (e.g., tanstack-table) is built for dynamic/sortable data, not static content. |
+| Metrics visualization (numbers, percentages) | Tailwind `<div>` bars + CSS width utilities | "90% automation" is a static number, not a live data point. A chart library (Recharts, Victory, Chart.js) brings heavy JavaScript for data that never changes. Plain CSS progress bars are sub-1KB and render server-side. |
+| Architecture diagrams | Inline SVG or existing `<Image>` component | Architecture images already exist as WebP files in the project (confirmed in PROJECT.md). New diagrams should be hand-authored SVGs inline in TSX or exported as static images — not generated via Mermaid. |
+| Better typography for technical content | Tailwind `prose`-equivalent utilities | The portfolio uses Tailwind v4 CSS-first config. Implement a `.prose-technical` CSS class in `globals.css` for consistent technical content typography (code fonts, quote styling, etc.) — no `@tailwindcss/typography` plugin needed. |
 
----
+**Why NOT to add Recharts/Victory/Tremor for metrics:**
 
-### Supporting: Math & Shader Utilities
+Recharts is 3.7.0 (current) and weighs ~700KB minified. Victory and Tremor are similarly heavy. The
+"metrics" on engineering challenge pages are 3-5 static numbers ("90% process automation", "9.5억원
+절감", "77% passenger satisfaction improvement"). These do not require SVG chart rendering — a styled
+`<div>` with a percentage width communicates the same information at zero cost.
 
-| Library | Version (verified) | Purpose | When to Use |
-|---|---|---|---|
-| `maath` | ^0.10.8 | R3F math helpers: easing functions, random distributions, geometry helpers | Use for `easing.dampE()` (smooth exponential dampening in the `useFrame` loop), `random.inSphere()` (particle distribution), `geometry.mergeVertices()`. Part of the pmndrs ecosystem, designed for R3F idioms. |
+**Why NOT to add Mermaid.js for diagrams:**
 
-**Shader noise:** Do NOT add a noise library package. Write noise GLSL inline using the canonical
-Simplex noise GLSL snippet (public domain, ~30 lines). `@react-three/drei`'s `shaderMaterial` helper
-handles shader compilation. Adding `glsl-noise` (abandoned, 12 years old) or `gl-noise` introduces
-unnecessary dependency risk for functionality that ships as trivial inline GLSL.
-
-**Custom GLSL imports:** Use Webpack raw-loader or inline template literals for GLSL. Drei's
-`shaderMaterial` accepts template literal shader strings natively — no build plugin needed.
+Mermaid 11.12.3 unpacked size: **69MB**. It is client-side only and requires `dynamic(() => import(),
+{ ssr: false })`. The portfolio already has architecture images in WebP format. For the one or two new
+architectural diagrams needed, inline SVG authored in TSX is smaller, faster, and fully server-rendered.
+Mermaid is appropriate for documentation sites with user-generated diagrams — not for a static portfolio
+with 5 pre-defined projects.
 
 ---
 
-### Supporting: Drei Helpers (already installed — specific APIs to use)
+## Installation
 
-`@react-three/drei` ^10.7.7 is already installed. The following APIs are specifically needed for /lab2:
+```bash
+# Only one new package needed
+npm install shiki --cache /tmp/npm-cache-temp
+```
 
-| Drei API | Purpose |
-|---|---|
-| `<shaderMaterial>` (via `extend`) | Custom GLSL materials for particle systems and distortion effects |
-| `<Points>` / `<PointMaterial>` | Efficient particle rendering (use with `useFrame` for animation) |
-| `<Float>` | Gentle floating animation for 3D objects (zero-code hover feel) |
-| `<Environment>` | IBL environment map for realistic material reflections |
-| `<Text>` | 3D SDF text rendering (for typographic 3D elements) |
-| `<ScrollControls>` | R3F-native scroll rig — useful if 3D scroll is managed entirely within R3F canvas |
-| `<useProgress>` | Loading progress for asset preload screen |
-| `<PerspectiveCamera>` | Declarative camera control |
-
-**Note on `<ScrollControls>` vs external Lenis:** Use `<ScrollControls>` (drei) when scroll is
-canvas-only. Use Lenis + GSAP when scroll also drives DOM elements outside the canvas (e.g., text
-overlays, project cards). For /lab2's hybrid layout (3D canvas + DOM overlay panels), Lenis + GSAP is
-the correct choice.
+That is the complete installation for v4.0. Everything else is Tailwind utilities and native HTML.
 
 ---
 
@@ -102,125 +118,154 @@ the correct choice.
 
 | Avoid | Why | Use Instead |
 |---|---|---|
-| `three-stdlib` | Redundant — drei wraps the useful parts. Adds bundle weight. | Use `@react-three/drei` directly |
-| `@studio-freight/lenis` | Deprecated. Package renamed to `lenis`. | `lenis` (bare package name) |
-| `framer-motion` (old import) | Rebranded to `motion` at v12. Install as `motion`, import from `motion/react`. | `motion` package |
-| `framer-motion-3d` | Redundant — `motion/react-three-fiber` is the current path, included in `motion` package | `motion` (includes 3D support) |
-| `react-spring` / `@react-spring/three` | Duplicates what GSAP + motion already provide. Two spring libraries in one project is confusion. | Use GSAP for scroll-driven, `motion` for UI springs |
-| `ScrollSmoother` (GSAP Club) | Requires GSAP Club subscription. Lenis is free, better maintained, and more composable. | `lenis` |
-| `locomotive-scroll` | Actively declining in maintenance. Lenis is the 2025 successor from the same ecosystem. | `lenis` |
-| `cannon-es` / `rapier` physics | Physics engine adds significant complexity and bundle weight. /lab2 is visual, not interactive physics. | Custom spring math with `maath` + `useFrame` |
-| `glsl-noise` (npm) | Abandoned 12 years ago. | Inline GLSL snippet (no dependency) |
-| `three-noise` | Unnecessary dependency for functionality that is 30 lines of inline GLSL. | Inline GLSL snippet |
-| `@react-three/a11y` | Accessibility for 3D is desktop-only context here; adds bundle size. Skip for /lab2. | — |
+| `react-syntax-highlighter` | Ships Prism/Highlight.js as client JavaScript — wasted bundle for static content | `shiki` (server component) |
+| `prismjs` | v2 development stalled; weak TypeScript grammar; client-side only | `shiki` |
+| `rehype-pretty-code` | MDX pipeline dependency — this project stores content in JSON translation files, not Markdown files | `shiki` codeToHtml() called directly |
+| `recharts` | ~700KB for static number display | CSS `<div>` with width percentage |
+| `victory` | Large bundle, built for interactive charts | CSS `<div>` with width percentage |
+| `tremor` | Built on Recharts (same weight); designed for dashboards, not portfolio pages | Tailwind utilities |
+| `chart.js` / `react-chartjs-2` | Client-side canvas rendering for static data | CSS bars |
+| `mermaid` | 69MB unpacked, client-side only, needs `dynamic` import | Inline SVG or existing WebP images |
+| `@tailwindcss/typography` | v4 CSS-first config doesn't use plugins the same way; manual `.prose-technical` class in globals.css is simpler and fully controlled | Tailwind v4 CSS-first custom class |
+| `shadcn/ui` | The project deliberately avoids pre-built component libraries (not in any existing milestone). Adding shadcn now creates inconsistency with the existing design system. | Custom Tailwind components |
+| `framer-motion` / `motion` | The v4.0 milestone explicitly removes animation libraries (lab2 cleanup). Any new animations should be CSS transitions only. | CSS `transition` utilities |
 
 ---
 
-## Installation
+## Implementation Pattern: Code Block Component
 
-```bash
-# Smooth scroll (Lenis)
-npm install lenis --cache /tmp/npm-cache-temp
-
-# Motion (framer-motion rebranded, React 19 compatible)
-npm install motion --cache /tmp/npm-cache-temp
-
-# Post-processing effects
-npm install @react-three/postprocessing --cache /tmp/npm-cache-temp
-
-# Math helpers (R3F ecosystem)
-npm install maath --cache /tmp/npm-cache-temp
-```
-
-**Single install command:**
-```bash
-npm install lenis motion @react-three/postprocessing maath --cache /tmp/npm-cache-temp
-```
-
----
-
-## Alternatives Considered
-
-| Recommended | Alternative | When Alternative is Better |
-|---|---|---|
-| `lenis` | Native browser scroll | When no smooth-scroll UX is needed — but for media-art feel, Lenis is non-negotiable |
-| `lenis` | `ScrollSmoother` (GSAP Club) | If already paying for GSAP Club membership — feature-equivalent but costs money |
-| `motion` | Pure GSAP for DOM animations | If the team only wants one animation system — GSAP can animate DOM; but motion/react declarative API is faster to write for React component trees |
-| `@react-three/postprocessing` | Manual Three.js EffectComposer | Direct Three.js control — but the R3F wrapper handles pass merging automatically and is production-tested |
-| `maath` | Hand-written math utilities | If only 1-2 functions are needed — then inline the math; but maath is tiny and covers the full R3F math toolkit |
-
----
-
-## Integration Points with Existing Setup
-
-### Lenis + GSAP ScrollTrigger (the canonical sync pattern)
+The Shiki integration is a single server component — no hook, no context, no client-side code:
 
 ```typescript
-// providers/SmoothScrollProvider.tsx  (new file — 'use client')
-import { ReactLenis, useLenis } from 'lenis/react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { gsap } from 'gsap';
-import { useEffect } from 'react';
+// components/ui/CodeBlock.tsx  (Server Component — no 'use client')
+import { codeToHtml, type BundledLanguage } from 'shiki'
 
-gsap.registerPlugin(ScrollTrigger);
+interface CodeBlockProps {
+  code: string
+  lang: BundledLanguage
+  filename?: string  // optional tab label, e.g. "middleware.ts"
+}
 
-export function SmoothScrollProvider({ children }: { children: React.ReactNode }) {
-  const lenis = useLenis(({ scroll }) => {
-    // Keep ScrollTrigger in sync with Lenis scroll position
-    ScrollTrigger.update();
-  });
+export async function CodeBlock({ code, lang, filename }: CodeBlockProps) {
+  const html = await codeToHtml(code, {
+    lang,
+    themes: {
+      light: 'github-light',
+      dark: 'github-dark',
+    },
+  })
 
-  useEffect(() => {
-    // Hook Lenis RAF into GSAP ticker
-    gsap.ticker.add((time) => {
-      lenis?.raf(time * 1000);
-    });
-    gsap.ticker.lagSmoothing(0);
-    return () => gsap.ticker.remove((time) => lenis?.raf(time * 1000));
-  }, [lenis]);
-
-  return <ReactLenis root>{children}</ReactLenis>;
+  return (
+    <div className="rounded-lg border border-border overflow-hidden font-mono text-sm">
+      {filename && (
+        <div className="px-4 py-2 border-b border-border text-xs text-muted-foreground bg-muted">
+          {filename}
+        </div>
+      )}
+      <div
+        className="p-4 overflow-x-auto [&_.shiki]:bg-transparent"
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
+    </div>
+  )
 }
 ```
 
-### motion/react with scroll progress from Lenis
+**Usage in project detail page (also Server Component):**
 
 ```typescript
-// In any 'use client' component
-import { useScroll, useTransform, motion } from 'motion/react';
+import { CodeBlock } from '@/components/ui/CodeBlock'
 
-// useScroll tracks DOM scroll — compatible with Lenis since Lenis drives window scroll
-const { scrollYProgress } = useScroll();
-const opacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
-
-return <motion.div style={{ opacity }}>Content</motion.div>;
+// In the engineering challenge section:
+<CodeBlock
+  code={`// JWT auto-refresh middleware
+export function middleware(request: NextRequest) {
+  const token = request.cookies.get('access_token')
+  if (!token || isExpired(token)) {
+    return refreshToken(request)
+  }
+}`}
+  lang="typescript"
+  filename="middleware.ts"
+/>
 ```
 
-### R3F Canvas + Post-Processing
+---
+
+## Implementation Pattern: Static Metrics Bar
+
+No library — pure Tailwind:
 
 ```typescript
-// LabScene2.tsx (new component, SSR-disabled via next/dynamic)
-import { EffectComposer, Bloom, Vignette, ChromaticAberration } from '@react-three/postprocessing';
-import { BlendFunction } from 'postprocessing';
+// components/ui/MetricBar.tsx  (Server Component)
+interface MetricBarProps {
+  label: string
+  value: string   // e.g. "90%"
+  percentage: number  // 0-100 for bar width
+  note?: string
+}
 
-// Inside <Canvas>:
-<EffectComposer>
-  <Bloom luminanceThreshold={0.9} intensity={1.5} mipmapBlur />
-  <Vignette eskil={false} offset={0.1} darkness={0.5} />
-  <ChromaticAberration blendFunction={BlendFunction.NORMAL} offset={[0.002, 0.002]} />
-</EffectComposer>
+export function MetricBar({ label, value, percentage, note }: MetricBarProps) {
+  return (
+    <div className="space-y-1">
+      <div className="flex justify-between text-sm">
+        <span className="text-foreground font-medium">{label}</span>
+        <span className="text-primary font-bold">{value}</span>
+      </div>
+      <div className="h-2 bg-muted rounded-full overflow-hidden">
+        <div
+          className="h-full bg-primary rounded-full"
+          style={{ width: `${percentage}%` }}
+        />
+      </div>
+      {note && <p className="text-xs text-muted-foreground">{note}</p>}
+    </div>
+  )
+}
 ```
 
-### Next.js SSR Guard (same pattern as /lab)
+---
+
+## Implementation Pattern: Tradeoff Comparison Table
+
+No library — semantic HTML with Tailwind:
 
 ```typescript
-// app/[locale]/lab2/page.tsx
-import dynamic from 'next/dynamic';
+// components/ui/TradeoffTable.tsx  (Server Component)
+interface Row {
+  option: string
+  pros: string[]
+  cons: string[]
+  chosen?: boolean
+}
 
-const Lab2Scene = dynamic(() => import('@/components/lab2/Lab2Scene'), {
-  ssr: false,           // THREE.js requires window — must disable SSR
-  loading: () => <LoadingScreen />,
-});
+export function TradeoffTable({ rows }: { rows: Row[] }) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-sm border-collapse">
+        <thead>
+          <tr className="border-b border-border">
+            <th className="text-left py-2 pr-4 font-medium text-muted-foreground">Option</th>
+            <th className="text-left py-2 pr-4 font-medium text-muted-foreground">Pros</th>
+            <th className="text-left py-2 font-medium text-muted-foreground">Cons</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr key={row.option} className={`border-b border-border/50 ${row.chosen ? 'bg-primary/5' : ''}`}>
+              <td className="py-3 pr-4 font-medium align-top">
+                {row.option}
+                {row.chosen && <span className="ml-2 text-xs text-primary">(chosen)</span>}
+              </td>
+              <td className="py-3 pr-4 align-top text-muted-foreground">{row.pros.join(', ')}</td>
+              <td className="py-3 align-top text-muted-foreground">{row.cons.join(', ')}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
 ```
 
 ---
@@ -229,45 +274,59 @@ const Lab2Scene = dynamic(() => import('@/components/lab2/Lab2Scene'), {
 
 | Package | Version | Compatible With | Notes |
 |---|---|---|---|
-| `@react-three/postprocessing` | ^3.0.4 | `@react-three/fiber ^9.0.0`, `three >= 0.156.0` | Peer deps confirmed via npm. Existing three@0.182 and R3F@9.5 satisfy requirements. |
-| `motion` | ^12.34.3 | React 19 | React 19 support added at v12. Import from `motion/react`, not `framer-motion`. |
-| `lenis` | ^1.3.17 | Next.js App Router, React 19 | Use `'use client'` directive. React sub-path: `lenis/react`. |
-| `maath` | ^0.10.8 | `@react-three/fiber`, `three` | pmndrs package, same ecosystem as drei/R3F — no conflicts. |
+| `shiki` | ^4.0.0 | Node.js 20+, Next.js 16 App Router, React 19 | v4 drops Node 18 only. Serverless runtime recommended (not Edge Runtime). ESM-only — no CJS build. |
+| `shiki` + `next-themes` | — | `data-theme` attribute approach | next-themes writes `data-theme` to HTML element; shiki dual-theme CSS uses `[data-theme='dark']` selector. Works without any JavaScript. |
+
+**Edge Runtime warning:** Do NOT use `shiki` in Next.js Edge Runtime (Middleware). Use it only in
+Server Components and Server Actions, which run in Node.js (Serverless) runtime.
+
+---
+
+## Alternatives Considered
+
+| Recommended | Alternative | When to Use Alternative |
+|---|---|---|
+| `shiki` | `react-syntax-highlighter` | When content is dynamically user-generated and must highlight client-side |
+| `shiki` | `prismjs` | Never for this project — TypeScript support is inferior |
+| CSS bars | `recharts` | When data is fetched at runtime and changes (never the case for a static portfolio) |
+| Inline SVG | `mermaid` | When end users author their own diagrams (documentation sites, wikis) |
+| Tailwind `prose-technical` class | `@tailwindcss/typography` | When rendering arbitrary Markdown from a CMS — not applicable here |
 
 ---
 
 ## Stack Patterns by Variant
 
-**If the scroll experience is purely inside the R3F canvas (no DOM text overlays):**
-- Use `<ScrollControls>` from `@react-three/drei` instead of Lenis
-- Simpler setup, no Lenis sync needed
-- Access scroll with `useScroll()` from drei (not motion)
+**If a code snippet is in a Server Component page (most cases):**
 
-**If the scroll experience drives both the 3D canvas and DOM content panels (recommended for /lab2):**
-- Use Lenis for smooth scroll normalization
-- Feed scroll progress to R3F via a shared ref or Zustand atom
-- Use `motion/react`'s `useScroll` / `useTransform` for DOM elements
-- Use GSAP ScrollTrigger for timeline-based 3D scene transitions
+- Use `<CodeBlock>` directly — it's async and renders server-side
+- No need for Suspense or loading state
+- Output is static HTML — zero client JavaScript
 
-**If a particle system is needed (e.g., floating particles as background):**
-- Use `<Points>` + custom `shaderMaterial` from drei
-- Animate in `useFrame` using `maath`'s `easing.dampE` for smooth lerp
-- Add `<Bloom>` from `@react-three/postprocessing` to make emissive particles glow
+**If a code snippet needs to be inside a Client Component for some reason:**
+
+- Wrap in a Server Component parent that passes `html` as a prop
+- Pre-render with shiki server-side, pass the HTML string, render with `dangerouslySetInnerHTML`
+- Do NOT use `react-syntax-highlighter` as a workaround — restructure to keep highlighting server-side
+
+**If the project detail page needs an architecture diagram that doesn't exist as a WebP image:**
+
+- Author inline SVG in TSX (hand-craft for simple diagrams, 5-20 elements)
+- Or export from Excalidraw/Figma as SVG and inline it as a React component
+- Do NOT add Mermaid for one diagram
 
 ---
 
 ## Sources
 
-- npm registry (direct `npm show [package] version` calls) — version verification for all packages
-- [pmndrs/react-postprocessing GitHub](https://github.com/pmndrs/react-postprocessing) — v3.0.4 release date (Feb 2025), peer deps
-- [darkroomengineering/lenis GitHub](https://github.com/darkroomengineering/lenis) — v1.3.17, `lenis/react` sub-path confirmed
-- [motion.dev — Motion for React Three Fiber](https://motion.dev/docs/react-three-fiber) — 3D motion integration docs
-- [GSAP Community — Lenis + ScrollTrigger sync pattern](https://gsap.com/community/forums/topic/40426-patterns-for-synchronizing-scrolltrigger-and-lenis-in-reactnext/) — canonical integration pattern
-- [Wawa Sensei — 3D Portfolio with R3F + Framer Motion Scroll](https://wawasensei.dev/tuto/build-a-3D-portfolio-with-react-three-fiber-framer-motion-scroll-animations) — real-world integration pattern
-- [Maxime Heckel — Particles with R3F and Shaders](https://blog.maximeheckel.com/posts/the-magical-world-of-particles-with-react-three-fiber-and-shaders/) — particle system patterns with R3F
-- [Codrops — GPGPU Particle Effect with Three.js (Dec 2024)](https://tympanus.net/codrops/2024/12/19/crafting-a-dreamy-particle-effect-with-three-js-and-gpgpu/) — advanced particle techniques
+- npm registry (`npm view shiki version`, `npm view mermaid dist.unpackedSize`) — version and size verification
+- [shiki.style/packages/next](https://shiki.style/packages/next) — official Next.js integration docs, v3.23.0 → v4.0.0 API
+- [shiki.style/guide/dual-themes](https://shiki.style/guide/dual-themes) — dual theme CSS variable approach confirmed
+- [shiki.style/guide/migrate](https://shiki.style/guide/migrate) — v4 breaking changes: Node 18 drop only, no API changes from v3
+- [Lucky Media — Shiki + React Server Components + Next.js](https://www.luckymedia.dev/blog/syntax-highlighting-with-shiki-react-server-components-and-next-js) — server component integration pattern (MEDIUM confidence, community source)
+- [chsm.dev — Comparing web code highlighters (Jan 2025)](https://chsm.dev/blog/2025/01/08/comparing-web-code-highlighters) — competitive analysis confirming Shiki recommendation (MEDIUM confidence)
+- [npm-compare.com — prismjs vs highlight.js vs shiki vs react-syntax-highlighter](https://npm-compare.com/highlight.js,prismjs,react-syntax-highlighter,shiki) — download/popularity data
 
 ---
 
-*Stack research for: Media-art 3D interactive portfolio (/lab2)*
-*Researched: 2026-02-28*
+*Stack research for: v4.0 Project Detail Enhancement — engineering-depth content*
+*Researched: 2026-03-02*

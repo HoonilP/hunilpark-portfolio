@@ -1,215 +1,173 @@
 # Project Research Summary
 
-**Project:** Portfolio /lab2 — Media-Art 3D Interactive Experience
-**Domain:** Scroll-driven 3D WebGL portfolio route (media-art installation style)
-**Researched:** 2026-02-28
-**Confidence:** HIGH
+**Project:** Portfolio v4.0 — Engineering-Depth Project Detail Pages
+**Domain:** Next.js App Router content restructuring + engineering case study presentation for Korean big tech frontend hiring
+**Researched:** 2026-03-02
+**Confidence:** HIGH (architecture from live codebase; stack npm-verified; pitfalls codebase-confirmed)
 
 ## Executive Summary
 
-The `/lab2` milestone is a single-route, desktop-only media-art experience that proves frontend engineering depth through the experience itself. Research confirms this is a well-understood domain with multiple high-quality Codrops 2025 case studies (Stas Bondar, Roman Jean-Elie, Stefan Vitasović) establishing clear patterns. The winning approach is a scroll-driven architecture where one continuous timeline advances the camera through 6 chapters (intro + 5 projects), with DOM overlay panels for readable content. All project content and images already exist in the codebase — this is purely an interactive visualization layer built on top of established data.
+This milestone is a content restructuring and targeted component addition — not a rebuild. The existing 6 project detail pages (built on Next.js 16, next-intl v4, Tailwind v4) have structurally sound pages but surface engineering outcomes without the decision-making narrative that Korean big tech recruiters (Toss, Kakao, Naver, LINE) explicitly evaluate. Research confirms that the gap is not technology — it is the absence of "alternatives considered," "why we chose this," and quantitative before/after measurements in the current content schema. The recommended approach restructures the i18n translation schema to unify `implementation` and `troubleshooting` into a single `challenges` block with explicit `alternatives`, `decision`, and `outcome` fields, adds an `outcomes` section for metric cards, and introduces 6 new server components to render them — all at zero client bundle cost.
 
-The recommended stack requires only 4 new packages on top of what is already installed (`lenis`, `motion`, `@react-three/postprocessing`, `maath`). The existing `/lab` codebase provides a proven scaffold — sticky canvas pattern, `dynamic()` SSR guard, scroll progress → prop → `useFrame` architecture — that `/lab2` extends rather than reinvents. The core differentiator is scroll-velocity as a consistent visual language: scroll speed drives text distortion, camera feel, and transition intensity throughout, unifying all visual effects under one conceptual direction (the pattern used across all three 2025 SOTD-winning reference portfolios).
+The only new package needed is `shiki` v4 for server-side syntax highlighting. Every other enhancement — metric visualization, comparison tables, architecture captions, retrospective sharpening — is achievable with Tailwind CSS utilities and native HTML server components. Research strongly recommends against adding chart libraries (Recharts: 700KB), diagram libraries (Mermaid: 69MB unpacked), or component libraries (shadcn/ui) that would introduce bundle weight, inconsistency with the existing design system, or client-side JavaScript where none is needed.
 
-The primary risk is performance on mid-range hardware (integrated GPU laptops common in Korean office environments). Research from Awwwards SOTD analysis and Three.js best practices converges on one rule: post-processing effects must be wrapped in `PerformanceMonitor` with adaptive quality from the first effect added, never retrofitted. A secondary risk is Phase 1 architecture decisions — WebGL context management, animation state via refs vs. state, and scroll authority — that are expensive to reverse if gotten wrong. These must be decided and enforced before any scene content is built.
+The two most significant risks are operational, not architectural. First, the lab2 cleanup phase must not accidentally remove GSAP, which is consumed by the main site's `HorizontalScrollWrapper.tsx` — this dependency is invisible to someone scanning only the lab2 directory. Second, i18n schema renames cause silent empty sections because `t.has()` returns false without throwing — content and component changes must be made atomically and verified with a bilingual parity script in both locales. Both risks are entirely preventable with the audit procedures documented in PITFALLS.md.
+
+---
 
 ## Key Findings
 
 ### Recommended Stack
 
-The existing stack (Three.js 0.182, R3F 9.5, Drei 10.7.7, GSAP 3.14, `@gsap/react`) already covers the core 3D and animation requirements. Four additions are needed. `lenis` (v1.3.17) provides smooth scroll normalization that feeds consistently into both GSAP ScrollTrigger and R3F — use the canonical package name (not the deprecated `@studio-freight/lenis`). `motion` (v12.34.3, the rebranded Framer Motion) handles DOM overlay animations declaratively; it is React 19 compatible and scoped strictly to the DOM layer, imported from `motion/react`. `@react-three/postprocessing` (v3.0.4) wraps the pmndrs post-processing pipeline for bloom, vignette, chromatic aberration, and film grain; peer deps satisfied by the existing stack. `maath` (v0.10.8) provides R3F-idiomatic math helpers for smooth `easing.dampE()` in `useFrame` loops and `random.inSphere()` for particle distribution. Inline GLSL template literals via Drei's `shaderMaterial` cover all shader needs without additional packages.
+The stack addition is minimal by design. One new package (`shiki ^4.0.0`) handles server-side syntax highlighting via Next.js Server Components, outputting pre-colored HTML with CSS variable dual-theme support that integrates directly with the existing `data-theme` attribute from next-themes. No runtime JavaScript is shipped for code blocks. Everything else — metric bars, comparison tables, architecture captions — is pure Tailwind CSS on server components.
+
+Packages explicitly rejected by research: `react-syntax-highlighter` (ships Prism to the client), `recharts`/`tremor`/`victory` (700KB+ for static numbers), `mermaid` (69MB unpacked, client-only), `@tailwindcss/typography` (v4 CSS-first config makes a manual `.prose-technical` class simpler), and `framer-motion`/`motion` (the v4.0 milestone removes animation libraries from lab2 cleanup — new animations must be CSS transitions). The v3.0 packages (`three`, R3F, GSAP, lenis) stay in `package.json` because the `/lab` route and `HorizontalScrollWrapper.tsx` still need them.
 
 **Core technologies:**
-- `lenis` v1.3.17: Smooth scroll normalization — syncs with GSAP ScrollTrigger via `ScrollTrigger.update()` on each Lenis tick; use `lenis/react` sub-path for `ReactLenis` wrapper
-- `motion` v12.34.3: DOM overlay animations (section titles, content panels, UI transitions) — React 19 compatible; import from `motion/react`, not `framer-motion`
-- `@react-three/postprocessing` v3.0.4: Bloom, vignette, chromatic aberration, film grain — peer deps satisfied by existing R3F 9.5 + Three.js 0.182
-- `maath` v0.10.8: `easing.dampE()` for smooth `useFrame` lerps, `random.inSphere()` for particle distribution — pmndrs ecosystem, no conflicts
-- **Do not add:** `framer-motion-3d` (discontinued, React 19 incompatible), physics engines (Cannon/Rapier — overkill for visual project), noise npm packages (use 30-line inline GLSL), `locomotive-scroll` (use `lenis`), `@studio-freight/lenis` (deprecated)
-
-**Install command:**
-```bash
-npm install lenis motion @react-three/postprocessing maath --cache /tmp/npm-cache-temp
-```
+- `shiki ^4.0.0`: Server-side syntax highlighting — zero client JS, VS Code grammar quality, dual-theme via CSS variables, integrates with existing `data-theme` attribute
+- Tailwind CSS v4 (existing): Metric bars, comparison tables, typography classes — no library needed for static content
+- next-intl v4 (existing): Extended i18n schema with `challenges`, `outcomes`, `alternatives` fields using existing `t.has()` pattern
+- Native HTML + inline SVG (existing): Tradeoff tables and architecture diagrams — no Mermaid
 
 ### Expected Features
 
-Research from three Codrops 2025 case studies and Awwwards SOTD analysis establishes two tiers. The table-stakes tier produces a credible experience; the differentiator tier produces an award-worthy one. The critical finding: cohesion beats feature count. One visual language applied consistently (scroll-velocity distortion throughout) beats many isolated effects. Roman Jean-Elie's principle: the best work removes features — every element must earn its presence.
+Research found clear consensus across Korean recruiting guides, Toss/LINE/Kakao tech blogs, and frontendcs.com case studies on what elevates a portfolio from "junior who built things" to "engineer who decides things."
 
-**Must have (table stakes — P1):**
-- Scroll-driven camera path storytelling — the entire experience spine; 6 chapters, camera flies between waypoints on scroll
-- Loading screen with `useProgress` progress bar — non-negotiable for any 3D site
-- Smooth scroll via Lenis — eliminates mechanical scroll feel; single setup call
-- Character-level text reveals (GSAP SplitText, now free in GSAP 3.x) — highest ROI differentiator at lowest implementation cost
-- HTML overlay content panels for project details — readable DOM text, not 3D geometry
-- Existing 13 WebP images mapped onto 3D texture planes — zero new asset creation required; all images in `/public/images/`
-- Particle field environment (<3k particles) — creates spatial inhabitation without GPU cost
-- `PerformanceMonitor` + adaptive DPR — must not crash integrated GPU in Korean office environments
-- Chapter progress indicator ("3 / 5") — hiring managers must know they've seen everything
-- Desktop-only gate (viewport < 1024px) — explicit "best on desktop" message; no broken mobile 3D
-- Back-to-main navigation — port directly from `/lab`
+**Must have (table stakes — P1 for v4.0):**
+- Engineering Challenge Section replacing the current Implementation section — explicit Problem, Alternatives, Decision, Outcome per challenge
+- Alternatives block per challenge — at least one alternative named and rejected with a reason; transforms "what I built" into "how I decided what to build"
+- Quantitative outcomes — every result that can be numbered must be numbered; vague adjectives are an active negative signal to Korean big tech reviewers
+- Architecture caption — 2-3 sentences under the architecture image explaining design decisions visible in the diagram
+- Retrospective sharpening — replace generic "I learned X" with "If I rebuilt this, I'd use Y instead of Z because W"
+- Bilingual content parity — all KO and EN keys updated simultaneously; missing English keys silently produce empty sections
 
 **Should have (competitive differentiators — P2):**
-- Scroll-velocity text stretch shader (`uVelocity` uniform to headline geometry) — single highest-ROI effect once core is stable
-- Post-processing: bloom + film grain — transforms "3D viewport" into "cinematic experience"; gated by `PerformanceMonitor`
-- Entry intro sequence — 2–3 second GSAP timeline after loading completes, before scroll begins
-- Mouse parallax on idle — interpolated camera drift toward cursor; port directly from `/lab`
-- Transition wipes between chapters — CSS clip-path animated by GSAP; makes chapter metaphor tangible
-- Custom cursor — 40px circle, `mix-blend-mode: difference`
-- Per-project color temperature (ambient/directional light shifts per chapter)
+- Trade-off comparison table — visual table for the 1-2 most significant decisions per project
+- Decision rationale callout — styled highlighted block making the key decision visible to a scanning recruiter
+- Per-challenge difficulty/impact tags — low cost, signals self-awareness and prioritization ability
 
-**Defer to v2+:**
-- Portal / FBO masked reveals — requires fundamentally different render-to-texture pipeline; architecture must accommodate it but do not build it now
-- Per-project GLSL shader signatures — requires per-project shader authoring
-- Audio opt-in — inappropriate for Korean hiring context
-- 3D extruded text for hero moments — only if confirmed GPU headroom
+**Defer (v5+):**
+- Project selection "start here" page guiding recruiters to the 2-3 deepest projects
+- Inline code snippet per challenge (CodeBlock component can be built in Phase 2; content authoring is the constraint)
+
+**Anti-features to avoid:**
+- Skill percentage bars — subjective, meaningless, Toss interviewers have flagged these negatively
+- Fabricated metrics for student projects — Korean recruiters cross-reference GitHub and live demos
+- Full feature lists for all 6 projects — depth over breadth is the Korean big tech consensus
+- Timeline/Gantt charts — visual noise without answering "how good is your code?"
 
 ### Architecture Approach
 
-The `/lab2` architecture extends the proven `/lab` scaffold with a clear three-layer system. A Server Component wrapper calls `setRequestLocale()` then renders a Client Component that owns a custom scroll container div. The scroll container derives `scrollProgress: number [0..1]` and `activeScene: SceneKey` from raw scroll position. The R3F Canvas is position-sticky (sticky, top-0, 100vh) and receives `scrollProgress` as a prop; inside Canvas, `CameraRig2` uses `useFrame` to lerp camera toward scroll-progress-derived waypoints with zero React state involvement. DOM overlay (`ContentPanel2`) receives `activeScene` and uses `motion/react` `AnimatePresence` to switch content. Individual scenes are isolated components under a `SceneRouter` for future code splitting.
+The restructure uses `ProjectContent.tsx` as a thin orchestrator — its external signature (`translationKey`, `projectId` props) stays identical, keeping `page.tsx` and the route entirely unchanged. The core new atom is `ChallengeSection.tsx`, a server component rendering the Problem → Context → Alternatives → Decision → Outcome card structure, reused across all 6 projects via a numbered-key iteration pattern (`challenge1`, `challenge2`, ...) consistent with the existing `feature1`/`issue1` convention. Optional fields use `t.has()` guards, which is already the established pattern in `ProjectContent.tsx`. All 6 new components are server components — no `'use client'` directive anywhere in the new content code.
+
+The i18n schema migration is the highest-risk step: `implementation` and `troubleshooting` collapse into a unified `challenges` block, and a new `outcomes` section is added for metric cards. This migration must be done atomically — JSON changes and component consumer updates in the same commit — validated by `next build` and visual QA of all 12 project pages (6 projects x 2 locales).
 
 **Major components:**
-1. `lab2/page.tsx` (Server Component wrapper) — calls `setRequestLocale(locale)`, renders `Lab2Client` via `dynamic()` with `ssr: false`
-2. `Lab2Client` / `lab2/page-client.tsx` — owns scroll container ref, derives `scrollProgress` + `activeScene`; `'use client'`
-3. `Lab2Scene` (Canvas wrapper) — sticky Canvas with `dpr={[1, 1.5]}`, `Suspense` boundaries, scene composition
-4. `CameraRig2` — `useFrame` lerp between 6 camera waypoints; all values in `useRef`, zero `setState`
-5. `SceneRouter` — mounts scenes by `sceneKey`; each scene independently deployable; enables `React.lazy()` code splitting
-6. `ContentPanel2` — fixed DOM overlay with `AnimatePresence` keyed by `activeScene`; `motion/react` for transitions
-7. `PostProcessing` — `EffectComposer` with conditional bloom/vignette gated by `PerformanceMonitor`
-8. `HUD` — fixed navigation dots, back link, scroll hint
-
-**Key patterns:**
-- Scroll container → `scrollProgress` float → prop into Canvas → `useFrame` lerp (same spine as `/lab`)
-- All 60fps animation values in `useRef`; only discrete scene transitions use `useState`
-- Single `<Canvas>` alive for entire /lab2 subtree — never conditionally render the Canvas
-- `dynamic(..., {ssr: false})` guard on all Three.js/R3F/Drei imports
+1. `ChallengesGrid.tsx` — iterates `challenge1..N`, renders `ChallengeSection` per challenge; replaces current Implementation and Troubleshooting sections
+2. `ChallengeSection.tsx` — core atom: Problem, optional Context, optional AlternativesTable, Decision, optional Outcome; ~70 lines, server component
+3. `AlternativesTable.tsx` — options-considered vs chosen table, conditionally rendered within ChallengeSection; separated to keep ChallengeSection lean
+4. `OutcomesSection.tsx` — dedicated metric card section for quantitative results; makes impact scannable for recruiters
+5. `OverviewSection.tsx` + `RetrospectiveSection.tsx` — clean extracted components, replacing inline rendering in ProjectContent body
+6. `CodeBlock.tsx` — shiki server component for per-challenge code snippets (build in Phase 2, use in Phase 3 content)
 
 ### Critical Pitfalls
 
-Research from R3F official docs, verified GitHub issues, and GSAP community forums identified 10 pitfalls. The following 5 are the highest-risk architectural decisions that cannot be cheaply reversed:
+1. **GSAP accidentally removed with lab2 packages** — `HorizontalScrollWrapper.tsx` in the MAIN site imports GSAP directly; removing GSAP breaks horizontal panel scroll on the homepage. Run `grep -r "from 'gsap'" src --include="*.tsx"` before any `npm uninstall`. Only `lenis` is safe to remove with lab2.
 
-1. **WebGL context leak on route navigation** — Keep one `<Canvas>` alive for the entire /lab2 subtree; never conditionally render the Canvas itself; call `renderer.dispose()` + geometry/material disposal on route exit. Chrome allows ~16 WebGL contexts; exceeding the limit silently kills the oldest context. Must be correct from the first commit.
+2. **Partial lab2 deletion leaves dangling references** — lab2 has a 4-layer dependency chain (Header → i18n keys → route → components). Delete in prescribed top-down order: Navigation.lab2 keys first, then Header link, then route directory, then components directory. Gate phase completion on `next build` with zero TypeScript errors.
 
-2. **setState inside useFrame causes cascading re-renders** — Animation-driving values (camera lerp targets, shader uniforms) must live in `useRef`, updated imperatively in `useFrame`. Only use `useState` for discrete events (scene changed, loading complete). 60fps `setState` causes 60 React reconciler cycles/second independent of GPU load.
+3. **i18n schema rename silently breaks t.has() rendering** — `t.has()` returns false for missing keys without throwing; build passes cleanly even when entire sections are empty. Schema renames must update JSON files and TSX consumer files atomically. Validate with the bilingual parity script and full visual QA of both locales.
 
-3. **Shader compilation stall on first paint** — Call `renderer.compile(scene, camera)` inside the R3F `onCreated` callback to force GPU shader compilation during the loading screen, before revealing the scene. Without this, first frame freezes 2–10 seconds on mid-range hardware.
+4. **English locale content drift** — Korean content written first, English deferred and forgotten. English project pages silently render empty sections with no error. Run the Python bilingual parity script as a hard gate after each project's content update.
 
-4. **Bundle size explosion from unguarded Three.js imports** — All Three.js/R3F/Drei imports must live exclusively inside components behind `dynamic(..., { ssr: false })`. A single indirect import in a shared module adds 600KB to every page. Verify with `@next/bundle-analyzer` before writing scene code.
+5. **Generic result fields failing the specificity test** — Qualitative language ("performance improved," "stability was better") is an active negative signal to Korean big tech reviewers. Every `result`/`outcome` field must contain at least one specific measurement, named alternative, or before/after comparison. Apply the specificity test per feature block before moving to the next project.
 
-5. **GSAP ScrollTrigger + Drei ScrollControls double-scroll conflict** — Choose ONE scroll authority (custom scroll div, same as `/lab`). Never add Drei `<ScrollControls>` on top of an existing GSAP ScrollTrigger setup. GSAP should animate Three.js object properties via refs inside `useFrame`, not observe the scroll container via ScrollTrigger's DOM observation.
+---
 
 ## Implications for Roadmap
 
-Based on research, suggested phase structure:
+Based on the dependency analysis in ARCHITECTURE.md and risk severity in PITFALLS.md, three phases are recommended.
 
-### Phase 1: Foundation
-**Rationale:** Architecture decisions here are the most expensive to reverse. WebGL context management, animation state boundaries, bundle isolation, and Next.js/next-intl integration must be verified before any scene content exists. The pitfalls research maps 7 of 10 critical pitfalls directly to this phase.
-**Delivers:** A working `/lab2` route with sticky Canvas, scroll progress wiring, empty scene, loading screen, and HUD — no visual content yet, but full infrastructure validated.
-**Addresses:** Loading screen (P1), back navigation (P1), desktop-only gate (P1), Server/Client wrapper pattern for next-intl
-**Avoids:** WebGL context leak, setState-in-useFrame, bundle bloat, framer-motion-3d incompatibility, next-intl hydration mismatch, shader compilation stall
-**Verification gates:** Navigate /lab2 ↔ / 10× (no canvas blackout); `ANALYZE=true npm run build` (Three.js in /lab2 chunk only); `npm run build` succeeds for both `ko` and `en`
+### Phase 1: Lab2 Cleanup
+**Rationale:** Lab2 deletion is a prerequisite for accurate dependency analysis. Packages cannot be safely assessed for removal while lab2 source files exist. This phase is independent of content work and has clear completion criteria. Doing this first prevents the highest-severity pitfall (accidental GSAP removal) from occurring mid-content-development.
+**Delivers:** Clean codebase with lab2 route, components, and navigation entries fully removed; package.json reflecting only retained dependencies (`gsap`, `@react-three/fiber`, `three` remain because `/lab` and `HorizontalScrollWrapper.tsx` need them; `lenis` removed)
+**Addresses:** PITFALLS 1, 2, 3 (GSAP dependency audit, dangling reference order, transpilePackages sync)
+**Avoids:** Installing shiki before the codebase is clean — mixing new additions with cleanup verification is a recipe for unclear build failures
 
-### Phase 2: Scroll Spine + Camera
-**Rationale:** Camera path storytelling is the experience itself — everything else is decoration on top. This phase establishes the `scrollProgress → waypoints → camera lerp` system with 6 real chapter boundaries. Nothing else can be built until this is correct and smooth.
-**Delivers:** Full scroll travel through 6 chapters with camera moving between defined 3D waypoints; cinematic feel; chapter state derivation working.
-**Uses:** Lenis + GSAP ScrollTrigger sync pattern; `CameraRig2` with `useFrame` + `maath.easing.dampE`; `useScrollProgress` + `useSceneState` hooks
-**Avoids:** GSAP + ScrollControls double-scroll conflict; scroll jank from main thread contention; magic-number scroll thresholds (extract to `SCENES` config constant from day 1)
-**Verification gate:** Scroll position maps 1:1 to camera position; Chrome Performance tab shows no Long Tasks during scroll
+### Phase 2: Component Infrastructure and Schema Migration
+**Rationale:** The i18n schema migration is the critical path blocker — all new components depend on the new translation key structure. Content authors need stable key names before writing begins. Building both schema and components in this phase before content authoring prevents expensive content rewrites caused by schema churn. This phase also installs shiki and builds the CodeBlock component so it is available for Phase 3 content work.
+**Delivers:** New `challenges`/`outcomes` i18n schema live in both `ko.json` and `en.json`; 6 new server components built and wired into `ProjectContent.tsx`; all 12 project pages rendering correctly with migrated content; `shiki` installed and `CodeBlock.tsx` available
+**Uses:** `shiki ^4.0.0` (sole new install); Tailwind v4 CSS-first custom `.prose-technical` class; numbered-key iteration and `t.has()` patterns (existing conventions)
+**Implements:** ChallengesGrid, ChallengeSection, AlternativesTable, OutcomesSection, OverviewSection, RetrospectiveSection
+**Avoids:** PITFALL 4 (schema/consumer atomicity enforced by making both changes in the same phase); anti-pattern of per-project dedicated components
 
-### Phase 3: 3D Scene Content
-**Rationale:** With camera and scroll proven, each scene can be built incrementally and verified independently. IntroScene first to validate the full pipeline end-to-end; project scenes carry the content payload.
-**Delivers:** 6 populated 3D scenes with particle field environment and project images mapped as texture planes.
-**Addresses:** Scroll-driven 3D environment (P1), existing images as 3D textures (P1), particle field (P1)
-**Implements:** `SceneRouter`, per-scene components, `ParticleMaterial` + `WaveMaterial` shaderMaterials via Drei `extend`
-**Avoids:** One giant scene component (anti-pattern); new `THREE.Vector3()` inside `useFrame` (GC pressure); single Suspense boundary wrapping all assets
-**Build order:** IntroScene → verify pipeline → AboutScene → ProjectsScene → SkillsScene → ContactScene
-
-### Phase 4: Content Overlay + HUD
-**Rationale:** Project content readability is a hiring requirement. `ContentPanel2` with `AnimatePresence` keyed by `activeScene` gives hiring managers clear, readable project details synchronized with scene state. Chapter nav confirms they've seen all 5 projects.
-**Delivers:** `ContentPanel2` with per-scene project content (name, summary, tech stack, localized KO/EN); chapter progress indicator "3 / 5"; new `Lab2` translation namespace.
-**Addresses:** Project panels (P1), chapter progress indicator (P1), bilingual content integration
-**Note:** No new content authoring — all project text already exists in main site translations; this phase wires existing content to the overlay
-
-### Phase 5: Typography Interactions
-**Rationale:** Character-level text animation is the single highest-ROI differentiator from the feature analysis. Research from all three 2025 case studies confirms this. GSAP SplitText is now free in GSAP 3.x. This adds the motion language that makes the experience feel "made carefully" to technical viewers.
-**Delivers:** Chapter headlines assembled character-by-character on scroll; GSAP SplitText with clip-path mask; scroll-velocity reactive text stretch shader on headlines.
-**Addresses:** Character-level text reveals (P1), scroll-velocity text stretch (P2)
-**Implements:** GSAP SplitText + stagger 0.02–0.05s/char; `uVelocity` uniform in headline vertex shader; scroll delta tracking between frames
-**Avoids:** Simultaneous independent GSAP tweens on same elements; 3D text for body copy (DOM only)
-
-### Phase 6: Post-Processing + Effects Polish
-**Rationale:** Post-processing is conditionally gated — it must not be added without `PerformanceMonitor`. With the core experience working at solid 60fps, this phase adds the cinematic layer that transforms visual quality, gated by measured GPU headroom.
-**Delivers:** Bloom on emissive elements, film grain, vignette, mouse parallax on idle, transition wipes, custom cursor, entry intro sequence, per-project color temperature shifts.
-**Addresses:** Post-processing bloom + grain (P2), entry intro sequence (P2), mouse parallax (P2), transition wipes (P2), custom cursor (P2), per-project color temperature (P2)
-**Uses:** `@react-three/postprocessing` `EffectComposer`; `PerformanceMonitor` from Drei gates all effects
-**Avoids:** GPU overload without adaptive quality; excessive particle counts (>3k); post-processing without quality fallback
-**Trigger:** Only start this phase when `PerformanceMonitor` confirms render budget headroom on target hardware
+### Phase 3: Content Authoring — Engineering Depth
+**Rationale:** Content authoring is the highest-ROI, highest-effort phase. It requires the new schema and components to be stable before writing begins, or content will be rewritten as structure evolves. The depth priority order from FEATURES.md is: Joshua, DY CMS, Scholarly Chain first (strongest engineering stories, clearest metrics), then Dino Go, then Retail Analysis, then Art War last (insufficient source data). Retrospective sharpening has the highest ROI per word written and should be done per project immediately after challenges.
+**Delivers:** All 6 projects with bilingual engineering-depth content — alternatives documented, decisions rationale stated, outcomes quantified, retrospectives specific; all content passing the specificity test
+**Addresses:** PITFALL 5 (EN parity — Python script gates each project), PITFALL 6 (specificity test gates each feature block)
+**Feature coverage:** Engineering Challenge Section, Alternatives block, Quantitative outcomes, Architecture captions, Retrospective sharpening (all P1 features from FEATURES.md)
 
 ### Phase Ordering Rationale
 
-- Phase 1 before everything: 7 of 10 critical pitfalls must be prevented at the architectural level before any scene content exists. Retrofitting costs 2–5× more than getting them right first.
-- Phase 2 before Phase 3: Camera waypoints define where scenes live in 3D space. Building scenes without knowing the camera path produces work that must be repositioned.
-- Phase 4 after Phase 3: Content panel content references scene names that exist after Phase 3. Structural shell can be built in parallel but content wiring requires scenes to exist.
-- Phase 5 after Phase 4: Typography interactions enhance content that Phase 4 delivers. SplitText applies to DOM text nodes that must already be rendering.
-- Phase 6 last: Post-processing is additive polish, never foundational. The `PerformanceMonitor` gate enforces this — effects only if headroom exists on target hardware.
+- **Lab2 first** because it removes risk before adding complexity. Pitfall 1 (GSAP removal) is a 30-minute recovery if it happens mid-Phase-2; it is a 5-minute prevention if audited in Phase 1.
+- **Infrastructure before content** because the i18n schema is the critical path blocker. Content writers need stable key names. Components need validated schema. Building both in Phase 2 prevents expensive content rewrites caused by schema churn.
+- **Content last** because it is the highest-effort phase and benefits from a stable, validated technical foundation. The per-project quality gate (specificity test + bilingual parity script) works best when completed one project at a time.
 
 ### Research Flags
 
-Phases with standard, well-documented patterns (low research risk):
-- **Phase 1 (Foundation):** Proven `/lab` scaffold to copy directly; all patterns have working implementations in the codebase.
-- **Phase 2 (Scroll Spine):** Lenis + GSAP ScrollTrigger sync is canonical with official documentation and verified community examples.
-- **Phase 4 (Content Overlay):** `AnimatePresence` with `motion/react` is documented; next-intl `useTranslations()` already used throughout codebase.
+Phases with standard patterns (skip research-phase — well-documented, fully resolved by this research):
+- **Phase 1 (Lab2 Cleanup):** Deletion order and dependency audit fully documented in PITFALLS.md. No additional research needed.
+- **Phase 2 (Infrastructure):** Component architecture fully specified in ARCHITECTURE.md. Shiki integration pattern fully specified in STACK.md with working code examples. No additional research needed.
 
-Phases likely needing prototyping or careful iteration:
-- **Phase 3 (3D Scene Content):** Scene composition and spatial layout are artistic decisions, not engineering ones — scene-by-scene iteration required. Prototype IntroScene first to validate full pipeline before committing to scene structure.
-- **Phase 5 (Typography):** Scroll-velocity text stretch shader requires GLSL authoring; `uVelocity` uniform integration needs prototyping to tune feel. This is the highest artistic risk in the roadmap.
-- **Phase 6 (Effects):** Post-processing tuning is hardware-dependent. Bloom `luminanceThreshold` and `intensity` must be tested on integrated GPU, not just M-series MacBook. Dedicated performance test on target hardware profile before launch.
+Phases that may warrant targeted validation during execution:
+- **Phase 3 (Content Authoring):** Specific quantitative claims per project require cross-referencing against PDF source documents. Research identifies which projects have documented metrics (DY CMS: "90% accounting automation"; Joshua: IPC performance data) and which do not (Art War: insufficient source data). This is a content-quality validation need, not a technology research need. No additional research phase required — the specificity test and bilingual parity script are sufficient gates.
+
+---
 
 ## Confidence Assessment
 
 | Area | Confidence | Notes |
 |------|------------|-------|
-| Stack | HIGH | All 4 new packages npm-verified at specific versions; peer deps confirmed against existing stack; integration patterns documented in official Motion, Lenis, and pmndrs sources |
-| Features | HIGH | Three Codrops 2025 case studies + Awwwards SOTD analysis from the exact same domain; prioritization matrix backed by real-world examples; dependency graph verified against reference implementations |
-| Architecture | HIGH | Existing `/lab` codebase directly inspected and verified; R3F official scaling docs + Codrops Feb 2026 tutorial corroborate patterns; 10-step build order derived from actual dependency graph |
-| Pitfalls | HIGH | R3F official pitfalls docs + verified GitHub issues (not theoretical warnings); GSAP conflict documented in official GSAP forum; framer-motion-3d deprecation verified on npm |
+| Stack | HIGH | `shiki` version npm-verified; integration pattern from official shiki.style docs; "no additional packages" recommendation supported by bundle size analysis (Recharts 700KB, Mermaid 69MB) |
+| Features | MEDIUM | Korean big tech recruiter preferences confirmed via multiple community sources (velog, brunch, nbcamp); Toss/LINE official tech blogs HIGH confidence; specific Naver/Kakao format requirements LOW — no official public guidance found |
+| Architecture | HIGH | All findings from direct live codebase inspection at commit `46c64df`; component boundaries verified against actual file structure; no external sources required for internal architecture decisions |
+| Pitfalls | HIGH | All 6 pitfalls grounded in direct codebase inspection; `t.has()` behavior confirmed against next-intl official docs; GSAP dependency confirmed by grep of `HorizontalScrollWrapper.tsx` |
 
 **Overall confidence:** HIGH
 
 ### Gaps to Address
 
-- **GLSL shader aesthetics:** Research confirms the technical pattern (shaderMaterial + uniforms + useFrame) but does not prescribe the specific GLSL code for the scroll-velocity stretch effect. The vertex shader for `uVelocity`-driven distortion must be authored during Phase 5. Prototype early — this is the highest artistic risk.
-- **Scene 3D layout and camera waypoints:** Camera waypoints and 3D scene positioning are aesthetic decisions. There is no "correct" answer from research — requires design iteration. Define the 6 waypoints in a config constant before building any scene geometry.
-- **Turbopack GLSL import compatibility:** ARCHITECTURE.md flags that GLSL file imports as raw strings may need Turbopack config with the current `next dev --turbopack` setup. Recommendation is to use inline template literals to avoid this. Validate this assumption in Phase 1 before committing to an approach.
-- **Mid-range GPU baseline:** All performance thresholds (particle count <3k, bloom `resolution={256}`, DPR max 1.5×) are calibrated from research analysis, but have not been tested on the specific hardware profile that Korean hiring managers use. A dedicated performance audit on an Intel Iris or AMD Vega integrated GPU laptop should happen during Phase 6 before launch.
+- **Specific metrics for Art War project:** Art War was flagged as having insufficient source data in PROJECT.md for deep engineering challenge content. During Phase 3, assess whether Art War should receive baseline-only treatment (overview + migration of existing content) rather than full engineering-depth treatment. Do not fabricate metrics.
+
+- **Korean recruiter specificity for Naver vs Kakao vs Toss:** Community sources agree on "alternatives considered" and "quantitative outcomes" patterns, but no official Naver or Kakao portfolio format guidance was found. The research recommendation (follow Toss Tech Blog / LINE Engineering Blog patterns) is the best available proxy. Validate against any direct recruiter feedback received during the job search.
+
+- **v4.x code snippet content decisions:** The `CodeBlock.tsx` component is straightforward to build in Phase 2. Which challenges actually warrant a code snippet (as opposed to prose description) is a Phase 3 content judgment call. The research identifies Scholarly Chain JWT middleware and Joshua IPC architecture as the strongest candidates — both have real, interesting code that reinforces the decision narrative.
+
+---
 
 ## Sources
 
 ### Primary (HIGH confidence)
-- [Stas Bondar '25 — Code and Techniques (Codrops March 2025)](https://tympanus.net/codrops/2025/03/25/stas-bondar-25-the-code-techniques-behind-a-next-level-portfolio/) — scroll-velocity patterns, SplitText, PerformanceMonitor
-- [Letting the Creative Process Shape a WebGL Portfolio (Codrops Nov 2025)](https://tympanus.net/codrops/2025/11/27/letting-the-creative-process-shape-a-webgl-portfolio/) — camera path storytelling, restraint principle
-- [Case Study: Stefan Vitasovic Portfolio 2025 (Codrops March 2025)](https://tympanus.net/codrops/2025/03/05/case-study-stefan-vitasovic-portfolio-2025/) — kinetic typography, scroll-velocity text stretch
-- [Building Efficient Three.js Scenes (Codrops Feb 2025)](https://tympanus.net/codrops/2025/02/11/building-efficient-three-js-scenes-optimize-performance-while-maintaining-quality/) — InstancedMesh, draw call batching
-- [React Three Fiber: Performance Pitfalls (official docs)](https://r3f.docs.pmnd.rs/advanced/pitfalls) — setState/useFrame anti-patterns, context leak
-- [React Three Fiber: Scaling Performance (official docs)](https://r3f.docs.pmnd.rs/advanced/scaling-performance) — DPR capping, PerformanceMonitor
-- [Lenis GitHub: darkroomengineering/lenis](https://github.com/darkroomengineering/lenis) — v1.3.17, `lenis/react` sub-path confirmed
-- [Motion docs: React Three Fiber integration](https://motion.dev/docs/react-three-fiber) — React 19 compatibility
-- [npm registry](https://www.npmjs.com) — version verification for all 4 new packages
-- [R3F GitHub issue #514: Leaking WebGLRenderer on unmount](https://github.com/pmndrs/react-three-fiber/issues/514) — WebGL context leak pattern
-- [GSAP Forum: ScrollTrigger + ScrollControls conflict](https://gsap.com/community/forums/topic/40114-scrolltrigger-pin-and-dreis-scrollcontrols-dont-play-well-together/) — scroll authority conflict
-- [pmndrs/react-postprocessing GitHub](https://github.com/pmndrs/react-postprocessing) — v3.0.4 peer deps confirmed
-- [WCAG 2.3.3: Animation from Interactions — W3C](https://www.w3.org/WAI/WCAG21/Understanding/animation-from-interactions.html) — prefers-reduced-motion handling
+- Live codebase inspection at commit `46c64df` — `ProjectContent.tsx`, `HorizontalScrollWrapper.tsx`, `Header.tsx`, `projects/[id]/page.tsx`, `messages/ko.json`, `messages/en.json`, `package.json`, `next.config.ts`
+- [shiki.style/packages/next](https://shiki.style/packages/next) — official Next.js integration, dual-theme CSS variable approach
+- [shiki.style/guide/migrate](https://shiki.style/guide/migrate) — v4 breaking changes confirmed (Node 18 drop only, no API changes from v3)
+- [next-intl.dev/docs/usage/translations](https://next-intl.dev/docs/usage/translations) — `t.has()` returns false, does not throw
+- npm registry — `npm view shiki version`, `npm view mermaid dist.unpackedSize`, bundle size verification for all rejected packages
+- [Toss Tech Blog — toss.tech](https://toss.tech/) — alternatives analysis and trade-off patterns in engineering articles
+- [LINE Engineering Blog](https://engineering.linecorp.com/) — architecture diagram with caption pattern, pragmatic rationale documentation
+- [frontendcs.com](https://frontendcs.com/) — 1,076 curated frontend case studies confirming structural patterns
 
 ### Secondary (MEDIUM confidence)
-- [Building a Scroll-Revealed WebGL Gallery (Codrops Feb 2026)](https://tympanus.net/codrops/2026/02/02/building-a-scroll-revealed-webgl-gallery-with-gsap-three-js-astro-and-barba-js/) — ref-based state pattern, unified motion system
-- [Wawa Sensei — 3D Portfolio R3F + Framer Motion Scroll](https://wawasensei.dev/tuto/build-a-3D-portfolio-with-react-three-fiber-framer-motion-scroll-animations) — real-world Next.js integration pattern
-- [Maxime Heckel — Particles with R3F and Shaders](https://blog.maximeheckel.com/posts/the-magical-world-of-particles-with-react-three-fiber-and-shaders/) — particle system patterns
-- [Three.js Discourse: Dispose things correctly](https://discourse.threejs.org/t/dispose-things-correctly-in-three-js/6534) — GPU context cleanup
-- [Three.js Discourse: Reducing shader compile time](https://discourse.threejs.org/t/reducing-shader-compile-time-on-scene-initialization/56572) — compile-before-reveal pattern
-- [14islands/r3f-scroll-rig GitHub](https://github.com/14islands/r3f-scroll-rig) — validates sticky canvas pattern
+- Korean portfolio community guides (velog, brunch, nbcamp sparta) — recruiter expectation patterns for Korean big tech
+- [신입 개발자의 포트폴리오 작성법 — velog.io/@yoosion030](https://velog.io/@yoosion030) — structural baseline expectations
+- [합격한 포트폴리오 제작기(3탄) — brunch.co.kr/@new-una/24](https://brunch.co.kr/@new-una/24) — Korean portfolio structural patterns
+- [chsm.dev — Comparing web code highlighters (Jan 2025)](https://chsm.dev/blog/2025/01/08/comparing-web-code-highlighters) — competitive analysis confirming shiki recommendation
+- [Building an Effective Frontend Developer Portfolio — frontendmentor.io](https://www.frontendmentor.io/articles/building-an-effective-frontend-developer-portfolio--7cE8BfMG_) — global best practices 2024-2025
 
 ### Tertiary (LOW confidence)
-- [100 Three.js Tips That Actually Improve Performance (2026)](https://www.utsubo.com/blog/threejs-best-practices-100-tips) — performance tips (validate against official sources before applying)
+- [이직 할거야? (카카오페이증권 합격 후기) — velog.io/@haryan248](https://velog.io/@haryan248) — single anecdote from a Kakao affiliate company; "thought process discussion" preference noted but not representative of all Kakao companies
 
 ---
-*Research completed: 2026-02-28*
+
+*Research completed: 2026-03-02*
 *Ready for roadmap: yes*

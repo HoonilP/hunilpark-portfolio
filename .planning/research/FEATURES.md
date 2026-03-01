@@ -1,326 +1,216 @@
 # Feature Research
 
-**Domain:** Media-art style interactive portfolio (/lab2 route) — v3.0 milestone
-**Researched:** 2026-02-28
-**Confidence:** HIGH (verified against Codrops 2025 case studies, Awwwards SOTD analysis, official library docs)
+**Domain:** Project detail page enhancement — engineering-depth case studies for Korean big tech frontend hiring
+**Researched:** 2026-03-02
+**Confidence:** MEDIUM (Korean-specific recruiter preferences confirmed via community sources; global engineering case study patterns HIGH; specific Naver/Kakao format requirements LOW — no official public guidance found)
 
 ---
 
-> **NOTE:** This file was updated for the v3.0 milestone. The original research (v1/v2 main portfolio features) is preserved at the bottom as a reference. The /lab2 media-art research is the primary content.
+## Context
 
----
+The existing project detail page structure ships: Overview → Implementation (problem/solution/result per feature) → Troubleshooting (problem/solution/result per issue) → Retrospective (growth/improvement). The structure is translated to KO + EN.
 
-## Context for /lab2
+The v4.0 milestone goal is to restructure the same pages to surface engineering depth: alternatives considered, trade-off rationale, quantitative outcomes. This is NOT a rebuild — it is a content restructuring plus targeted component additions within the existing Next.js + next-intl stack.
 
-The `/lab2` route is a **single-route interactive experience** — desktop-only, no separate project detail pages. The experience must:
-
-1. Prove frontend engineering depth through the experience itself (the portfolio IS the demo)
-2. Showcase 5 projects inline without separate pages
-3. Feel like a media-art installation, not a scrollable webpage
-4. Target Korean big-tech hiring managers who will recognize technical sophistication
-
-**Existing assets to use:**
-- 13 optimized WebP images (hero, architecture, thumbnail per project) — already in `/public/images/`
-- ~20,000 words bilingual project content — already authored, available via next-intl translations
-- Existing `/lab` patterns (scroll-driven canvas, sticky 3D scene, dot nav) — extend, don't reinvent
+**What already exists (do not recreate):**
+- 6 project detail pages with bilingual content (~20,000+ words)
+- Sidebar with metadata (tech stack, period, links)
+- Breadcrumbs, hero image, architecture image, ProjectNavigation
+- Translation keys structured as `ProjectDetail.[projectKey].implementation.featureN.{problem,solution,result}`
+- Translation keys structured as `ProjectDetail.[projectKey].troubleshooting.issueN.{problem,solution,result}`
 
 ---
 
 ## Feature Landscape
 
-### Table Stakes (Users Expect These)
+### Table Stakes (Recruiters Expect These)
 
-Features that award-winning interactive portfolios must have. Missing any of these makes the experience feel unfinished or broken.
+Features that Korean big tech recruiters assume exist in a serious engineering portfolio. Missing these = candidate feels junior or unprepared.
 
 | Feature | Why Expected | Complexity | Notes |
 |---------|--------------|------------|-------|
-| **Scroll-driven progression** | Core mechanic of media-art portfolios — scroll controls the narrative timeline | MEDIUM | Map scroll 0–1 to scene chapters. Pattern already wired in `/lab`. GSAP ScrollSmoother or Lenis + `useScroll` from R3F. |
-| **Smooth scroll / scroll lerp** | Native browser scroll feels mechanical; premium feel requires interpolation | LOW | Lenis (2.3kB gzip) or GSAP ScrollSmoother. Single setup call, massive perceived quality gain. |
-| **Loading screen with asset progress** | 3D assets and textures take time; blank canvas = broken perception | MEDIUM | R3F/drei `useProgress` hook + GSAP-animated overlay. Fade-out at 100%. Minimal, calm design — two lines of text, a progress line. |
-| **Cinematic scene transitions** | Camera moving between chapters must feel deliberate, not snapping | MEDIUM | GSAP timeline per chapter, scrubbed by scroll. `customEase` curves (e.g. "cinematicSilk": 0.45,0.05,0.55,0.95). |
-| **Text animations (character-level)** | Static text in a motion-heavy experience reads as incomplete and cheapens everything | MEDIUM | GSAP SplitText or manual char splitting (SplitText is now free in GSAP 3.x). Stagger 0.02–0.05s per character. |
-| **Chapter navigation / orientation** | User must know where they are in the experience — disorientation kills engagement | LOW | Dot nav (already in `/lab`), or "2 / 5" chapter counter. Chapter name shown on active section. |
-| **Back-to-main link** | User must be able to exit the experience cleanly | LOW | Fixed position, subtle. Already implemented in `/lab` — port directly. |
-| **Project information readability** | Hiring managers must actually be able to read project details | MEDIUM | HTML overlay panels positioned over canvas (not 3D text). High contrast, clean typography. |
-| **60fps baseline** | Below 60fps, the experience reads as broken rather than artistic | HIGH | R3F `PerformanceMonitor` + adaptive pixel ratio. Disable expensive post-processing below 30fps. |
-| **Graceful mobile message** | Desktop-only is in scope; mobile users need a clear explanation | LOW | Detect viewport < 1024px, show a simple "best viewed on desktop" message. No attempt to make 3D work on mobile. |
+| **Problem → Process → Solution → Result narrative** | Korean recruiter consensus (velog, brunch, sparta blog): this four-beat structure is the baseline for any troubleshooting or implementation section | LOW | Already implemented. Upgrade needed: "process" is currently absent — implementations jump straight to solution without showing deliberation. Add an "alternatives considered" beat. |
+| **Technology choice rationale** | All Korean portfolio guides agree: "why you chose each technology" is mandatory. Listing tech without rationale fails the "왜" test. Toss explicitly evaluates reasoning process. | LOW | Currently sidebar shows tech stack without rationale. Add per-technology "why" annotation, or surface it in the engineering challenge narrative. |
+| **Quantitative outcomes** | Korean recruiters cite numbers as the gap between "I did X" and "X had Y impact." Examples found: "9.5억 절감", "응답 시간 10초→7.8초", "사용자 체류 시간 20% 증가". Absent metrics = unverifiable claims. | LOW | Existing content has qualitative results. Upgrade: convert "successfully resolved" to "reduced from X to Y" where real data exists. Do not fabricate numbers — only use data from actual project PDF sources. |
+| **Contribution scope clarity** | For team projects (Scholarly Chain: 4-person team; Joshua: 2-person), recruiters need to know exactly what *you* built. "Developed frontend" is insufficient. | LOW | Existing overview.contribution field covers this partially. Needs more specificity per engineering challenge. |
+| **Architecture diagram with explanation** | The existing architecture image renders with no textual context. Korean portfolio guides recommend visual + written explanation together. | LOW | Image exists. Add a 2–3 sentence caption or section explaining what the diagram shows and key design decisions visible in it. |
+| **Visible thought process (사고방식 노출)** | Kakao Pay Securities interview feedback: recruiters want "2-hour discussion of your thought process." The portfolio primes that discussion. A portfolio that shows only outcomes leaves no foothold for deep technical interview questions. | MEDIUM | New requirement. The "why" and "what was tried first" narrative must be visible somewhere in each challenge. This is the core gap between current structure and v4.0 target. |
 
 ### Differentiators (Competitive Advantage)
 
-What separates a "Three.js sphere in a dark room" from an Awwwards SOTD. These are where engineering talent becomes visible.
+Features that go beyond baseline and signal a senior engineering mindset — meaningful for Korean big tech targets where competition for frontend roles is high.
 
 | Feature | Value Proposition | Complexity | Notes |
 |---------|-------------------|------------|-------|
-| **Camera path storytelling** | Camera flies through a continuous 3D space; each project is a new "shot" — creates cinematic progression | HIGH | GSAP timeline scrubbed by scroll progress. `camera.position.set()` + `lookAt()` per chapter. The most critical differentiator — this IS the experience structure. |
-| **Scroll-velocity reactive text stretch** | Text geometry that distorts in proportion to scroll speed — immediately "feels alive" to technical viewers | MEDIUM | Track scroll delta between frames. Pass as `uniform float uVelocity` to GLSL vertex shader. Stefan Vitasović and Roman Jean-Elie both use this. Highest ROI effect. |
-| **Kinetic character-level typography** | Characters that assemble, disperse, or morph rather than fade — the single biggest perceptual differentiator at low cost | MEDIUM | GSAP SplitText + staggered x-axis motion with masked overflow. Stefan Vitasović's "characters-to-word" assembly. Combine with `clip-path: inset()` for glass-parallax feel. |
-| **Project images as 3D texture planes** | Existing WebP images mapped onto planes in 3D space — turns static assets into dynamic scene elements | LOW | `PlaneGeometry` with `TextureLoader`. Can add subtle displacement shader on hover. All 13 images already exist as WebP. |
-| **Particle field as environment** | A background particle system creates sense of being somewhere rather than floating in void | MEDIUM | Three.js `Points` + `BufferGeometry`. Keep < 3k particles. Velocity-responsive opacity or drift. Environment, not centerpiece. |
-| **Post-processing effects** | Bloom + film grain transform the rendering from "3D viewport" to "cinematic experience" | MEDIUM | `@react-three/postprocessing` EffectComposer. Bloom on emissive meshes. FilmGrain adds analog texture. Must be conditionally disabled via PerformanceMonitor. |
-| **Mouse parallax on idle** | Camera or scene reacts subtly to cursor position when user is not actively scrolling — creates "alive" feeling | LOW | Interpolated `camera.rotation.x/y` toward mouse target. Already implemented in `/lab` — port directly. Very low cost, high perceived quality. |
-| **Transition wipes between chapters** | Geometric wipe (not a fade) marks major section shifts clearly and intentionally | MEDIUM | CSS clip-path animated via GSAP, or a fullscreen quad mesh in WebGL. Makes the "chapter" metaphor tangible. |
-| **Entry intro sequence** | After loading completes, 2–3 second animated intro before scroll-driven content starts — sets tone | MEDIUM | Camera starts zoomed out / abstract. Text assembles. Environment fades in. GSAP timeline, not scroll-driven. |
-| **Per-project visual signature** | Each of 5 project chapters has a slightly different color temperature or shader effect — prevents visual monotony | HIGH | Swap `THREE.Color` for ambient/directional lights per chapter. Or pass a per-chapter `uColor` uniform to shared shaders. Can be added incrementally. |
-| **Custom cursor** | Replaces browser cursor with a minimal dot that reacts to hover states — standard on Awwwards-quality sites | LOW | 40px circle, `mix-blend-mode: difference`. Enlarges on hover over interactive elements. CSS + GSAP, no Three.js. |
+| **Alternatives analysis block** | Most Korean portfolio guides say "문제 → 시도했던 방법들 → 비교 → 알게 된 점" is the strongest troubleshooting format. Explicitly documenting what was tried and why it was rejected shows intellectual rigor above average candidates. | MEDIUM | Requires new translation key structure: `alternatives` field per challenge. New UI component to render alternatives in a visually distinct way (e.g., a comparison list or table). |
+| **Trade-off comparison table** | Real engineering always involves trade-offs. Showing "Option A: fast but fragile / Option B: slower but maintainable → chose B because..." is a differentiator that invites technical conversation. Toss tech blog articles explicitly use this pattern. | MEDIUM | Requires new UI component (e.g., a small comparison table inline within a challenge section). Works best for 2–3 option decisions: library choices, architecture decisions, state management approaches. |
+| **Decision rationale callout** | A highlighted "why we chose this" block — visually distinct from surrounding prose — makes the decision visible to a scanning recruiter. Toss/Kakao engineering blogs structure all articles around such explicit decision points. | LOW | Can be implemented as a styled blockquote or card with a "결정" or "Decision" label. Content already partially exists in translation files; needs extraction and visual treatment. |
+| **Per-challenge difficulty/impact tagging** | Signals self-awareness and prioritization ability: "This was High complexity / High impact." Rare in Korean frontend portfolios but valued at senior+ levels where prioritization is evaluated. | LOW | Optional metadata tag per challenge. Label-only, no numerical rating (ratings are anti-features). Could be: 기술적 난이도 (Technical Difficulty), 프로젝트 임팩트 (Project Impact). |
+| **Architecture diagram caption** | Adding 2–4 sentences explaining what the diagram depicts, what architectural decision it encodes, and why that structure was chosen — turns a static image into evidence of systems thinking. LINE Engineering blog uses this pattern on every technical post. | LOW | New translation key: `architectureCaption`. New UI: caption below the image. Bilingual. |
+| **Retrospective "if I were to rebuild" section** | Documents what you would do differently with current knowledge. Shows growth mindset and honest self-assessment — valued in Korean tech culture where "성장" (growth) is a core hiring signal. | LOW | Existing retrospective.improvement field already exists but is vague. Sharpen to "구체적으로 어떤 기술/패턴으로 교체할 것인가" specificity. No new structure needed, only content upgrade. |
+| **Project selection rationale (which to deep-dive)** | Not all 6 projects should receive the same depth. Explicitly choosing 2–3 projects for maximum engineering depth and explaining why those were selected signals priority thinking. | LOW | Not a UI feature but a content strategy decision: pick Joshua, DY CMS, Scholarly Chain as the deep-dive candidates (strongest frontend engineering stories). Others get upgraded baseline. |
 
 ### Anti-Features (Commonly Requested, Often Problematic)
 
 | Feature | Why Requested | Why Problematic | Alternative |
 |---------|---------------|-----------------|-------------|
-| **Ambient audio / autoplay sound** | Cinematic, media-art feel | Browsers block autoplay; unexpected sound is hostile; hiring managers view in offices or with headphones on calls | If audio is desired: explicit opt-in mute/unmute toggle with clear iconography. Never autoplay. Realistically, skip audio entirely for hiring context. |
-| **Full mobile support** | Portfolio should work everywhere | 3D on mobile: thermal throttling, 60fps impossible on mid-range phones, WebGL context loss is common. Attempting mobile degrades the desktop experience too. | Show "best experienced on desktop" message. /lab2 is explicitly desktop-only in the project spec. |
-| **Excessive particle counts (> 10k)** | More particles = more "media art" impressiveness | Single `Points` pass > 10k stalls GPU on integrated graphics (MacBook Air is common in Korean offices). Laptop fans spin up during hiring manager demo. | Keep particles < 3k. Use instanced meshes for repeated elements. Scale count with `dpr`. |
-| **Simultaneous independent GSAP tweens** | Rich, layered motion | Multiple concurrent tweens on the same element cause style conflicts and jank; common 30fps culprit | Consolidate all animation for a chapter into one GSAP timeline. One master timeline per scroll chapter, scrubbed by progress. |
-| **Video backgrounds / autoplay video** | Dramatic and cinematic | Large file size, bandwidth cost, battery drain, codec inconsistencies, conflicts with WebGL canvas | Use static images with shader-based animation: noise displacement, scanline overlay, subtle vertex drift. Equally cinematic, 10x lighter. |
-| **Physics simulation (Matter.js / Cannon.js)** | "Alive" feel, memorable interactions | Physics at 60Hz + GSAP + WebGL = triple simultaneous CPU load. Even Stas Bondar, who uses physics for character dropping, limits it to a single isolated moment. | Fake physics with spring-eased GSAP: `elastic.out(1, 0.3)` easing. Same perceived feel, zero runtime cost. |
-| **3D text for readable body copy** | Shows technical depth, "look what I can do" | `TextGeometry` is expensive (high poly count); 3D text anti-aliases poorly at small sizes; completely unreadable in dark environments. | 3D text only for hero moments (1–2 large words). All project descriptions in HTML overlay with proper typography. |
-| **Infinite scroll / no defined endpoint** | "Premium scrolly" pattern | Hiring managers don't explore endlessly. If they don't know when they've seen everything, they assume they've missed something and give up. | Define clear chapter count (5–7). Show progress. "4 of 5" indicator tells them they're almost done. |
-| **Preloading all assets before start** | Prevents missing textures mid-experience | If total assets > 3–5MB, user waits > 3s before seeing anything. Perceived as broken or stuck. | Load entry state assets immediately. Load per-chapter textures just-in-time as chapters approach. Drei `useTexture` with Suspense. |
-| **Portal / FBO render pipeline (initially)** | Maximum visual differentiation, Roman Jean-Elie's signature technique | Requires a fundamentally different render pipeline (render-to-texture, mask geometry). Cannot be added later without major refactor. | Build with standard scene first. Plan the architecture to accommodate FBO as a future upgrade if the simpler approach works. |
+| **Skill percentage bars on project page** | "Shows how much I used each technology" | Already identified as anti-feature project-wide. Percentage bars are subjective, meaningless, and actively signal poor judgment. Toss interviewers have noted this in feedback. | Show tech stack with role (primary/supporting) and specific context ("used for server-side rendering, not state management") — informative without fake quantification. |
+| **"Impact" metrics fabricated for student projects** | "Looks impressive" | Korean recruiters cross-reference with GitHub commit history, README, and live demos. Fabricated numbers destroy credibility entirely if caught. Kakao hiring posts note authenticity is evaluated. | Use only numbers from actual project data (PDF source). For student/hackathon projects without real metrics, use process metrics ("reduced review cycle from X to Y hours" if documented) or omit numbers. |
+| **Timeline/gantt of project phases** | "Shows project management skills" | Hiring managers for frontend roles care about technical decision-making, not Gantt chart literacy. Timeline adds visual noise without answering "how good is your code?" | Instead: mention the constraint (24-hour hackathon for Dino Go, 4-month capstone for Scholarly Chain) as context for trade-off decisions, not as a management artifact. |
+| **Full feature list for every project** | "Proves breadth" | Comprehensive feature lists dilute focus. 10 features with shallow description = weaker signal than 2–3 features with deep engineering reasoning. Korean recruiting consensus: depth > breadth. | For each project, pick the 2–3 hardest engineering challenges. Everything else goes in sidebar metadata or is omitted. |
+| **Generic "I learned X" retrospective** | "Shows growth" | Every portfolio has this. "I learned React hooks by building this" reads as noise to a recruiter evaluating 100+ portfolios. | Replace with: "If I rebuilt this now, I would use [X] instead of [Y] because [Z technical reason]" — specific, defensible, demonstrates actual depth of reflection. |
+| **Separate "Tech Stack" section duplicating sidebar** | "Redundancy is completeness" | Already in sidebar. Repeating it in the main content body creates visual clutter and signals lack of editorial judgment. | Surface technology rationale inline within engineering challenge narratives, not as a standalone repeated section. |
+| **"Version history" or changelog on portfolio** | "Shows iterative thinking" | Portfolio is a static credential document, not a product changelog. Version notes confuse the reader about current state. | Document evolution decisions in the retrospective section instead: "started with X approach, realized Y problem, migrated to Z." |
 
 ---
 
 ## Feature Dependencies
 
 ```
-[Smooth Scroll / Lenis]
-    └──required by──> [Scroll Progression System]
+[Engineering Challenge Section (new)]
+    └──requires──> [Existing Implementation Section] (replaces/extends it)
+    └──requires──> [Translation key additions] (alternatives, rationale, decision fields)
+    └──requires──> [ProjectContent.tsx refactor]
 
-[Scroll Progression System]  (core spine — everything depends on this)
-    └──required by──> [Camera Path Storytelling]
-    └──required by──> [Chapter State Machine]
-    └──required by──> [Scroll-velocity reactive effects]
-    └──required by──> [Text animation triggers]
-    └──required by──> [Transition wipes]
+[Alternatives Analysis Block (new UI)]
+    └──requires──> [Engineering Challenge Section]
+    └──requires──> [New translation keys per project]
 
-[Camera Path Storytelling]
-    └──required by──> [Per-project visual signature]
-    └──required by──> [Project panel reveal]
+[Trade-off Comparison Table (new UI)]
+    └──requires──> [Engineering Challenge Section]
+    └──requires──> [New translation keys per project]
+    └──optional──> [Alternatives Analysis Block] (both display decision data, can coexist)
 
-[Chapter State Machine]
-    └──required by──> [Project information display]
-    └──required by──> [Chapter progress indicator]
+[Decision Rationale Callout (new UI)]
+    └──requires──> [Engineering Challenge Section]
+    └──requires──> [New translation keys: rationale or decision field]
 
-[R3F / Three.js Canvas]
-    └──required by──> [Particle field]
-    └──required by──> [Project images as 3D textures]
-    └──required by──> [Post-processing effects]
-    └──required by──> [Custom GLSL shaders]
+[Architecture Caption (new)]
+    └──requires──> [Existing architecture image]
+    └──requires──> [New translation key: architectureCaption]
 
-[Post-Processing Effects]
-    └──requires──> [PerformanceMonitor] to disable gracefully
+[Quantitative Outcome Upgrade]
+    └──requires──> [Content audit per project] (identify what can be quantified from PDF source data)
+    └──feeds into──> [Engineering Challenge Section result fields]
 
-[Loading Screen]
-    └──precedes──> [Entry intro sequence]
-    └──precedes──> [Scroll-driven content]
+[Retrospective Sharpening]
+    └──requires──> [Existing retrospective.improvement keys]
+    └──no new structure needed──> content rewrite only
 
-[Asset preloading strategy]
-    └──required by──> [Loading Screen with progress]
+[Per-challenge Difficulty/Impact Tags]
+    └──requires──> [Engineering Challenge Section]
+    └──enhances──> [Visual scannability] for recruiters
+    └──optional──> [Alternatives Analysis Block] can exist without it
 
-[GSAP SplitText]
-    └──required by──> [Kinetic character typography]
-    └──enhances──> [Text animations]
-
-[Scroll delta tracking]
-    └──required by──> [Scroll-velocity text stretch shader]
-    └──feeds──> [Custom GLSL uniform uVelocity]
-
-[Custom GLSL shaders]
-    └──enhances──> [Particle systems] (velocity-based opacity)
-    └──enhances──> [Project image planes] (displacement on hover)
-
-[Mouse position tracking]
-    └──required by──> [Mouse parallax]
-    └──required by──> [Custom cursor]
+[Bilingual content update (KO + EN)]
+    └──required by──> all new translation keys
+    └──requires──> updating both /messages/ko.json and /messages/en.json simultaneously
 ```
 
 ### Dependency Notes
 
-- **Scroll Progression is the spine.** Everything else is a function of the 0–1 scroll value. Build this first, test it, then layer features on top.
-- **Camera Path requires Scroll Progression.** Camera position is computed as a chapter-keyed function of global scroll. This cannot be retrofitted — design the chapter count and camera waypoints before building anything else.
-- **Post-Processing requires PerformanceMonitor.** Without adaptive disabling, bloom + grain will tank integrated GPU laptops (MacBook Air, common in Korean office environments). PerformanceMonitor is not optional if post-processing is in scope.
-- **Loading Screen precedes everything visible.** Nothing should render in the canvas until critical assets are ready. GSAP overlay with `useProgress` from drei is the standard pattern.
-- **FBO / Portal conflicts with standard scene.** The portal mask technique requires render-to-texture pipeline. Decide architecture in Phase 1. Adding it later requires a meaningful refactor.
-- **Custom cursor is independent.** Zero Three.js involvement. Can be added at any phase. Low cost, adds significant polish.
+- **Engineering Challenge Section is the core restructure.** Everything else (alternatives, trade-offs, decision callout) is a sub-component within it. Build the section wrapper and translation schema first, then add visual components.
+- **Translation keys must be bilingual from the start.** next-intl will throw if a key exists in one locale file but not the other. Add KO and EN simultaneously.
+- **Trade-off Table requires careful content.** Only implement where a real 2–3 option decision exists with documented reasoning (not invented). Do not add a trade-off table if the content is "I tried one thing and it worked."
+- **Quantitative upgrades require PDF source validation.** The PROJECT.md constraint is explicit: no fabricated content. Each numeric claim must trace to a real source. Audit before writing.
+- **Retrospective sharpening is content-only** — no new component or translation key needed. Highest ROI for lowest effort.
 
 ---
 
 ## MVP Definition
 
-### Launch With (v1 — Credible media-art showcase)
+This is a restructuring milestone on existing pages, not a new product. "Launch" means: all 6 project pages reflect the new structure.
 
-The minimum set that proves this is an intentional, technically sophisticated experience:
+### Launch With (v4.0 core)
 
-- [ ] **Scroll-driven 3D environment** — Camera moves through a continuous space as user scrolls. 6 chapters: intro + one per project. Establishes the core mechanic. No scroll = no experience.
-- [ ] **Loading screen with progress bar** — `useProgress` + GSAP fade-out. Non-negotiable for any 3D site.
-- [ ] **Smooth scroll (Lenis)** — Eliminates mechanical scroll feel. Single setup call.
-- [ ] **Character-level text reveals** — Each chapter has a headline that assembles character by character. The single highest-ROI differentiator.
-- [ ] **Project showcase panels (HTML overlay)** — When scrolling to each project chapter, project name, tech stack, and 2–3 sentence summary are readable. HTML positioned over canvas — not 3D text.
-- [ ] **Existing project images as 3D texture planes** — Map the 13 existing WebP images onto planes in the scene. All images exist; zero new asset creation needed.
-- [ ] **Particle field environment** — Background particle system (< 3k) creates sense of inhabiting a space. Ties chapters together visually.
-- [ ] **Performance monitor + adaptive DPR** — R3F `PerformanceMonitor`. Must not crash integrated GPU.
-- [ ] **Chapter progress indicator** — "3 / 5" counter or dot nav. User must know they've seen all projects.
-- [ ] **Back-to-main navigation** — Fixed link, same as `/lab`. Port directly.
-- [ ] **Desktop-only gate** — Viewport < 1024px shows a clean "best experienced on desktop" message. No broken 3D on mobile.
+Minimum set that makes the restructuring visibly different and meaningfully better for recruiters:
 
-### Add After Core Works (v1.x — Polish layer)
+- [ ] **Engineering Challenge Section replacing current Implementation Section** — Reframes 2–3 features per project as "핵심 엔지니어링 챌린지" with context, problem, alternatives tried, decision rationale, solution, and quantitative result. Core content restructure.
+- [ ] **Alternatives block per challenge** — At least one alternative explicitly named and rejected with reason. Even one sentence: "We considered [X] but rejected it because [Y]." Transforms narrative from "what I built" to "how I decided what to build."
+- [ ] **Quantitative outcomes where available** — Every result that can be stated numerically should be. Where no real numbers exist, remove vague claims rather than inventing numbers.
+- [ ] **Architecture caption** — 2–3 sentences under the architecture image for every project that has one.
+- [ ] **Retrospective sharpening** — Replace generic "I learned X" with "If I rebuilt this, I'd use Y instead of Z because W."
+- [ ] **Bilingual content parity** — All changes applied to both `ko.json` and `en.json`.
 
-- [ ] **Scroll-velocity text stretch shader** — Pass scroll `delta` as `uVelocity` uniform to headline geometry. Adds immediate "wow" without architecture changes. Trigger: core scroll + 3D working at stable 60fps.
-- [ ] **Post-processing: bloom + film grain** — `@react-three/postprocessing` EffectComposer. Trigger: PerformanceMonitor shows render budget headroom on target hardware.
-- [ ] **Entry intro sequence** — 2–3 second animated intro after loading completes before scroll-driven content begins. GSAP timeline. Sets tone for entire experience.
-- [ ] **Mouse parallax on idle** — Interpolated camera drift toward cursor. Port from `/lab` directly.
-- [ ] **Transition wipes between chapters** — CSS clip-path animated by GSAP at chapter boundaries.
-- [ ] **Custom cursor** — 40px circle, `mix-blend-mode: difference`, grows on hover. Pure CSS + GSAP.
-- [ ] **Per-project color temperature** — Shift ambient/directional light colors per chapter. Prevents visual monotony across 5 projects.
+### Add After Core Works (v4.x — polish)
 
-### Future Consideration (v2+ — If time and budget allow)
+- [ ] **Trade-off comparison table** — Visual table for the 1–2 most significant decisions per project. Trigger: core restructure complete and content is confirmed accurate.
+- [ ] **Decision rationale callout UI** — Styled block highlighting the key decision. Trigger: content written, needs visual emphasis.
+- [ ] **Per-challenge difficulty/impact tags** — Label-only metadata. Trigger: design validation that it improves scannability without adding clutter.
 
-- [ ] **Portal / FBO masked reveals** — Bounded WebGL plane using render-to-texture mask. Maximum visual impact. Requires architecture decision upfront even if deferred.
-- [ ] **Per-project GLSL shader signature** — Unique fragment shader per project chapter (dither effect, scanlines, noise pattern). Requires shader authoring per project.
-- [ ] **Audio opt-in** — A single ambient drone with mute toggle. Only after accessibility review. Probably not appropriate for Korean hiring context.
-- [ ] **3D extruded text for hero moments** — `troika-three-text` for 1–2 key title moments. Only if performance headroom is confirmed.
-- [ ] **Physics-driven elements** — GSAP spring easing as fake physics for most things. Real physics (Rapier) only if a specific interaction justifiably requires it.
+### Future Consideration (v5+)
+
+- [ ] **Project selection page ("start here" recommendation)** — Guide recruiters to the 2–3 deepest projects. Depends on whether the main projects list page supports featured/recommended sorting.
+- [ ] **Inline code snippet per challenge** — For specific algorithmic or architecture decisions, showing actual code is maximum credibility. Requires syntax highlighting component and content authoring per project.
 
 ---
 
 ## Feature Prioritization Matrix
 
-| Feature | User Value | Implementation Cost | Priority |
-|---------|------------|---------------------|----------|
-| Scroll-driven camera path storytelling | HIGH | HIGH | P1 (it is the experience) |
-| Loading screen with progress | HIGH | LOW | P1 |
-| Smooth scroll (Lenis) | HIGH | LOW | P1 |
-| Chapter text reveals (SplitText) | HIGH | LOW | P1 |
-| Project panels (HTML overlay) | HIGH | LOW | P1 |
-| Existing images as 3D textures | HIGH | LOW | P1 |
-| Particle field environment | MEDIUM | LOW | P1 |
-| Performance monitor + adaptive DPR | HIGH | LOW | P1 |
-| Chapter progress indicator | MEDIUM | LOW | P1 |
-| Desktop-only gate | HIGH | LOW | P1 |
-| Scroll-velocity text stretch shader | HIGH | MEDIUM | P2 |
-| Post-processing bloom + grain | HIGH | MEDIUM | P2 |
-| Entry intro sequence | HIGH | MEDIUM | P2 |
-| Mouse parallax | MEDIUM | LOW | P2 |
-| Transition wipes | MEDIUM | MEDIUM | P2 |
-| Custom cursor | MEDIUM | LOW | P2 |
-| Per-project color temperature | MEDIUM | LOW | P2 |
-| Portal / FBO masked reveals | HIGH | HIGH | P3 |
-| Per-project GLSL shader signature | HIGH | HIGH | P3 |
-| Audio opt-in | LOW | MEDIUM | P3 |
-| 3D extruded text (troika) | MEDIUM | HIGH | P3 |
+| Feature | Recruiter Value | Implementation Cost | Priority |
+|---------|-----------------|---------------------|----------|
+| Engineering Challenge Section (content restructure) | HIGH | MEDIUM (content rewrite + component refactor) | P1 |
+| Alternatives block (at least 1 per challenge) | HIGH | LOW (new translation fields + minimal UI) | P1 |
+| Quantitative outcomes upgrade | HIGH | LOW (content audit + rewrite) | P1 |
+| Architecture caption | MEDIUM | LOW (new key + 2 sentences per project) | P1 |
+| Retrospective sharpening | HIGH | LOW (content rewrite, no new structure) | P1 |
+| Bilingual content parity | HIGH | MEDIUM (all keys × 2 locales) | P1 |
+| Trade-off comparison table | MEDIUM | MEDIUM (new component + content) | P2 |
+| Decision rationale callout (styled UI) | MEDIUM | LOW (styled blockquote variant) | P2 |
+| Per-challenge difficulty/impact tags | LOW | LOW | P3 |
 
 **Priority key:**
-- P1: Must have for launch
-- P2: Should have, add when possible
-- P3: Nice to have, future consideration
+- P1: Required for v4.0 milestone to be complete
+- P2: Adds clear value, implement when P1 is stable
+- P3: Nice-to-have, defer
 
 ---
 
 ## Competitor Feature Analysis
 
-Reference portfolios analyzed for this research (all Codrops case studies or Awwwards SOTD, 2025):
+Reference points studied: Toss Tech Blog, Kakao Tech Blog, LINE Engineering Blog, frontendcs.com case study index, Korean portfolio community guidance (velog, brunch, nbcamp sparta).
 
-| Feature | Stas Bondar '25 | Roman Jean-Elie '25 | Stefan Vitasović '25 | /lab2 Approach |
-|---------|-----------------|---------------------|----------------------|----------------|
-| Scroll mechanism | GSAP ScrollTrigger + scrub | Custom scroll engine + Virtual Scroll | Custom scroll + Lethargy | Lenis + GSAP ScrollTrigger (proven combo for Next.js) |
-| Text animation | SplitText stagger + scramble | Kinetic character assembly on x-axis | x-axis char movement, masked overflow | GSAP SplitText — character-level stagger, clip-path mask |
-| 3D engine | Three.js | Three.js | Three.js | R3F (React wrapper, easier Next.js integration) |
-| Project showcase | WebGL grid + hover | Portal mask + DOM sync | WebGL textures on planes | HTML overlay panels synchronized with scroll chapter state |
-| Scroll-velocity effect | Not specified | Velocity-stretch on project titles | Displacement on project thumbnails | Velocity stretch on chapter headlines via `uVelocity` uniform |
-| Loading experience | Not detailed | AnimatePresence fade between pages | CDN-hosted media | drei `useProgress` + GSAP overlay — single preload, clean fade |
-| Post-processing | Ordered dithering on all images | Not described | LED overlay + noise grain on video | Bloom on emissive elements + FilmGrain for analog texture |
-| Cursor | Custom (not detailed) | Not detailed | Not detailed | 40px circle, mix-blend-mode difference |
-| Audio | None | None | None | None (anti-feature for hiring context) |
-| Mobile | Desktop-focused | Desktop-focused | Desktop-focused | Explicit "desktop only" message |
-| Unique signature | Dithering as consistent visual language | Portal morphing across all sections | Swiss-style grid + fluid digital | Scroll-velocity as consistent motion language |
+| Feature | Toss Tech Blog articles | LINE Engineering Blog | Top Korean portfolio guides | Current portfolio | v4.0 Target |
+|---------|------------------------|----------------------|-----------------------------|-------------------|-------------|
+| Problem framing | Opens with concrete pain point, not abstract challenge | Real service context (71M MAU) establishes stakes | "문제가 무엇이었는지 명확히" | Present (overview.background) | Sharpen to concrete constraint, not abstract |
+| Alternatives considered | Explicit: RAG vs Plugin, low-level vs high-level API | Explicit: external library vs custom SVG component | "시도했던 방법들" recommended | Absent | Add as `alternatives` field |
+| Trade-off statement | Always present, framed as cost vs benefit | Acknowledged ("maintenance cost" vs "80% of use cases") | Implicit in troubleshooting | Absent | Add decision rationale per challenge |
+| Quantitative result | High specificity: "20배 노출", "5-6x CTR" | Performance metrics per device | "구체적인 숫자로" repeatedly emphasized | Partial (qualitative) | Upgrade all results to numbers where possible |
+| Visual aid | Diagrams inline with explanation | Architecture diagrams with captions | Screenshots recommended | Image exists, no caption | Add architecture caption |
+| Tech choice rationale | "왜 이 기술을 선택했는지" explicit in all articles | Pragmatic rationale for each tool | "채택 이유" mandatory | Sidebar lists tech, no rationale | Surface rationale in challenge narrative |
+| Growth/retrospective | Rare in product blogs; implied in org learning | Team retrospectives mentioned | "성장한 부분" expected | Present but vague | Sharpen to "what I'd do differently and why" |
 
 ---
 
-## What Makes Awwwards-Quality Interactive Portfolio
+## Project-Specific Engineering Challenge Selection
 
-Based on analysis of SOTD winners and 2025 Codrops case studies, the difference between "Three.js demo" and "award-winning" is:
+Based on PROJECT.md content, the strongest candidates for deep-dive treatment (2–3 challenges per project with full alternatives + trade-off analysis):
 
-**1. Cohesion over feature count.** Every visual element serves one conceptual direction. Stas Bondar's dithering appears on every image — not one. Roman Jean-Elie's portal morphs in every section transition. Pick one visual language and apply it consistently. More effects with less consistency = worse result.
-
-**2. Motion that carries meaning.** Scroll-velocity text stretch MEANS "you're moving fast through this." Camera pulling back MEANS "zooming out to see the larger picture." Effects must have narrative logic — not just look cool. If you can't explain why an effect exists, cut it.
-
-**3. 60fps is the baseline, not a goal.** All SOTD winners use adaptive performance systems. `PerformanceMonitor` that backs off DPR and disables post-processing below 30fps is table stakes, not optional.
-
-**4. Typography is the highest-ROI investment.** In every case study, character-level text animation creates the strongest "this was made carefully" signal. GSAP SplitText correctly eased (not just fading) is what separates mediocre from memorable.
-
-**5. Loading screen is part of the product.** A minimal, beautiful preloader signals intent. A blank screen with a browser spinner signals "this wasn't thought through."
-
-**6. Restraint at the end.** Roman Jean-Elie: "what I initially thought would be the centerpiece almost became optional." Stas Bondar removed effects that detracted from the physics typography. The best work REMOVES features. Every element in /lab2 should earn its presence.
-
----
-
-## Content Dependencies (from Existing Portfolio)
-
-No new content creation required. All narrative content comes from existing bilingual portfolio data.
-
-| Feature in /lab2 | Depends On | Status |
-|-----------------|-----------|--------|
-| Project panels (name, summary, tech) | 5 project descriptions (KO + EN) | EXISTS in main site translations |
-| Project images as 3D textures | 13 WebP images in `/public/images/` | EXISTS |
-| Tech stack display per project | Tech stack per project (PROJECT.md) | EXISTS |
-| Bilingual text animations | next-intl translation files | EXISTS — must wire locale to lab2 |
-| Back-to-main navigation | Main route `/{locale}` | EXISTS |
-| Existing scroll + 3D patterns | `/lab` codebase | EXISTS — reference and extend |
+| Project | Best Engineering Challenges | Quantitative Data Available | Depth Priority |
+|---------|----------------------------|----------------------------|----------------|
+| **Joshua** (Electron + Angular + KoGPT-2) | Electron IPC architecture for KoGPT-2 inference; Stripe payment integration for desktop app; cross-platform packaging | "90% accounting process automation" (DY CMS — note: this metric belongs to DY CMS not Joshua) | HIGH — unique stack, interesting trade-offs |
+| **DY CMS** (Next.js + NestJS + PostgreSQL) | Frontend/backend separation architecture decision; dashboard data update strategy (polling vs websocket vs SSR); account process automation approach | "90% accounting process automation", full-stack solo ownership | HIGH — clearest before/after metrics |
+| **Scholarly Chain** (Next.js + shadcn/ui + FCM + JWT) | JWT auto-refresh middleware design; FCM role-based push notification segmentation; role-based UI rendering strategy | "4인 팀, 프론트엔드 100% 담당", 30+ reusable components, 15+ pages | HIGH — team project with clear ownership scoping |
+| **Dino Go** (Three.js + Sui blockchain + Walrus) | Google Maps + Three.js 3D map integration (two 3D contexts); Web3 wallet connection UX pattern; custom Web3 client library design (3 clients built) | "24-hour hackathon", 4 Move modules, 3 custom libraries | MEDIUM — hackathon constraints are themselves a trade-off story |
+| **Retail Analysis** (YOLO + VanillaJS dashboard) | Dashboard data visualization architecture for real-time camera feed; VanillaJS choice over React for ML-embedded context | Heatmap, tracking data — qualitative; "말레이시아 현장 배포" | MEDIUM — frontend work is narrower |
+| **Art War** (Next.js + NestJS + Solidity + Monad) | Solidity smart contract interaction from frontend; Monad blockchain integration UX | Newest project, less source data in PROJECT.md | LOW — insufficient source data for deep content |
 
 ---
 
 ## Sources
 
-- [Stas Bondar '25: Code and Techniques Behind a Next-Level Portfolio](https://tympanus.net/codrops/2025/03/25/stas-bondar-25-the-code-techniques-behind-a-next-level-portfolio/) — HIGH confidence (Codrops case study, March 2025)
-- [Letting the Creative Process Shape a WebGL Portfolio (Roman Jean-Elie)](https://tympanus.net/codrops/2025/11/27/letting-the-creative-process-shape-a-webgl-portfolio/) — HIGH confidence (Codrops case study, November 2025)
-- [Case Study: Stefan Vitasovic Portfolio 2025](https://tympanus.net/codrops/2025/03/05/case-study-stefan-vitasovic-portfolio-2025/) — HIGH confidence (Codrops case study, March 2025)
-- [How to Build Cinematic 3D Scroll Experiences with GSAP](https://tympanus.net/codrops/2025/11/19/how-to-build-cinematic-3d-scroll-experiences-with-gsap/) — HIGH confidence (Codrops tutorial, November 2025)
-- [Building Efficient Three.js Scenes: Optimize Performance While Maintaining Quality](https://tympanus.net/codrops/2025/02/11/building-efficient-three-js-scenes-optimize-performance-while-maintaining-quality/) — HIGH confidence (Codrops tutorial, February 2025)
-- [Building a Scroll-Revealed WebGL Gallery with GSAP, Three.js](https://tympanus.net/codrops/2026/02/02/building-a-scroll-revealed-webgl-gallery-with-gsap-three-js-astro-and-barba-js/) — HIGH confidence (Codrops tutorial, February 2026)
-- [Cyd Stumpel Portfolio 2025 — Awwwards SOTD](https://www.awwwards.com/sites/cyd-stumpel-portfolio-2025) — HIGH confidence (Awwwards, 2025)
-- [Portfolio 25 — Awwwards SOTD (Roman Jean-Elie)](https://www.awwwards.com/sites/portfolio-25-1) — HIGH confidence (Awwwards, 2025)
-- [Three.js Journey: Performance Tips](https://threejs-journey.com/lessons/performance-tips) — HIGH confidence (official Three.js Journey, Bruno Simon)
-- [GSAP ScrollTrigger Docs](https://gsap.com/docs/v3/Plugins/ScrollTrigger/) — HIGH confidence (official GSAP docs)
-- [WebGL Refraction hover effect — Awwwards inspiration](https://www.awwwards.com/inspiration/webgl-refraction-hover-effect-dorian-lods-portfolio-2025) — MEDIUM confidence (Awwwards, 2025)
+- [신입 개발자의 포트폴리오 작성법 — velog.io/@yoosion030](https://velog.io/@yoosion030/%EC%8B%A0%EC%9E%85%EA%B0%9C%EB%B0%9C%EC%9E%90%ED%8F%AC%ED%8A%B8%ED%8F%B4%EB%A6%AC%EC%98%A4%EC%9E%91%EC%84%B1%EB%B2%95) — MEDIUM confidence (community, 2024, verified by multiple corroborating sources)
+- [2024 프론트엔드 포트폴리오 모음 — spartaclub.kr](https://spartaclub.kr/blog/2024-frontend-portfolio) — MEDIUM confidence (Korean bootcamp aggregate, 2024)
+- [신입 개발자에게 기대하는 것 — brunch.co.kr/@skykamja24/640](https://brunch.co.kr/@skykamja24/640) — MEDIUM confidence (Korean recruiter perspective, community)
+- [이직 할거야? (카카오페이증권 합격 후기) — velog.io/@haryan248](https://velog.io/@haryan248/%EC%9D%B4%EC%A7%81-%ED%95%A0%EA%B1%B0%EC%95%BC-feat.-%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%8E%98%EC%9D%B4%EC%A6%9D%EA%B6%8C-%ED%95%A9%EA%B2%A9-%ED%9B%84%EA%B8%B0) — LOW confidence (single anecdote, Kakao affiliate company)
+- [Toss Tech Blog — toss.tech](https://toss.tech/) — HIGH confidence (official Toss engineering blog, current)
+- [LINE Engineering Blog — Introducing Web Frontend Team](https://engineering.linecorp.com/en/blog/team-and-project-introducing-the-team-developing-web-frontend-for-line-user-services/) — HIGH confidence (official LINE engineering blog)
+- [Frontend Case Studies index — frontendcs.com](https://frontendcs.com/) — HIGH confidence (curated, 1,076 case studies from 177 companies, 2010–2026)
+- [GitHub: andrew--r/frontend-case-studies](https://github.com/andrew--r/frontend-case-studies) — HIGH confidence (curated list, frequently updated)
+- [합격한 포트폴리오 제작기(3탄) — brunch.co.kr/@new-una/24](https://brunch.co.kr/@new-una/24) — MEDIUM confidence (Korean UX/product portfolio guide, structural patterns applicable)
+- [Building an Effective Frontend Developer Portfolio — frontendmentor.io](https://www.frontendmentor.io/articles/building-an-effective-frontend-developer-portfolio--7cE8BfMG_) — MEDIUM confidence (global best practices, 2024–2025)
 
 ---
 
-*Feature research for: media-art style interactive portfolio (/lab2 route), v3.0 milestone*
-*Researched: 2026-02-28*
-
----
-
-## Archived: v1/v2 Main Portfolio Feature Research
-
-> The research below covers the main portfolio site (v1/v2 — already shipped). Retained for reference.
-
-**Domain:** Frontend Developer Portfolio Website
-**Target Audience:** Korean Big Tech Recruiters (Samsung, Naver, Kakao)
-**Researched:** 2026-02-11
-**Confidence:** MEDIUM (Korean-specific context is LOW)
-
-### Table Stakes (Main Portfolio — SHIPPED)
-
-| Feature | Why Expected | Complexity | Status |
-|---------|--------------|------------|--------|
-| Fast Load Time (<3s) | Recruiters leave slow sites | Medium | DONE — WebP images, static export |
-| Mobile-First Design | 50%+ traffic is mobile | Medium | DONE |
-| 3-5 Polished Projects | Quality over quantity | High | DONE — 5 projects |
-| Project Case Studies | Problem → Solution → Results | High | DONE — ~20,000 words |
-| Korean/English Toggle | Korean big tech expects bilingual | Medium | DONE — next-intl |
-| Live Demo Links | Proves deployment skills | Low | DONE |
-| GitHub Profile Link | Validates code quality | Low | DONE |
-| Clear Tech Stack per Project | Keyword matching for JDs | Low | DONE |
-| Contact Section | Must be easy to reach | Low | DONE |
-| About Section | Humanizes candidate | Low | DONE |
-| Skills Overview | Quick capability scan | Low | DONE |
-
-### Anti-Features (Main Portfolio — Applied)
-
-| Anti-Feature | Decision |
-|--------------|----------|
-| Overly Complex Animations | Avoided in main site — deferred to /lab2 |
-| Splash/Loading Screens | Not on main site |
-| Skill Rating Bars | Explicitly excluded |
-| Auto-Playing Media | Not implemented |
-| More than 5 projects | Capped at 5 |
+*Feature research for: project detail page restructuring, v4.0 milestone — Korean big tech frontend hiring target*
+*Researched: 2026-03-02*
