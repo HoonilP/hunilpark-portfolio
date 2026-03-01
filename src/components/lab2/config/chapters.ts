@@ -5,51 +5,66 @@ export interface Chapter {
   label: string;
   position: THREE.Vector3;
   lookAt: THREE.Vector3;
+  /** Maps to /public/projects/{projectId}/ folder. Undefined for intro. */
+  projectId?: string;
+  /** Maps to Projects.{translationKey} in messages JSON. Undefined for intro. */
+  translationKey?: string;
 }
 
 /**
  * CHAPTERS — 6 camera waypoints defining the scroll-driven path through /lab2.
  * All downstream math derives from CHAPTERS.length — no magic numbers.
  *
- * Positions and lookAt targets are placeholder values to be tuned in Phase 8
- * once real scenes are in place.
+ * Camera waypoints are designed to frame the scene content placed in Plan 02.
+ * Each chapter's group focal center (SceneManager group position) is the lookAt target.
+ * Chapters are spaced ~6 units apart on the Z axis so scenes don't overlap.
  */
 export const CHAPTERS: Chapter[] = [
   {
     id: 'intro',
     label: 'Intro',
     position: new THREE.Vector3(0, 2, 5),
-    lookAt: new THREE.Vector3(0, 0, 0),
+    lookAt: new THREE.Vector3(0, 0.5, 0),
   },
   {
     id: 'project-1',
     label: 'Project 1',
-    position: new THREE.Vector3(5, 1.5, 3),
-    lookAt: new THREE.Vector3(5, 0, 0),
+    position: new THREE.Vector3(4, 1.5, -2),
+    lookAt: new THREE.Vector3(1, 0.5, -5),
+    projectId: '6',
+    translationKey: 'artWar',
   },
   {
     id: 'project-2',
     label: 'Project 2',
-    position: new THREE.Vector3(-4, 2, -2),
-    lookAt: new THREE.Vector3(-4, 0, -5),
+    position: new THREE.Vector3(-4, 2, -8),
+    lookAt: new THREE.Vector3(-1, 0.5, -11),
+    projectId: '2',
+    translationKey: 'dyCms',
   },
   {
     id: 'project-3',
     label: 'Project 3',
-    position: new THREE.Vector3(3, 3, -6),
-    lookAt: new THREE.Vector3(0, 1, -8),
+    position: new THREE.Vector3(3, 2.5, -14),
+    lookAt: new THREE.Vector3(0, 0.5, -17),
+    projectId: '1',
+    translationKey: 'joshua',
   },
   {
     id: 'project-4',
     label: 'Project 4',
-    position: new THREE.Vector3(-3, 1.5, -10),
-    lookAt: new THREE.Vector3(-3, 0, -13),
+    position: new THREE.Vector3(-3, 1.5, -20),
+    lookAt: new THREE.Vector3(0, 0.5, -23),
+    projectId: '3',
+    translationKey: 'retailAnalysis',
   },
   {
     id: 'project-5',
     label: 'Project 5',
-    position: new THREE.Vector3(0, 2, -15),
-    lookAt: new THREE.Vector3(0, 0, -18),
+    position: new THREE.Vector3(0, 2, -26),
+    lookAt: new THREE.Vector3(0, 0.5, -29),
+    projectId: '5',
+    translationKey: 'dinoGo',
   },
 ];
 
