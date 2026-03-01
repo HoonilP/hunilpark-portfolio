@@ -4,7 +4,8 @@
 
 - ✅ **v1.0 Portfolio MVP** - Phases 1-4 (shipped 2026-02-12)
 - ✅ **v2.0 Content Expansion** - Phase 5 (shipped 2026-02-13)
-- 🚧 **v3.0 Interactive Portfolio** - Phases 6-11 (in progress)
+- ✅ **v3.0 Interactive Portfolio** - Phases 6-11 (archived 2026-03-02)
+- 🚧 **v4.0 Project Detail Enhancement** - Phases 12-14 (in progress)
 
 ## Phases
 
@@ -38,93 +39,81 @@
 
 </details>
 
-### 🚧 v3.0 Interactive Portfolio (Phases 6-11)
+<details>
+<summary>✅ v3.0 Interactive Portfolio (Phases 6-11) - ARCHIVED 2026-03-02</summary>
 
-**Milestone Goal:** /lab2에 미디어아트 스타일 3D 인터랙티브 포트폴리오를 구축하여 프론트엔드 역량을 사이트 자체로 증명한다.
+### Phase 6: Foundation
+**Goal**: /lab2 라우트 + WebGL 인프라 + 로딩 화면 + HUD 기반
+**Plans**: Complete
+
+### Phase 7: Scroll Spine
+**Goal**: Lenis 스무스 스크롤 + 6-챕터 카메라 웨이포인트 시스템
+**Plans**: Complete
+
+### Phase 8: 3D Scenes
+**Goal**: IntroScene + 5개 프로젝트 씬 + 파티클 필드 + 텍스처 플레인
+**Plans**: Complete
+
+### Phase 9: Content Overlay
+**Goal**: HTML 오버레이 패널 + 한/영 콘텐츠 + 챕터 HUD
+**Plans**: Cancelled (archived with milestone)
+
+### Phase 10: Typography
+**Goal**: GSAP SplitText 글자별 등장 + 스크롤 속도 반응 텍스트 셰이더
+**Plans**: Cancelled (archived with milestone)
+
+### Phase 11: Effects Polish
+**Goal**: 블룸/필름 그레인/비네팅 + 엔트리 시퀀스 + 마우스 드리프트 + 커스텀 커서
+**Plans**: Cancelled (archived with milestone)
+
+</details>
+
+### 🚧 v4.0 Project Detail Enhancement (Phases 12-14)
+
+**Milestone Goal:** 프로젝트 상세 페이지를 "핵심 엔지니어링 챌린지" 중심으로 재구조화하여, 채용 담당자에게 프론트엔드 엔지니어로서의 문제 해결 능력과 기술적 깊이를 증명한다.
 
 ---
 
-- [x] **Phase 6: Foundation** - /lab2 라우트 + WebGL 인프라 + 로딩 화면 + HUD 기반 (completed 2026-02-27)
-- [x] **Phase 7: Scroll Spine** - Lenis 스무스 스크롤 + 6-챕터 카메라 웨이포인트 시스템 (completed 2026-02-28)
-- [x] **Phase 8: 3D Scenes** - IntroScene + 5개 프로젝트 씬 + 파티클 필드 + 텍스처 플레인 (completed 2026-03-01)
-- [ ] **Phase 9: Content Overlay** - HTML 오버레이 패널 + 한/영 콘텐츠 + 챕터 HUD
-- [ ] **Phase 10: Typography** - GSAP SplitText 글자별 등장 + 스크롤 속도 반응 텍스트 셰이더
-- [ ] **Phase 11: Effects Polish** - 블룸/필름 그레인/비네팅 + 엔트리 시퀀스 + 마우스 드리프트 + 커스텀 커서
+- [ ] **Phase 12: Lab2 Cleanup** - lab2 라우트, 컴포넌트, 번역키, lenis 패키지를 빌드 에러 없이 완전 삭제
+- [ ] **Phase 13: Component Infrastructure** - 엔지니어링 챌린지 i18n 스키마 마이그레이션 + 6개 서버 컴포넌트 구축
+- [ ] **Phase 14: Content Authoring** - 6개 프로젝트 양언어 엔지니어링 챌린지 콘텐츠 작성
 
 ## Phase Details
 
-### Phase 6: Foundation
-**Goal**: 채용담당자가 /lab2에 접속했을 때 두 로케일(ko/en) 모두에서 WebGL 캔버스가 올바르게 로드되고, 뷰포트 게이트와 로딩 화면이 동작하며, /lab2 ↔ 메인 사이트 왕복 시 WebGL 컨텍스트가 누수 없이 안정적으로 동작한다
-**Depends on**: Phase 5 (existing codebase)
-**Requirements**: FOUND-01, FOUND-02, FOUND-03, FOUND-04, FOUND-05
+### Phase 12: Lab2 Cleanup
+**Goal**: lab2에 관련된 모든 코드, 라우트, 번역키, 패키지가 제거되고 `next build`가 에러 없이 통과한다
+**Depends on**: Phase 11 (existing codebase)
+**Requirements**: CLEAN-01, CLEAN-02, CLEAN-03, CLEAN-04, CLEAN-05
 **Success Criteria** (what must be TRUE):
-  1. /ko/lab2 와 /en/lab2 모두 접속 시 빈 씬이라도 캔버스가 정상 렌더링된다
-  2. 로딩 화면이 에셋 진행률(%)을 표시하고 완료 후 씬으로 전환된다
-  3. 뷰포트 1024px 미만에서 "데스크톱에서 보세요" 메시지가 캔버스 대신 표시된다
-  4. /lab2 ↔ / 간 10회 왕복 후에도 캔버스가 검게 되거나 오류가 없다
-  5. `ANALYZE=true npm run build` 결과에서 Three.js 번들이 /lab2 청크에만 포함된다
-**Plans**: 2 plans
-- [ ] 06-01-PLAN.md — /lab2 route infrastructure, WebGL canvas, loading screen, viewport gate
-- [ ] 06-02-PLAN.md — Header navigation link, bundle verification, WebGL lifecycle test
-
-### Phase 7: Scroll Spine
-**Goal**: 스크롤이 6개 챕터 웨이포인트 사이를 부드럽게 이동하는 카메라 경로 스토리텔링의 척추(spine)가 완성된다 — 이것이 전체 경험의 핵심이며 나머지는 그 위의 장식이다
-**Depends on**: Phase 6
-**Requirements**: SCRL-01, SCRL-02, SCRL-03, SCRL-04
-**Success Criteria** (what must be TRUE):
-  1. 페이지 전체에서 스크롤이 Lenis 특유의 부드럽고 탄성 있는 느낌으로 동작한다
-  2. 스크롤 위치에 따라 카메라가 6개 웨이포인트를 부드럽게 이동하며 챕터가 전환된다
-  3. Chrome Performance 탭에서 스크롤 중 Long Task가 없다 (60fps 유지)
-  4. 챕터 경계가 config 상수에서 파생되며 코드 어느 곳에도 매직 넘버 없이 동작한다
-**Plans**: 2 plans
-- [x] 07-01-PLAN.md — Lenis smooth scroll + useScrollProgress hook + CHAPTERS config + page scroll height
-- [x] 07-02-PLAN.md — CameraRig waypoint interpolation + Lab2Scene integration + scroll verification
-
-### Phase 8: 3D Scenes
-**Goal**: 6개 챕터(인트로 + 5개 프로젝트)에 고유한 3D 씬이 채워지고, 기존 WebP 이미지들이 텍스처 플레인으로 공간 안에 배치되며, 파티클 필드가 공간감을 제공한다
-**Depends on**: Phase 7
-**Requirements**: SCENE-01, SCENE-02, SCENE-03, SCENE-04, SCENE-05
-**Success Criteria** (what must be TRUE):
-  1. IntroScene에서 사용자 이름/타이틀이 3D 공간에 렌더링된다
-  2. 5개 프로젝트 챕터 각각에 시각적으로 구별되는 고유한 3D 씬이 존재한다
-  3. 기존 WebP 이미지(프로젝트 hero/architecture)가 씬 안에 텍스처 플레인으로 표시된다
-  4. 파티클 필드가 배경에서 공간감을 제공하며 3,000개 이하의 파티클을 사용한다
-  5. 챕터 전환 시 이전 씬의 지오메트리/머티리얼이 dispose되어 VRAM이 증가하지 않는다
+  1. /ko/lab2 와 /en/lab2 라우트가 404를 반환하고 접근할 수 없다
+  2. 헤더 네비게이션에 lab2 링크가 없다
+  3. ko.json과 en.json에서 Lab2 번역 네임스페이스가 사라졌다
+  4. package.json에서 lenis 패키지가 제거되었고, gsap/three/@react-three/* 는 그대로다
+  5. `next build`가 TypeScript 오류 없이 성공한다
 **Plans**: TBD
 
-### Phase 9: Content Overlay
-**Goal**: 채용담당자가 각 프로젝트 챕터에서 HTML 오버레이 패널로 프로젝트 상세 정보를 한국어/영어로 읽을 수 있고, 챕터 진행 현황과 네비게이션을 통해 전체 포트폴리오를 탐색할 수 있다
-**Depends on**: Phase 8
+### Phase 13: Component Infrastructure
+**Goal**: 새 challenges/outcomes i18n 스키마와 6개 서버 컴포넌트가 구축되어, 6개 프로젝트 상세 페이지가 양 로케일에서 새 구조로 렌더링된다
+**Depends on**: Phase 12
+**Requirements**: STRC-01, STRC-02, STRC-03, STRC-04, STRC-05, STRC-06
+**Success Criteria** (what must be TRUE):
+  1. 프로젝트 상세 페이지에서 기존 Implementation/Troubleshooting 섹션 대신 Engineering Challenges 섹션이 렌더링된다
+  2. 각 챌린지가 문제정의 → 시도한 접근법 → 비교/결정 → 구현 → 성과 순서로 표시된다
+  3. 코드 블록이 구문 강조(shiki)로 렌더링되고 다크모드에서 테마가 자동 전환된다
+  4. 6개 프로젝트 모두 /ko와 /en에서 빈 섹션 없이 정상 렌더링된다
+  5. `next build`가 에러 없이 통과한다
+**Plans**: TBD
+
+### Phase 14: Content Authoring
+**Goal**: 6개 프로젝트 각각 2-3개 핵심 엔지니어링 챌린지가 대안 분석, 결정 근거, 정량적 성과와 함께 한국어/영어로 완성된다
+**Depends on**: Phase 13
 **Requirements**: CONT-01, CONT-02, CONT-03, CONT-04, CONT-05, CONT-06
 **Success Criteria** (what must be TRUE):
-  1. 각 챕터에서 해당 프로젝트의 이름, 요약, 기술 스택이 HTML 패널에 한/영으로 표시된다
-  2. 챕터 전환 시 패널이 부드럽게 페이드인/아웃되며 이전 내용이 자연스럽게 사라진다
-  3. 화면 어딘가에 "3 / 6" 형식의 현재 챕터 위치 표시기가 항상 보인다
-  4. 네비게이션 도트를 클릭하면 해당 챕터로 스크롤이 이동한다
-  5. 메인 사이트 복귀 링크가 항상 표시되고 클릭 시 메인 포트폴리오로 이동한다
-**Plans**: TBD
-
-### Phase 10: Typography
-**Goal**: 챕터 제목이 글자 단위로 등장하는 인터랙션과 스크롤 속도에 반응하는 텍스트 왜곡 효과가 경험 전체의 고급스러운 모션 언어를 완성한다
-**Depends on**: Phase 9
-**Requirements**: TYPO-01, TYPO-02
-**Success Criteria** (what must be TRUE):
-  1. 챕터 진입 시 제목이 글자 하나씩 순차적으로 등장하는 애니메이션이 동작한다
-  2. 빠르게 스크롤할 때 헤드라인 텍스트가 스크롤 방향으로 늘어나는 시각적 왜곡이 보인다
-  3. 스크롤을 멈추면 텍스트가 정상 형태로 부드럽게 복원된다
-**Plans**: TBD
-
-### Phase 11: Effects Polish
-**Goal**: 블룸, 필름 그레인, 엔트리 시퀀스, 마우스 드리프트, 커스텀 커서, 프로젝트별 색온도가 경험을 미디어아트 수준으로 완성한다 — 모든 효과는 PerformanceMonitor로 게이팅된다
-**Depends on**: Phase 10
-**Requirements**: FX-01, FX-02, FX-03, FX-04, FX-05, FX-06
-**Success Criteria** (what must be TRUE):
-  1. 발광 요소에 블룸 효과가 적용되며, 저사양 GPU에서는 효과가 자동으로 비활성화된다
-  2. 필름 그레인과 비네팅이 화면에 시네마틱 분위기를 더한다
-  3. 로딩 완료 후 2-3초 엔트리 인트로 시퀀스가 재생된 후 스크롤이 활성화된다
-  4. 스크롤 없이 idle 상태일 때 마우스 움직임에 따라 카메라가 미세하게 드리프트한다
-  5. 커스텀 원형 커서가 mix-blend-mode: difference로 표시되어 콘텐츠 위에서 반전된다
-  6. 챕터 전환 시 조명 색온도가 각 프로젝트의 고유한 색상으로 변한다
+  1. 6개 프로젝트 각각 2-3개 챌린지가 작성되고, 각 챌린지는 대안 후보 1개 이상을 명시적으로 기각하는 이유와 함께 포함한다
+  2. 모든 챌린지의 outcome 필드에 정량적 수치(before/after, 측정값, 비율)가 포함된다
+  3. AI 관련 프로젝트(Joshua, Retail Analysis)의 챌린지에 AI 엔지니어링 난제가 포함된다
+  4. ko.json과 en.json의 챌린지 키가 1대1로 일치하고 누락된 번역 키가 없다
+  5. 모든 콘텐츠가 이력서/포트폴리오 PDF 기반 사실이며 임의 내용이 없다
 **Plans**: TBD
 
 ## Progress
@@ -136,9 +125,12 @@
 | 3. Main Page | v1.0 | - | Complete | 2026-02-12 |
 | 4. Project Detail Pages | v1.0 | - | Complete | 2026-02-12 |
 | 5. Content Expansion | v2.0 | - | Complete | 2026-02-13 |
-| 6. Foundation | 2/2 | Complete   | 2026-02-27 | - |
+| 6. Foundation | v3.0 | 2/2 | Complete | 2026-02-27 |
 | 7. Scroll Spine | v3.0 | 2/2 | Complete | 2026-02-28 |
-| 8. 3D Scenes | 2/2 | Complete   | 2026-03-01 | - |
-| 9. Content Overlay | v3.0 | 0/TBD | Not started | - |
-| 10. Typography | v3.0 | 0/TBD | Not started | - |
-| 11. Effects Polish | v3.0 | 0/TBD | Not started | - |
+| 8. 3D Scenes | v3.0 | 2/2 | Complete | 2026-03-01 |
+| 9. Content Overlay | v3.0 | - | Archived | - |
+| 10. Typography | v3.0 | - | Archived | - |
+| 11. Effects Polish | v3.0 | - | Archived | - |
+| 12. Lab2 Cleanup | v4.0 | 0/TBD | Not started | - |
+| 13. Component Infrastructure | v4.0 | 0/TBD | Not started | - |
+| 14. Content Authoring | v4.0 | 0/TBD | Not started | - |

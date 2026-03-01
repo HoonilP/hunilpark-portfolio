@@ -61,29 +61,29 @@ Requirements for project detail page enhancement. Each maps to roadmap phases.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CLEAN-01 | TBD | Pending |
-| CLEAN-02 | TBD | Pending |
-| CLEAN-03 | TBD | Pending |
-| CLEAN-04 | TBD | Pending |
-| CLEAN-05 | TBD | Pending |
-| STRC-01 | TBD | Pending |
-| STRC-02 | TBD | Pending |
-| STRC-03 | TBD | Pending |
-| STRC-04 | TBD | Pending |
-| STRC-05 | TBD | Pending |
-| STRC-06 | TBD | Pending |
-| CONT-01 | TBD | Pending |
-| CONT-02 | TBD | Pending |
-| CONT-03 | TBD | Pending |
-| CONT-04 | TBD | Pending |
-| CONT-05 | TBD | Pending |
-| CONT-06 | TBD | Pending |
+| CLEAN-01 | Phase 12 | Pending |
+| CLEAN-02 | Phase 12 | Pending |
+| CLEAN-03 | Phase 12 | Pending |
+| CLEAN-04 | Phase 12 | Pending |
+| CLEAN-05 | Phase 12 | Pending |
+| STRC-01 | Phase 13 | Pending |
+| STRC-02 | Phase 13 | Pending |
+| STRC-03 | Phase 13 | Pending |
+| STRC-04 | Phase 13 | Pending |
+| STRC-05 | Phase 13 | Pending |
+| STRC-06 | Phase 13 | Pending |
+| CONT-01 | Phase 14 | Pending |
+| CONT-02 | Phase 14 | Pending |
+| CONT-03 | Phase 14 | Pending |
+| CONT-04 | Phase 14 | Pending |
+| CONT-05 | Phase 14 | Pending |
+| CONT-06 | Phase 14 | Pending |
 
 **Coverage:**
 - v4.0 requirements: 17 total
-- Mapped to phases: 0
-- Unmapped: 17 ⚠️
+- Mapped to phases: 17
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-03-02*
-*Last updated: 2026-03-02 after initial definition*
+*Last updated: 2026-03-02 after roadmap v4.0 creation*
