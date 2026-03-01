@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: Interactive Portfolio
-status: in_progress
-last_updated: "2026-03-01T04:11:29Z"
+status: unknown
+last_updated: "2026-03-01T04:17:20.998Z"
 progress:
-  total_phases: 11
-  completed_phases: 7
+  total_phases: 8
+  completed_phases: 8
   total_plans: 17
-  completed_plans: 16
+  completed_plans: 17
 ---
 
 # Project State
@@ -72,6 +72,8 @@ Recent decisions affecting current work:
 - [08-01]: bufferAttribute in R3F 9.5.0 requires args=[array, itemSize] constructor pattern — plain array/count/itemSize props cause TS2741 error
 - [08-01]: SceneManager groups positioned at lookAt focal centers (not camera positions) so scene content is centered in frame
 - [08-01]: ParticleField z-range 5 to -35 covers full camera path from chapter 0 (z=5) through chapter 5 (lookAt z=-29)
+- [Phase 08-3d-scenes]: Scene component positions use relative offsets from (0,0,0) — parent SceneManager group provides world position from chapters.ts waypoints
+- [Phase 08-3d-scenes]: useTexture.preload() called at module level so texture loading begins when JS parses the module, before Suspense activates
 
 ### Pending Todos
 
@@ -85,5 +87,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-01
-Stopped at: Completed 08-01-PLAN.md — SceneManager visibility-toggle architecture, ParticleField 2000 ambient particles, TexturePlane reusable component, chapters.ts extended with projectId/translationKey metadata
+Stopped at: 08-02-PLAN.md Task 3 checkpoint — awaiting human visual verification of IntroScene + 5 ProjectScene components in browser
 Resume file: None

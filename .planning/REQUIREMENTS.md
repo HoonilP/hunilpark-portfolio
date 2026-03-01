@@ -24,10 +24,10 @@ Requirements for /lab2 media-art 3D interactive portfolio. Each maps to roadmap 
 
 ### 3D Scenes
 
-- [ ] **SCENE-01**: IntroScene이 사용자 이름/타이틀과 함께 3D 공간에서 렌더링된다
-- [ ] **SCENE-02**: 5개 프로젝트 각각에 고유한 3D 씬이 존재한다
+- [x] **SCENE-01**: IntroScene이 사용자 이름/타이틀과 함께 3D 공간에서 렌더링된다
+- [x] **SCENE-02**: 5개 프로젝트 각각에 고유한 3D 씬이 존재한다
 - [x] **SCENE-03**: 파티클 필드가 배경에서 공간감을 제공한다 (3k 이하)
-- [ ] **SCENE-04**: 기존 WebP 이미지들이 3D 텍스처 플레인으로 씬 안에 표시된다
+- [x] **SCENE-04**: 기존 WebP 이미지들이 3D 텍스처 플레인으로 씬 안에 표시된다
 - [x] **SCENE-05**: 씬 전환 시 지오메트리/머티리얼이 적절히 dispose되어 VRAM 누수가 없다
 
 ### Content & UI
@@ -83,10 +83,10 @@ Requirements for /lab2 media-art 3D interactive portfolio. Each maps to roadmap 
 | SCRL-02 | Phase 7 | Complete |
 | SCRL-03 | Phase 7 | Complete |
 | SCRL-04 | Phase 7 | Complete |
-| SCENE-01 | Phase 8 | Pending |
-| SCENE-02 | Phase 8 | Pending |
+| SCENE-01 | Phase 8 | Complete |
+| SCENE-02 | Phase 8 | Complete |
 | SCENE-03 | Phase 8 | Complete |
-| SCENE-04 | Phase 8 | Pending |
+| SCENE-04 | Phase 8 | Complete |
 | SCENE-05 | Phase 8 | Complete |
 | CONT-01 | Phase 9 | Pending |
 | CONT-02 | Phase 9 | Pending |
