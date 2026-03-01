@@ -20,7 +20,7 @@ export default function IntroScene() {
         position={[0, 0.8, 0]}
         fontSize={0.6}
         color="#ffffff"
-        font="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff/Pretendard-Bold.woff"
+        font="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/static/woff/Pretendard-Bold.woff"
         anchorX="center"
         anchorY="middle"
       >
@@ -32,7 +32,7 @@ export default function IntroScene() {
         position={[0, 0, 0]}
         fontSize={0.18}
         color="#888888"
-        font="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff/Pretendard-Regular.woff"
+        font="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/static/woff/Pretendard-Regular.woff"
         anchorX="center"
         anchorY="middle"
       >
