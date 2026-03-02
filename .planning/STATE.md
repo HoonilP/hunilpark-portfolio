@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v4.0
 milestone_name: Project Detail Enhancement
 status: unknown
-last_updated: "2026-03-02T05:40:11.957Z"
+last_updated: "2026-03-02T06:53:49Z"
 progress:
   total_phases: 10
   completed_phases: 10
@@ -18,14 +18,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-02)
 
 **Core value:** 프론트엔드 개발 역량을 깔끔하고 정교한 디자인으로 보여주는 포트폴리오 사이트 — 채용 담당자가 빠르게 핵심 역량과 프로젝트를 파악할 수 있어야 한다.
-**Current focus:** v4.0 Project Detail Enhancement — Phase 13: Component Infrastructure
+**Current focus:** v4.0 Project Detail Enhancement — Phase 14: Content Authoring
 
 ## Current Position
 
-Phase: 13 of 14 (Component Infrastructure)
-Plan: 3 of 3 (complete)
-Status: Phase 13 complete (gap closure done) — Ready for Phase 14 (content authoring)
-Last activity: 2026-03-02 — 13-03 executed (CodeBlock wired into ChallengeSection, i18n optional code fields)
+Phase: 14 of 14 (Content Authoring)
+Plan: 1 of 1 (complete)
+Status: Phase 14 Plan 01 complete — 6 engineering challenges authored for Joshua, DY CMS, Retail Analysis (ko + en)
+Last activity: 2026-03-02 — 14-01 executed (6 bilingual challenges authored with quantitative outcomes and rejected alternatives)
 
 Progress: [██░░░░░░░░] 20%
 
@@ -68,6 +68,10 @@ Recent decisions affecting current work:
 - [13-03]: CodeBlock renders after narrative fields (outcome) — supplementary evidence, not primary narrative
 - [13-03]: t.has() guard pattern for optional i18n fields — challenges without code render text-only unchanged
 - [13-03]: Async ChallengeSection requires no changes to ProjectContent.tsx caller
+- [14-01]: Joshua challenge2 KoGPT-2 outcome: used team size (3) and dual platform (2) count as quantitative anchors — no precise ms improvement figure in source documents
+- [14-01]: Retail Analysis challenge1 outcome: used 3 behavioral metric count as quantitative anchor
+- [14-01]: Ko titles extended from exactly 20 chars to 21+ to satisfy validation threshold (> 20)
+- [14-01]: IPC code snippet in Joshua challenge1 updated to show actual ipcMain/ipcRenderer + RxJS Observable pattern
 
 ### Pending Todos
 
@@ -80,5 +84,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-02
-Stopped at: Completed 13-03-PLAN.md (CodeBlock wired into ChallengeSection, STRC-01 through STRC-06 complete — build passing)
+Stopped at: Completed 14-01-PLAN.md (6 bilingual engineering challenges authored for Joshua, DY CMS, Retail Analysis — build passing)
 Resume file: None

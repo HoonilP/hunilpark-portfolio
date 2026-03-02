@@ -26,12 +26,12 @@ Requirements for project detail page enhancement. Each maps to roadmap phases.
 
 ### Content
 
-- [ ] **CONT-01**: 6개 프로젝트 각각 2-3개의 핵심 엔지니어링 챌린지가 깊이 있게 작성된다
-- [ ] **CONT-02**: 모든 챌린지의 outcome 필드에 정량적 수치(before/after, 측정값, 비율 등)가 포함된다
-- [ ] **CONT-03**: 각 프로젝트의 기술 스택 선택에 대한 이유(왜 이 기술을 선택했는가)가 포함된다
-- [ ] **CONT-04**: AI 관련 프로젝트(Joshua, Retail Analysis, Art War)에서 AI 엔지니어링 챌린지가 포함된다
-- [ ] **CONT-05**: 한국어와 영어 콘텐츠가 동시에 업데이트되고, 양언어 키 일치가 검증된다
-- [ ] **CONT-06**: 콘텐츠가 이력서/포트폴리오 PDF 데이터 기반이며 임의 내용이 생성되지 않는다
+- [x] **CONT-01**: 6개 프로젝트 각각 2-3개의 핵심 엔지니어링 챌린지가 깊이 있게 작성된다
+- [x] **CONT-02**: 모든 챌린지의 outcome 필드에 정량적 수치(before/after, 측정값, 비율 등)가 포함된다
+- [x] **CONT-03**: 각 프로젝트의 기술 스택 선택에 대한 이유(왜 이 기술을 선택했는가)가 포함된다
+- [x] **CONT-04**: AI 관련 프로젝트(Joshua, Retail Analysis, Art War)에서 AI 엔지니어링 챌린지가 포함된다
+- [x] **CONT-05**: 한국어와 영어 콘텐츠가 동시에 업데이트되고, 양언어 키 일치가 검증된다
+- [x] **CONT-06**: 콘텐츠가 이력서/포트폴리오 PDF 데이터 기반이며 임의 내용이 생성되지 않는다
 
 ## Future Requirements
 
@@ -72,12 +72,12 @@ Requirements for project detail page enhancement. Each maps to roadmap phases.
 | STRC-04 | Phase 13 | Complete |
 | STRC-05 | Phase 13 | Complete |
 | STRC-06 | Phase 13 | Complete |
-| CONT-01 | Phase 14 | Pending |
-| CONT-02 | Phase 14 | Pending |
-| CONT-03 | Phase 14 | Pending |
-| CONT-04 | Phase 14 | Pending |
-| CONT-05 | Phase 14 | Pending |
-| CONT-06 | Phase 14 | Pending |
+| CONT-01 | Phase 14 | Complete |
+| CONT-02 | Phase 14 | Complete |
+| CONT-03 | Phase 14 | Complete |
+| CONT-04 | Phase 14 | Complete |
+| CONT-05 | Phase 14 | Complete |
+| CONT-06 | Phase 14 | Complete |
 
 **Coverage:**
 - v4.0 requirements: 17 total
