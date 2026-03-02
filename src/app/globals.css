@@ -43,6 +43,18 @@
   --animate-reveal-line: reveal-line 0.8s ease-out forwards;
 }
 
+/* ===== Shiki Code Block Dark Mode ===== */
+.shiki {
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+[data-theme='dark'] .shiki,
+[data-theme='dark'] .shiki span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+}
+
 /* ===== Hero Staggered Slide-Up (Modo Museum style) ===== */
 @keyframes hero-reveal {
   from {
