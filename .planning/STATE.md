@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v4.0
 milestone_name: Project Detail Enhancement
 status: unknown
-last_updated: "2026-03-02T04:53:29Z"
+last_updated: "2026-03-02T04:56:40Z"
 progress:
   total_phases: 9
   completed_phases: 9
@@ -23,11 +23,11 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 ## Current Position
 
 Phase: 13 of 14 (Component Infrastructure)
-Plan: 1 of 2 (complete)
-Status: Phase 13 plan 01 complete — Ready for 13-02 (i18n migration)
-Last activity: 2026-03-02 — 13-01 executed (shiki CodeBlock infrastructure)
+Plan: 2 of 2 (complete)
+Status: Phase 13 complete — Ready for Phase 14 (content authoring)
+Last activity: 2026-03-02 — 13-02 executed (i18n schema migration + ChallengeSection component)
 
-Progress: [█░░░░░░░░░] 10%
+Progress: [██░░░░░░░░] 20%
 
 ## Performance Metrics
 
@@ -62,6 +62,9 @@ Recent decisions affecting current work:
 - [13-01]: Shiki singleton pattern — module-level Promise<Highlighter> | null to prevent re-initialization per request
 - [13-01]: defaultColor: 'light' with [data-theme='dark'] CSS variable override — single HTML output, dark mode via CSS
 - [13-01]: No edge runtime on shiki — requires Node.js filesystem access for grammar bundles
+- [13-02]: ChallengeSection receives t as prop (not getTranslations internally) — parent owns translation context
+- [13-02]: No sub-field labels rendered as headings — five-part narrative flow implicit from content structure
+- [13-02]: CodeBlock not wired in ChallengeSection this phase — text-only; Phase 14 may add optional code rendering
 
 ### Pending Todos
 
@@ -69,10 +72,10 @@ None.
 
 ### Blockers/Concerns
 
-- [Phase 13]: i18n schema rename 후 t.has() 가 에러 없이 빈 섹션을 반환하므로 양 로케일 시각 QA 필수
+None.
 
 ## Session Continuity
 
 Last session: 2026-03-02
-Stopped at: Completed 13-01-PLAN.md (shiki CodeBlock infrastructure — all tasks done, build passing)
+Stopped at: Completed 13-02-PLAN.md (i18n schema migration + ChallengeSection component — all tasks done, build passing)
 Resume file: None
