@@ -9,11 +9,11 @@ Requirements for project detail page enhancement. Each maps to roadmap phases.
 
 ### Cleanup
 
-- [ ] **CLEAN-01**: lab2 라우트 디렉토리(/[locale]/lab2)와 모든 lab2 전용 컴포넌트가 삭제된다
-- [ ] **CLEAN-02**: lab2 관련 번역키(Lab2, Navigation.lab2)가 ko.json과 en.json에서 제거된다
-- [ ] **CLEAN-03**: 헤더 네비게이션에서 lab2 링크가 제거된다
-- [ ] **CLEAN-04**: lenis 패키지가 제거되고, 나머지 의존성(GSAP, Three.js 등)은 유지된다
-- [ ] **CLEAN-05**: lab2 삭제 후 `next build`가 에러 없이 성공한다
+- [x] **CLEAN-01**: lab2 라우트 디렉토리(/[locale]/lab2)와 모든 lab2 전용 컴포넌트가 삭제된다
+- [x] **CLEAN-02**: lab2 관련 번역키(Lab2, Navigation.lab2)가 ko.json과 en.json에서 제거된다
+- [x] **CLEAN-03**: 헤더 네비게이션에서 lab2 링크가 제거된다
+- [x] **CLEAN-04**: lenis 패키지가 제거되고, 나머지 의존성(GSAP, Three.js 등)은 유지된다
+- [x] **CLEAN-05**: lab2 삭제 후 `next build`가 에러 없이 성공한다
 
 ### Structure
 
@@ -61,11 +61,11 @@ Requirements for project detail page enhancement. Each maps to roadmap phases.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CLEAN-01 | Phase 12 | Pending |
-| CLEAN-02 | Phase 12 | Pending |
-| CLEAN-03 | Phase 12 | Pending |
-| CLEAN-04 | Phase 12 | Pending |
-| CLEAN-05 | Phase 12 | Pending |
+| CLEAN-01 | Phase 12 | Complete |
+| CLEAN-02 | Phase 12 | Complete |
+| CLEAN-03 | Phase 12 | Complete |
+| CLEAN-04 | Phase 12 | Complete |
+| CLEAN-05 | Phase 12 | Complete |
 | STRC-01 | Phase 13 | Pending |
 | STRC-02 | Phase 13 | Pending |
 | STRC-03 | Phase 13 | Pending |

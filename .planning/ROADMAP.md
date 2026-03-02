@@ -74,7 +74,7 @@
 
 ---
 
-- [ ] **Phase 12: Lab2 Cleanup** - lab2 라우트, 컴포넌트, 번역키, lenis 패키지를 빌드 에러 없이 완전 삭제
+- [x] **Phase 12: Lab2 Cleanup** - lab2 라우트, 컴포넌트, 번역키, lenis 패키지를 빌드 에러 없이 완전 삭제 (completed 2026-03-02)
 - [ ] **Phase 13: Component Infrastructure** - 엔지니어링 챌린지 i18n 스키마 마이그레이션 + 6개 서버 컴포넌트 구축
 - [ ] **Phase 14: Content Authoring** - 6개 프로젝트 양언어 엔지니어링 챌린지 콘텐츠 작성
 
@@ -132,6 +132,6 @@
 | 9. Content Overlay | v3.0 | - | Archived | - |
 | 10. Typography | v3.0 | - | Archived | - |
 | 11. Effects Polish | v3.0 | - | Archived | - |
-| 12. Lab2 Cleanup | v4.0 | 0/1 | Planned | - |
+| 12. Lab2 Cleanup | 1/1 | Complete   | 2026-03-02 | - |
 | 13. Component Infrastructure | v4.0 | 0/TBD | Not started | - |
 | 14. Content Authoring | v4.0 | 0/TBD | Not started | - |
