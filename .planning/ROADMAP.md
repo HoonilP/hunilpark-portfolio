@@ -103,7 +103,10 @@
   3. 코드 블록이 구문 강조(shiki)로 렌더링되고 다크모드에서 테마가 자동 전환된다
   4. 6개 프로젝트 모두 /ko와 /en에서 빈 섹션 없이 정상 렌더링된다
   5. `next build`가 에러 없이 통과한다
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 13-01-PLAN.md — Install shiki + CodeBlock server component + dark mode CSS
+- [ ] 13-02-PLAN.md — i18n schema migration + ChallengeSection + ProjectContent rewrite
 
 ### Phase 14: Content Authoring
 **Goal**: 6개 프로젝트 각각 2-3개 핵심 엔지니어링 챌린지가 대안 분석, 결정 근거, 정량적 성과와 함께 한국어/영어로 완성된다
@@ -133,5 +136,5 @@
 | 10. Typography | v3.0 | - | Archived | - |
 | 11. Effects Polish | v3.0 | - | Archived | - |
 | 12. Lab2 Cleanup | 1/1 | Complete    | 2026-03-02 | - |
-| 13. Component Infrastructure | v4.0 | 0/TBD | Not started | - |
+| 13. Component Infrastructure | v4.0 | 0/2 | Not started | - |
 | 14. Content Authoring | v4.0 | 0/TBD | Not started | - |
