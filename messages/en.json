@@ -266,12 +266,20 @@
       "challenges": {
         "title": "Engineering Challenges",
         "challenge1": {
-          "title": "Core Technical Challenge",
-          "context": "Problem definition (to be replaced with real content in Phase 14)",
-          "alternatives": "Approaches tried (to be replaced with real content in Phase 14)",
-          "decision": "Comparison and decision rationale (to be replaced with real content in Phase 14)",
-          "implementation": "Implementation details (to be replaced with real content in Phase 14)",
-          "outcome": "Quantitative results (to be replaced with real content in Phase 14)"
+          "title": "JWT Auto-Renewal Middleware and Auth Architecture Design",
+          "context": "In the blockchain-integrated student fee management system, 3 roles (student/committee/admin) each required different dashboards and permissions. Pages for reviewing fee history and verifying blockchain transactions required long sessions, but JWT expiration causing session disconnection would severely degrade user experience.",
+          "alternatives": "Session-based authentication (express-session) was rejected due to server state dependency making it incompatible with Vercel's serverless environment. NextAuth.js was rejected because its App Router support was unstable at the time and it was difficult to flexibly implement the custom authentication flow (API Routes proxy) needed for the blockchain backend.",
+          "decision": "I implemented JWT with a custom middleware approach. Next.js middleware automatically renews tokens before expiration to prevent session disconnection, API Routes proxy backend authentication requests, and route access is controlled based on the role claim in the JWT token.",
+          "implementation": "Next.js middleware checks JWT expiry on every request and auto-refreshes via refresh token when within threshold. API Routes proxy requests to the Hyperledger Fabric backend while passing the token. Role-based route guards (student/committee/admin) are enforced at the middleware level, redirecting on unauthorized access attempts.",
+          "outcome": "Implemented 15+ pages and 30+ reusable components, deploying successfully on Vercel. As the sole frontend developer in a 4-person team, built a 3-role authentication system with JWT auto-renewal that eliminates session disconnection."
+        },
+        "challenge2": {
+          "title": "Hyperledger Fabric Blockchain Integration Proxy Design",
+          "context": "All transactions needed to be recorded on the Hyperledger Fabric blockchain for transparent student fee management. However, direct frontend access to blockchain nodes would expose complex SDK logic — including certificate management and network configuration — to the client side, creating security vulnerabilities.",
+          "alternatives": "Directly calling the Hyperledger SDK from the frontend was rejected because certificates and network configuration would be exposed to the client, posing security risks and significantly increasing bundle size. Adding a GraphQL layer was rejected because the blockchain query patterns were simple (recording/retrieving transactions), making a GraphQL schema unnecessarily over-engineered.",
+          "decision": "I used Next.js API Routes as a proxy layer. The frontend only calls internal API Routes, which relay requests to the blockchain backend server, encapsulating SDK complexity on the server side and keeping frontend code simple.",
+          "implementation": "API Routes validate JWT before forwarding requests to the backend blockchain server. FCM push notifications were integrated to send real-time role-specific alerts on fee deposits and expenditures. Blockchain transaction history was visualized in table and card formats using shadcn/ui components, providing a transparency dashboard accessible to all students.",
+          "outcome": "All blockchain-integrated UI was implemented using the API Routes proxy pattern across 30+ reusable components, completely eliminating blockchain SDK dependencies from the frontend code. As the sole frontend developer in a 4-person team, built 15+ pages and deployed successfully on Vercel."
         }
       }
     },
@@ -294,12 +302,20 @@
       "challenges": {
         "title": "Engineering Challenges",
         "challenge1": {
-          "title": "Core Technical Challenge",
-          "context": "Problem definition (to be replaced with real content in Phase 14)",
-          "alternatives": "Approaches tried (to be replaced with real content in Phase 14)",
-          "decision": "Comparison and decision rationale (to be replaced with real content in Phase 14)",
-          "implementation": "Implementation details (to be replaced with real content in Phase 14)",
-          "outcome": "Quantitative results (to be replaced with real content in Phase 14)"
+          "title": "Google Maps + Three.js Coordinate Synchronization System",
+          "context": "In the Sui blockchain location-based NFT collection game, 3D dinosaur models needed to be overlaid on Google Maps. When users drag or zoom the map, 3D objects must follow their exact geographic positions — but Google Maps' latitude/longitude coordinate system and Three.js's 3D world coordinate system are entirely different, making real-time synchronization the core technical challenge.",
+          "alternatives": "Using 2D images as map markers was rejected because 3D interactions (rotation, animation) would be impossible, eliminating the core game experience. Implementing a custom map renderer with Three.js alone was rejected as impractical within the 3-day hackathon timeline — tile rendering, zoom levels, and satellite imagery processing would take far too long to build from scratch.",
+          "decision": "I separated Google Maps and Three.js into distinct layers. Google Maps handles the map rendering, and Three.js overlays a transparent Canvas on top. I implemented latitude/longitude ↔ pixel ↔ 3D world coordinate transformation logic directly to synchronize real-time with drag and zoom events.",
+          "implementation": "Extended Google Maps' OverlayView API to mount the Three.js Scene as an overlay. Whenever map events (drag, zoom_changed) fire, a coordinate transformation function converts lat/lng → pixel → Three.js world coordinates and updates positions of all 3D dinosaur objects. 3D model scale is also adjusted dynamically based on zoom level.",
+          "outcome": "Completed a coordinate synchronization system where 3D dinosaur objects render at accurate positions during map drag and zoom, across 10+ pages (NFT Studio, Marketplace, 3D Map, etc.) delivered in a 3-day hackathon. Led all frontend development as the sole frontend engineer in a 4-person team."
+        },
+        "challenge2": {
+          "title": "Web3 Client Library Abstraction Layer",
+          "context": "Multiple services in the Sui blockchain ecosystem (Sui SDK, Walrus decentralized storage, Seal threshold encryption, Kiosk SDK) needed to be used on the frontend, but each SDK had different interfaces and inconsistent wallet connection and transaction signing patterns, rapidly increasing code complexity. Handling each SDK individually during a 3-day hackathon would have severely slowed development speed.",
+          "alternatives": "Calling each SDK directly from components was rejected because SDK updates would require modifying every usage site, and distributed wallet connection state management increases bug potential. Using existing Web3 integration libraries (e.g., wagmi) was rejected due to insufficient Sui chain support and no coverage for ecosystem-specific SDKs like Walrus and Seal.",
+          "decision": "I implemented 3 custom Web3 client libraries from scratch. Each abstracts one SDK — Sui SDK, Walrus, and Seal/Kiosk — and exposes a unified interface so that wallet connection, transaction signing, and storage uploads follow a consistent calling pattern across the codebase.",
+          "implementation": "Each library exposes shared methods such as connect(), signAndExecute(), and upload() through a unified interface. The Walrus library handles decentralized NFT image storage, the Seal library protects NFT metadata with threshold encryption, and the Kiosk SDK wrapper encapsulates NFT marketplace transaction logic.",
+          "outcome": "Abstracted Sui SDK, Walrus, and Seal/Kiosk integrations through 3 custom client libraries, enabling consistent Web3 interface calls from 10+ pages. Delivered NFT minting, marketplace trading, and decentralized storage all within the 3-day hackathon timeline."
         }
       }
     },
