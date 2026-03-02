@@ -118,7 +118,10 @@ Plans:
   3. AI 관련 프로젝트(Joshua, Retail Analysis)의 챌린지에 AI 엔지니어링 난제가 포함된다
   4. ko.json과 en.json의 챌린지 키가 1대1로 일치하고 누락된 번역 키가 없다
   5. 모든 콘텐츠가 이력서/포트폴리오 PDF 기반 사실이며 임의 내용이 없다
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 14-01-PLAN.md — Author Joshua, DY CMS, Retail Analysis challenges (ko + en)
+- [ ] 14-02-PLAN.md — Author ScholarlyChain, DinoGo, ArtWar challenges (ko + en) + final validation
 
 ## Progress
 
@@ -137,4 +140,4 @@ Plans:
 | 11. Effects Polish | v3.0 | - | Archived | - |
 | 12. Lab2 Cleanup | 1/1 | Complete    | 2026-03-02 | - |
 | 13. Component Infrastructure | 3/3 | Complete    | 2026-03-02 | - |
-| 14. Content Authoring | v4.0 | 0/TBD | Not started | - |
+| 14. Content Authoring | v4.0 | 0/2 | Planned | - |
