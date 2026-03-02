@@ -156,14 +156,22 @@
       "challenges": {
         "title": "Engineering Challenges",
         "challenge1": {
-          "title": "Core Technical Challenge",
-          "context": "Problem definition (to be replaced with real content in Phase 14)",
-          "alternatives": "Approaches tried (to be replaced with real content in Phase 14)",
-          "decision": "Comparison and decision rationale (to be replaced with real content in Phase 14)",
-          "implementation": "Implementation details (to be replaced with real content in Phase 14)",
-          "outcome": "Quantitative results (to be replaced with real content in Phase 14)",
-          "code": "// Example: KoGPT-2 inference pipeline\nconst response = await model.generate({\n  prompt: userInput,\n  maxTokens: 256,\n  temperature: 0.7,\n});",
+          "title": "Electron IPC Architecture Design",
+          "context": "In Electron's separated Main↔Renderer process model, I needed to safely synchronize AI inference requests, Stripe payment events, and UI state. Unlike a browser app where a simple fetch suffices, IPC channel design in a desktop app directly determines overall application stability.",
+          "alternatives": "Making external API calls directly from the Renderer was rejected due to security vulnerabilities (API key exposure) and CORS issues. A single-process Node.js CLI app was rejected because it couldn't incorporate the UI/UX designed with the team's designers and failed to meet the SI delivery requirement for a GUI application.",
+          "decision": "I chose Electron + Angular, with a strict IPC separation where the Main process handles all external communication (FastAPI, Stripe) while the Renderer focuses purely on UI. Angular's DI system and RxJS streaming were well-suited for real-time AI response rendering, and the client required cross-platform support for both Windows and macOS.",
+          "implementation": "The ipcMain relays inference requests to the FastAPI server, and the ipcRenderer subscribes to AI responses as an RxJS Observable stream. Stripe webhook events are also processed in the Main process, propagating payment status changes (feature lock/unlock) to the UI.",
+          "outcome": "Successfully delivered the SI project on schedule and launched a Windows/macOS cross-platform desktop application. The full development cycle was completed by a 3-person team (2 designers, 1 planning & development).",
+          "code": "// Main process: relay inference request and stream response via IPC\nipcMain.handle('ai:generate', async (event, prompt) => {\n  const res = await fetch('http://localhost:8000/generate', {\n    method: 'POST',\n    body: JSON.stringify({ prompt }),\n  });\n  const reader = res.body.getReader();\n  for await (const chunk of readChunks(reader)) {\n    event.sender.send('ai:chunk', chunk);\n  }\n});\n\n// Renderer process (Angular service): subscribe via RxJS\ngenerate(prompt: string): Observable<string> {\n  ipcRenderer.invoke('ai:generate', prompt);\n  return fromEvent<string>(ipcRenderer, 'ai:chunk');\n}",
           "codeLang": "typescript"
+        },
+        "challenge2": {
+          "title": "KoGPT-2 Inference Pipeline Optimization",
+          "context": "I fine-tuned KoGPT-2 to auto-generate Korean copywriting text, but the default generation settings produced excessive unnecessary tokens, causing response latency and quality degradation. Fast response was a critical requirement for the SI delivery environment.",
+          "alternatives": "Using GPT-3/ChatGPT API was rejected because Korean copywriting quality was unstable in 2022, reliance on an external API made offline support impossible, and the cost structure was incompatible with the SI delivery model. Rule-based template generation was rejected for lacking keyword combination diversity and being unable to produce the creative copy marketers expected.",
+          "decision": "I chose KoGPT-2 fine-tuning on a self-configured GPU bare-metal server. I designed a keyword-centric prompt structure and applied generation parameter tuning to reduce unnecessary token output. The internal GPU server was used like an inference-serving platform to handle requests reliably.",
+          "implementation": "I structured prompts around input keywords so the model focused on relevant context. Generation parameters such as top-k and temperature were experimentally adjusted to balance output quality and speed. A FastAPI server exposed the inference endpoint, which the Electron Main process called via IPC.",
+          "outcome": "Tuning top-k and temperature parameters reduced unnecessary token generation and achieved a response speed suitable for real-time production use. A 3-person team delivered the SI project on schedule and shipped the app simultaneously on 2 platforms (Windows and macOS)."
         }
       }
     },
@@ -186,12 +194,20 @@
       "challenges": {
         "title": "Engineering Challenges",
         "challenge1": {
-          "title": "Core Technical Challenge",
-          "context": "Problem definition (to be replaced with real content in Phase 14)",
-          "alternatives": "Approaches tried (to be replaced with real content in Phase 14)",
-          "decision": "Comparison and decision rationale (to be replaced with real content in Phase 14)",
-          "implementation": "Implementation details (to be replaced with real content in Phase 14)",
-          "outcome": "Quantitative results (to be replaced with real content in Phase 14)"
+          "title": "Frontend-Backend Separated Architecture Design",
+          "context": "DY Microfinance's existing workflow relied on Excel spreadsheets and manual processes, requiring dozens of hours for month-end closing and causing frequent data integrity errors. I needed to migrate to a systematic digital system while maintaining maintainability and scalability as a solo full-stack developer.",
+          "alternatives": "A monolithic full-stack framework (e.g., Django) was rejected because it offered lower frontend flexibility and made implementing a modern SPA-style admin dashboard difficult. Firebase/Supabase BaaS was rejected because the complex accounting calculation logic unique to microfinance is hard to implement serverlessly, and real-time DB dependency was unsuitable for Myanmar's local network conditions.",
+          "decision": "I selected a separated architecture: Next.js App Router (frontend) + NestJS (backend) + PostgreSQL. Server Actions simplified form handling, and NestJS's module system allowed accounting logic to be organized by domain. Even as a solo developer, establishing a clear frontend/backend boundary enabled a structure ready for team division if the system later expanded into an ERP.",
+          "implementation": "I implemented loan/repayment transaction CRUD and automatic BS/PL calculation APIs in NestJS, and applied RBAC-based routing (3 roles: loan officer, accountant, admin) in the Next.js dashboard. Server Actions validated form submissions server-side before calling NestJS APIs.",
+          "outcome": "Achieved approximately 90% automation of the overall accounting process. Reduced month-end closing time from dozens of hours to just a few hours. The system stability was sufficient to prompt ongoing discussions about ERP expansion."
+        },
+        "challenge2": {
+          "title": "RBAC Role-Based Access Control Implementation",
+          "context": "In microfinance operations, loan officers, accountants, and administrators have clearly distinct responsibilities. If a loan officer could modify accounting data or a non-admin could change system settings, financial data integrity would be at risk. Role-based access control was a core business requirement.",
+          "alternatives": "Applying only simple page-level route guards was rejected because guarding only the frontend without API-level validation allows bypassing via direct API calls. External auth services (Auth0, Clerk) were rejected due to the need to minimize external service dependency in Myanmar's local internet environment, and the cost structure was excessive for a small user base of dozens of accounts.",
+          "decision": "I implemented a self-built JWT-based RBAC system. NestJS Guards handle role validation, and Next.js middleware provides route-level access control — creating a dual-layer enforcement. I defined the role-based permission matrix directly, drawing on real microfinance accounting and operations experience.",
+          "implementation": "NestJS includes a role claim in JWT tokens, and custom Guard decorators enforce role validation per API endpoint. The Next.js frontend filters route access via middleware and renders different dashboard layouts based on role. Separate menus and data access scopes were defined for each of the 3 roles (loan officer / accountant / admin).",
+          "outcome": "Enforced role-based access control at both frontend routing and backend API layers, securing data integrity and protecting financial records previously managed manually and in scattered spreadsheets. Established a safe multi-user environment underpinning ~90% accounting automation."
         }
       }
     },
