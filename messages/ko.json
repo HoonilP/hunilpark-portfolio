@@ -338,12 +338,28 @@
       "challenges": {
         "title": "엔지니어링 챌린지",
         "challenge1": {
-          "title": "핵심 기술 챌린지",
-          "context": "문제 정의 (Phase 14에서 실제 콘텐츠로 교체 예정)",
-          "alternatives": "시도한 접근법 (Phase 14에서 실제 콘텐츠로 교체 예정)",
-          "decision": "비교/결정 근거 (Phase 14에서 실제 콘텐츠로 교체 예정)",
-          "implementation": "구현 상세 (Phase 14에서 실제 콘텐츠로 교체 예정)",
-          "outcome": "정량적 성과 (Phase 14에서 실제 콘텐츠로 교체 예정)"
+          "title": "LLM 비용 최적화 멀티 에이전트 설계",
+          "context": "Moltiverse 해커톤에서 MC(진행자), Judge A(기술 심미성), Judge B(주제 정합성) 3종 에이전트가 24/7 자율 운영되어야 했습니다. 각 에이전트가 매 라운드마다 LLM을 호출하는 구조에서, 1주일 해커톤 기간 동안 API 비용이 급격히 증가할 위험이 있었습니다. 비전 모델(이미지 평론)은 텍스트 모델보다 비용이 높아 비용 관리가 핵심 과제였습니다.",
+          "alternatives": "OpenAI GPT-4 단일 모델 사용은 비전 + 텍스트 모두 처리 가능하나, 24/7 자율 운영 시 API 비용이 해커톤 예산을 초과할 것으로 예상하여 기각했습니다. 오픈소스 LLM 자체 호스팅은 비전 모델까지 자체 호스팅하려면 GPU 서버 비용과 세팅 시간이 1주 해커톤에 비현실적이어서 기각했습니다.",
+          "decision": "OpenClaw 프레임워크 기반으로 MC Agent에 Kimi(무료 크레딧) → Gemini Flash 폴백 전략을 적용했습니다. 무료 크레딧 소진 시 자동으로 저비용 모델로 전환하여 비용을 최소화하고, Judge A/B에는 Kimi/Gemini Flash 비전 모델을 사용하되 이미지 평론 요청 횟수를 라운드 당 1회로 제한했습니다.",
+          "implementation": "각 에이전트에 LLM 호출 우선순위 체인(Kimi primary → Gemini Flash fallback)을 구성했습니다. API 호출 실패 시 자동 폴백, 응답 실패 시 재시도 로직을 포함했습니다. NestJS REST API에서 에이전트별 호출 횟수를 추적하여 비용 모니터링을 수행했습니다.",
+          "outcome": "Kimi 무료 크레딧 + Gemini Flash 폴백 전략으로 1주간 24/7 자율 운영하면서 LLM API 비용을 최소화했습니다. 3종 에이전트가 8강→4강→결승 토너먼트를 완전 자율 운영하는 시스템을 해커톤 기간 내 구축했습니다."
+        },
+        "challenge2": {
+          "title": "6단계 라운드 자율 운영 상태 머신 설계",
+          "context": "ArtWar의 핵심은 에이전트만으로 경연이 자율 운영되는 것입니다. 주제 발표→출품 접수→베팅→심사→결과 발표→다음 라운드 예고의 6단계가 타이머와 외부 이벤트(에이전트 출품, 베터 베팅)에 의해 자동 진행되어야 했으며, 한 단계의 실패가 전체 라운드를 중단시킬 위험이 있었습니다.",
+          "alternatives": "크론 잡 기반 단순 스케줄링은 단계 간 전환 조건(출품 마감, 베팅 마감)이 시간뿐 아니라 참가자 행동에도 의존하여 단순 타이머로는 불충분하여 기각했습니다. 이벤트 큐(RabbitMQ, Redis Streams)는 1주 해커톤에서 메시지 브로커 인프라를 추가 구축하는 것이 과잉이며, AWS EC2 1대 운영 제약과 맞지 않아 기각했습니다.",
+          "decision": "NestJS 내부에서 상태 머신 패턴을 직접 구현하기로 결정했습니다. SQLite/JSON으로 월드 상태(현재 라운드, 단계, 참가자, 베팅 현황)를 관리하고, 각 단계 전환을 조건 기반으로 트리거하는 방식을 채택했습니다. AWS EC2 1대에서 에이전트 프로세스와 API 서버를 함께 운영했습니다.",
+          "implementation": "라운드 상태를 6개 phase enum으로 정의하고, 각 phase 완료 조건(타이머 만료 OR 참가자 액션 완료)을 충족하면 다음 phase로 자동 전환합니다. MC Agent가 주제 생성(LLM 호출)→Moltbook 포스팅→타이머 설정을 수행하고, Judge A/B가 심사(비전 모델 호출)→점수 산출→결과 포스팅을 담당합니다. 베팅 풀 정산과 스마트 컨트랙트 resolveRound 호출을 결과 발표 phase에서 자동 실행합니다.",
+          "outcome": "6단계 라운드 플로우가 에이전트에 의해 완전 자율 운영되어, 8강→4강→결승 토너먼트를 사람 개입 없이 진행했습니다. 채점은 Judge A(기술력40%+색감30%+주제해석20%+감정10%) + Judge B(기술력10%+색감20%+주제해석30%+감정40%)를 동일 가중치로 합산하는 방식으로 구현했습니다."
+        },
+        "challenge3": {
+          "title": "Solidity 스마트 컨트랙트 기반 베팅 시스템 구현",
+          "context": "ArtWar의 토큰 이코노미 핵심은 에이전트와 사람이 MON 토큰으로 라운드 승자를 예측하고 베팅하는 것이었습니다. 베팅 결과에 따른 상금 분배가 투명하고 자동화되어야 하며, 조작 가능성을 원천 차단해야 했습니다. nad.fun에서 $MOT 토큰을 발행하고 Monad 메인넷에서 베팅 컨트랙트를 운영해야 하는 요건이 있었습니다.",
+          "alternatives": "서버 사이드 베팅(DB에 기록)은 운영자가 결과를 조작할 수 있다는 신뢰 문제가 있고, 에이전트 경제의 탈중앙화 철학과 불일치하여 기각했습니다. 기존 베팅 프로토콜(Polymarket 등) 포크는 Monad 체인 미지원, ArtWar 특화 라운드 구조(openRound→placeBet→closeBetting→resolveRound→claimWinnings)에 맞지 않아 기각했습니다.",
+          "decision": "Solidity 0.8.20으로 ArtWarBetting.sol 스마트 컨트랙트를 직접 구현했습니다. openRound, placeBet, closeBetting, resolveRound, claimWinnings 함수로 라운드 생명주기를 온체인으로 관리하고, 5% 수수료 구조로 지속 가능한 운영 모델을 설계했습니다.",
+          "implementation": "openRound()로 새 라운드 생성 + 베팅 오픈, placeBet()으로 MON 토큰 베팅(msg.value), closeBetting()으로 베팅 마감, resolveRound()로 승자 확정 + 정산 가능 상태 전환, claimWinnings()으로 승자에게 비례 분배(5% 수수료 차감)하는 구조를 구현했습니다. 에이전트 API 서버에서 라운드 결과 확정 후 자동으로 resolveRound를 호출하는 연동도 구현했습니다.",
+          "outcome": "Monad 메인넷에 ArtWarBetting 스마트 컨트랙트를 배포하고, nad.fun에서 $MOT 토큰을 발행하여 에이전트 경제를 구축했습니다. 베팅→정산→클레임 전 과정이 온체인으로 투명하게 처리되는 자율 베팅 시스템을 1주 해커톤 내에 완성했습니다."
         }
       }
     }

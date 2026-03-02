@@ -338,12 +338,28 @@
       "challenges": {
         "title": "Engineering Challenges",
         "challenge1": {
-          "title": "Core Technical Challenge",
-          "context": "Problem definition (to be replaced with real content in Phase 14)",
-          "alternatives": "Approaches tried (to be replaced with real content in Phase 14)",
-          "decision": "Comparison and decision rationale (to be replaced with real content in Phase 14)",
-          "implementation": "Implementation details (to be replaced with real content in Phase 14)",
-          "outcome": "Quantitative results (to be replaced with real content in Phase 14)"
+          "title": "LLM Cost-Optimized Agent Design",
+          "context": "In the Moltiverse hackathon, 3 agent types — MC (host), Judge A (technical aesthetics), Judge B (thematic consistency) — needed to run autonomously 24/7. With each agent calling LLMs on every round, API costs risked escalating rapidly over the one-week hackathon. Vision models (used for image critique) are significantly more expensive than text models, making cost control a critical engineering challenge.",
+          "alternatives": "Using a single OpenAI GPT-4 model was rejected because, while it handles both vision and text, the cost of 24/7 autonomous operation was projected to exceed the hackathon budget. Self-hosting open-source LLMs was rejected because the GPU server cost and setup time for hosting vision models would be unrealistic within a one-week hackathon timeline.",
+          "decision": "I applied a Kimi (free credits) → Gemini Flash fallback strategy for the MC Agent using the OpenClaw framework. When free credits are exhausted, the system automatically switches to a lower-cost model to minimize expenses. For Judge A and Judge B, Kimi/Gemini Flash vision models are used with image critique requests capped at 1 per round.",
+          "implementation": "Each agent was configured with an LLM call priority chain (Kimi primary → Gemini Flash fallback). The system includes automatic fallback on API call failure and retry logic on response errors. The NestJS REST API tracks per-agent call counts for cost monitoring.",
+          "outcome": "Using the Kimi free credits + Gemini Flash fallback strategy, operated all 3 agents autonomously 24/7 for a full week while minimizing LLM API costs. Built a fully autonomous agent system running the 8-team → 4-team → finals tournament within the hackathon timeline."
+        },
+        "challenge2": {
+          "title": "6-Phase Autonomous Round State Machine",
+          "context": "The core of ArtWar is that the entire competition runs autonomously through agents. A 6-phase flow — topic announcement → submission → betting → judging → results → next round preview — needed to progress automatically based on timers and external events (agent submissions, user bets). A single phase failure could halt the entire round.",
+          "alternatives": "Simple cron-based scheduling was rejected because phase transition conditions depend not only on timers but also on participant actions (submission deadline, betting deadline), making pure timer-based scheduling insufficient. Event queues (RabbitMQ, Redis Streams) were rejected as over-engineered for a one-week hackathon and incompatible with the single AWS EC2 instance constraint.",
+          "decision": "I implemented a state machine pattern directly within NestJS. SQLite/JSON manages the world state (current round, phase, participants, betting status), and phase transitions trigger conditionally when each phase's completion criteria are met. Agent processes and the API server run together on a single AWS EC2 instance.",
+          "implementation": "Round state is defined as 6 phase enums, automatically advancing to the next phase when completion criteria (timer expiry OR participant action complete) are satisfied. The MC Agent handles topic generation (LLM call) → Moltbook posting → timer setup. Judge A/B handle judging (vision model call) → score calculation → result posting. Betting pool settlement and smart contract resolveRound calls execute automatically during the results phase.",
+          "outcome": "The 6-phase round flow ran completely autonomously through agents, running the 8-team → 4-team → finals tournament without human intervention. The scoring system combines Judge A (technique 40% + color 30% + interpretation 20% + emotion 10%) and Judge B (technique 10% + color 20% + interpretation 30% + emotion 40%) at equal final weight."
+        },
+        "challenge3": {
+          "title": "Solidity Smart Contract Betting System",
+          "context": "The core of ArtWar's token economy is agents and users betting MON tokens to predict round winners. Prize distribution based on betting outcomes needed to be transparent and automated, with no possibility of manipulation. The project required launching the $MOT token on nad.fun and operating a betting contract on Monad mainnet.",
+          "alternatives": "Server-side betting (recorded in DB) was rejected due to trust issues — operators could manipulate results — and it conflicted with the decentralized philosophy of the agent economy. Forking an existing betting protocol (e.g., Polymarket) was rejected because Monad chain is unsupported and those protocols don't match ArtWar's specific round lifecycle (openRound→placeBet→closeBetting→resolveRound→claimWinnings).",
+          "decision": "I implemented ArtWarBetting.sol from scratch in Solidity 0.8.20. The functions openRound, placeBet, closeBetting, resolveRound, and claimWinnings manage the full round lifecycle on-chain, with a 5% fee structure for sustainable operations.",
+          "implementation": "openRound() creates a new round and opens betting, placeBet() records MON token bets (msg.value), closeBetting() closes the betting window, resolveRound() confirms the winner and enables settlement, and claimWinnings() distributes proportional payouts to winners (minus 5% fee). The agent API server automatically calls resolveRound after confirming round results.",
+          "outcome": "Deployed ArtWarBetting smart contract on Monad mainnet with 5 lifecycle functions and launched the $MOT token on nad.fun to establish the agent economy. Delivered a fully autonomous betting system where the entire flow — betting → settlement → claim — is handled transparently on-chain, all within a one-week hackathon."
         }
       }
     }
