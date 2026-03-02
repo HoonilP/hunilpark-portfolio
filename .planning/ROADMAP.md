@@ -90,7 +90,8 @@
   3. ko.json과 en.json에서 Lab2 번역 네임스페이스가 사라졌다
   4. package.json에서 lenis 패키지가 제거되었고, gsap/three/@react-three/* 는 그대로다
   5. `next build`가 TypeScript 오류 없이 성공한다
-**Plans**: TBD
+**Plans**: 1 plan
+- [ ] 12-01-PLAN.md — Delete lab2 files, navigation, translations, and uninstall lenis
 
 ### Phase 13: Component Infrastructure
 **Goal**: 새 challenges/outcomes i18n 스키마와 6개 서버 컴포넌트가 구축되어, 6개 프로젝트 상세 페이지가 양 로케일에서 새 구조로 렌더링된다
@@ -131,6 +132,6 @@
 | 9. Content Overlay | v3.0 | - | Archived | - |
 | 10. Typography | v3.0 | - | Archived | - |
 | 11. Effects Polish | v3.0 | - | Archived | - |
-| 12. Lab2 Cleanup | v4.0 | 0/TBD | Not started | - |
+| 12. Lab2 Cleanup | v4.0 | 0/1 | Planned | - |
 | 13. Component Infrastructure | v4.0 | 0/TBD | Not started | - |
 | 14. Content Authoring | v4.0 | 0/TBD | Not started | - |
