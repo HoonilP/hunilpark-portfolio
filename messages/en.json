@@ -13,8 +13,7 @@
     "experience": "Experience",
     "education": "Education",
     "contact": "Contact",
-    "lab": "Lab",
-    "lab2": "Studio"
+    "lab": "Lab"
   },
   "Common": {
     "language": "KO",
@@ -24,11 +23,6 @@
     "backToHome": "Home",
     "loading": "Loading...",
     "scrollHint": "Click objects to explore"
-  },
-  "Lab2": {
-    "backToHome": "Home",
-    "viewportGate": "This experience is optimized for desktop",
-    "loading": "Loading"
   },
   "Footer": {
     "email": "Email",

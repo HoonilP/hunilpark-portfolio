@@ -13,8 +13,7 @@
     "experience": "경력",
     "education": "학력",
     "contact": "연락처",
-    "lab": "Lab",
-    "lab2": "Studio"
+    "lab": "Lab"
   },
   "Common": {
     "language": "EN",
@@ -24,11 +23,6 @@
     "backToHome": "홈으로",
     "loading": "로딩 중...",
     "scrollHint": "오브젝트를 클릭하여 둘러보기"
-  },
-  "Lab2": {
-    "backToHome": "홈으로",
-    "viewportGate": "이 경험은 데스크톱 환경에 최적화되어 있습니다",
-    "loading": "로딩 중"
   },
   "Footer": {
     "email": "이메일",

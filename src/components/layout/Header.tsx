@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
-import { FlaskConical, Box } from 'lucide-react';
+import { FlaskConical } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import LanguageToggle from '@/components/LanguageToggle';
 import ThemeToggle from '@/components/layout/ThemeToggle';
@@ -68,13 +68,6 @@ export default function Header() {
             title={t('lab')}
           >
             <FlaskConical className="w-4 h-4" />
-          </Link>
-          <Link
-            href="/lab2"
-            className="rounded-lg p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100"
-            title={t('lab2')}
-          >
-            <Box className="w-4 h-4" />
           </Link>
           <LanguageToggle />
 
