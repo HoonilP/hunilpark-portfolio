@@ -20,8 +20,8 @@ Requirements for project detail page enhancement. Each maps to roadmap phases.
 - [ ] **STRC-01**: ProjectContent 컴포넌트가 기존 Implementation+Troubleshooting 대신 통합된 "Engineering Challenges" 섹션을 렌더링한다
 - [ ] **STRC-02**: 각 챌린지가 문제정의 → 시도한 접근법 → 비교/결정 → 구현 → 성과 흐름으로 구성된다
 - [ ] **STRC-03**: i18n 스키마가 challenges 구조(challenge1~N, 각각 title/context/alternatives/decision/implementation/outcome 필드)로 마이그레이션된다
-- [ ] **STRC-04**: shiki 기반 CodeBlock 서버 컴포넌트가 챌린지 내 코드 스니펫을 구문 강조로 렌더링한다
-- [ ] **STRC-05**: 다크모드에서 코드 스니펫 테마가 자동 전환된다
+- [x] **STRC-04**: shiki 기반 CodeBlock 서버 컴포넌트가 챌린지 내 코드 스니펫을 구문 강조로 렌더링한다
+- [x] **STRC-05**: 다크모드에서 코드 스니펫 테마가 자동 전환된다
 - [ ] **STRC-06**: 6개 프로젝트 모두 새 구조로 양 로케일(ko/en)에서 정상 렌더링된다
 
 ### Content
@@ -69,8 +69,8 @@ Requirements for project detail page enhancement. Each maps to roadmap phases.
 | STRC-01 | Phase 13 | Pending |
 | STRC-02 | Phase 13 | Pending |
 | STRC-03 | Phase 13 | Pending |
-| STRC-04 | Phase 13 | Pending |
-| STRC-05 | Phase 13 | Pending |
+| STRC-04 | Phase 13 | Complete |
+| STRC-05 | Phase 13 | Complete |
 | STRC-06 | Phase 13 | Pending |
 | CONT-01 | Phase 14 | Pending |
 | CONT-02 | Phase 14 | Pending |

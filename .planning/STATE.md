@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v4.0
 milestone_name: Project Detail Enhancement
 status: unknown
-last_updated: "2026-03-02T04:08:14.653Z"
+last_updated: "2026-03-02T04:53:29Z"
 progress:
   total_phases: 9
   completed_phases: 9
-  total_plans: 18
-  completed_plans: 18
+  total_plans: 19
+  completed_plans: 19
 ---
 
 # Project State
@@ -18,14 +18,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-02)
 
 **Core value:** 프론트엔드 개발 역량을 깔끔하고 정교한 디자인으로 보여주는 포트폴리오 사이트 — 채용 담당자가 빠르게 핵심 역량과 프로젝트를 파악할 수 있어야 한다.
-**Current focus:** v4.0 Project Detail Enhancement — Phase 12: Lab2 Cleanup
+**Current focus:** v4.0 Project Detail Enhancement — Phase 13: Component Infrastructure
 
 ## Current Position
 
-Phase: 12 of 14 (Lab2 Cleanup)
-Plan: 1 of 1 (complete)
-Status: Phase 12 complete — Ready for Phase 13
-Last activity: 2026-03-02 — 12-01 executed (lab2 cleanup)
+Phase: 13 of 14 (Component Infrastructure)
+Plan: 1 of 2 (complete)
+Status: Phase 13 plan 01 complete — Ready for 13-02 (i18n migration)
+Last activity: 2026-03-02 — 13-01 executed (shiki CodeBlock infrastructure)
 
 Progress: [█░░░░░░░░░] 10%
 
@@ -59,6 +59,9 @@ Recent decisions affecting current work:
 - [v4.0 roadmap]: i18n 스키마 마이그레이션은 JSON 변경과 컴포넌트 변경을 원자적으로 수행
 - [12-01]: lenis 제거 확정 (lab2 전용), python3 json.load/dump로 번역 파일 안전 수정
 - [12-01]: Box 아이콘 제거, FlaskConical + /lab 링크는 유지
+- [13-01]: Shiki singleton pattern — module-level Promise<Highlighter> | null to prevent re-initialization per request
+- [13-01]: defaultColor: 'light' with [data-theme='dark'] CSS variable override — single HTML output, dark mode via CSS
+- [13-01]: No edge runtime on shiki — requires Node.js filesystem access for grammar bundles
 
 ### Pending Todos
 
@@ -71,5 +74,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-02
-Stopped at: Completed 12-01-PLAN.md (lab2 cleanup — all tasks done, build passing)
+Stopped at: Completed 13-01-PLAN.md (shiki CodeBlock infrastructure — all tasks done, build passing)
 Resume file: None
