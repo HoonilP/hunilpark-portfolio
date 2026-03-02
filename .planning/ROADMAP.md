@@ -132,6 +132,6 @@
 | 9. Content Overlay | v3.0 | - | Archived | - |
 | 10. Typography | v3.0 | - | Archived | - |
 | 11. Effects Polish | v3.0 | - | Archived | - |
-| 12. Lab2 Cleanup | 1/1 | Complete   | 2026-03-02 | - |
+| 12. Lab2 Cleanup | 1/1 | Complete    | 2026-03-02 | - |
 | 13. Component Infrastructure | v4.0 | 0/TBD | Not started | - |
 | 14. Content Authoring | v4.0 | 0/TBD | Not started | - |
