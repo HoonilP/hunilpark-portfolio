@@ -1,5 +1,30 @@
 # Project Milestones: 박훈일 프론트엔드 포트폴리오
 
+## v4.0 Project Detail Enhancement (Shipped: 2026-03-02)
+
+**Delivered:** 프로젝트 상세 페이지를 "핵심 엔지니어링 챌린지" 중심으로 재구조화. lab2 코드 완전 삭제, shiki 기반 코드 하이라이팅 인프라 구축, 6개 프로젝트 13개 양언어 엔지니어링 챌린지 콘텐츠 작성 완료.
+
+**Phases completed:** 12-14 (3 phases, 6 plans)
+
+**Key accomplishments:**
+- Lab2 라우트/컴포넌트/번역키/lenis 패키지 완전 삭제 — clean build 확보
+- Shiki 기반 CodeBlock 서버 컴포넌트 + 다크모드 CSS 변수 자동 전환
+- ChallengeSection 5-part narrative RSC + t.has() 가드 패턴으로 유연한 챌린지 렌더링
+- i18n 스키마 마이그레이션: implementation+troubleshooting → challenges 구조
+- 6개 프로젝트 13개 양언어 엔지니어링 챌린지 작성 (대안 분석 + 정량적 성과 포함)
+- AI 프로젝트(Joshua/Retail Analysis/ArtWar) AI 엔지니어링 챌린지 포함
+
+**Stats:**
+- 3 phases (12-14), 6 plans
+- 35 commits, 11 feat commits
+- 29 source files changed, +368/-1,379 lines (net cleanup)
+- ~2,871 LOC (TypeScript/TSX/CSS)
+- 1 day (2026-03-02)
+
+**Git range:** `8025a02` → `73c30b8`
+
+---
+
 ## v3.0 Interactive Portfolio (Archived: 2026-03-02)
 
 **Delivered:** /lab2 라우트에 Three.js/R3F 기반 3D 인터랙티브 포트폴리오의 기반 인프라, 스크롤 카메라 시스템, 6개 챕터 3D 씬을 구축. Phases 9-11 (Content Overlay, Typography, Effects Polish)은 미완료 상태로 아카이브.

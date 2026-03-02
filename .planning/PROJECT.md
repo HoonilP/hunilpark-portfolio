@@ -2,7 +2,7 @@
 
 ## What This Is
 
-한국 대기업 IT 프론트엔드 직무 취업을 위한 개인 포트폴리오 웹사이트. Next.js 16 + Tailwind v4 + next-intl 기반으로 제작된 정적 사이트로, 7개 섹션의 메인 페이지와 5개 프로젝트 상세 페이지를 한국어/영어 양언어로 제공한다. 5개 프로젝트 모두 실제 이미지와 최적화된 WebP 썸네일을 포함한 완성된 포트폴리오.
+한국 대기업 IT 프론트엔드 직무 취업을 위한 개인 포트폴리오 웹사이트. Next.js 16 + Tailwind v4 + next-intl 기반으로 제작된 정적 사이트로, 7개 섹션의 메인 페이지와 6개 프로젝트 상세 페이지를 한국어/영어 양언어로 제공한다. 각 프로젝트 상세 페이지는 "핵심 엔지니어링 챌린지" 중심으로 구성되어 문제 정의 → 대안 분석 → 결정 → 구현 → 정량적 성과의 5단계 내러티브와 shiki 기반 코드 하이라이팅을 포함한다.
 
 ## Core Value
 
@@ -26,16 +26,15 @@
 - ✓ 2개 프로젝트 추가 (Scholarly Chain, Dino Go) — v2.0
 - ✓ 전체 프로젝트 실제 이미지 추가 (placeholder 교체) — v2.0
 - ✓ 프로젝트 카드 썸네일 이미지 추가 — v2.0
+- ✓ lab2 관련 코드, 라우트, 컴포넌트, 번역키, 패키지 완전 삭제 — v4.0
+- ✓ 프로젝트 상세 페이지 구조를 "핵심 엔지니어링 챌린지" 중심으로 재설계 — v4.0
+- ✓ 각 프로젝트별 가장 어려웠던 기술적 난제 2-3개를 깊게 파는 콘텐츠 — v4.0
+- ✓ 대안 분석, 트레이드오프 비교, 정량적 성과를 포함한 엔지니어적 근거 강화 — v4.0
+- ✓ 한국어/영어 양언어 콘텐츠 동시 업데이트 — v4.0
 
 ### Active
 
-<!-- v4.0 Project Detail Enhancement -->
-- [ ] lab2 관련 코드, 라우트, 컴포넌트, 번역키, 패키지 완전 삭제
-- [ ] 프로젝트 상세 페이지 구조를 "핵심 엔지니어링 챌린지" 중심으로 재설계
-- [ ] 각 프로젝트별 가장 어려웠던 기술적 난제 2-3개를 깊게 파는 콘텐츠
-- [ ] 대안 분석, 트레이드오프 비교, 정량적 성과를 포함한 엔지니어적 근거 강화
-- [ ] 리서치 기반으로 어떤 프로젝트에 집중할지 결정
-- [ ] 한국어/영어 양언어 콘텐츠 동시 업데이트
+(None — define in next milestone)
 
 ### Out of Scope
 
@@ -45,17 +44,20 @@
 - Contact form (서버) — 이메일 직접 링크로 충분
 - 스킬 퍼센트 바 — 의미 없는 주관적 지표, 안티패턴
 - 3D/복잡한 애니메이션 — v3.0에서 시도 후 아카이브 (lab2 삭제 결정)
+- 대안 비교 테이블 별도 컴포넌트 — 텍스트 내러티브로 충분 (v5+)
+- 성과 지표 시각화 — 텍스트 수치로 충분 (v5+)
 
 ## Context
 
-### Current State (v2.0 shipped 2026-02-13)
+### Current State (v4.0 shipped 2026-03-02)
 
-- **Tech Stack**: Next.js 16 (App Router), TypeScript, Tailwind CSS v4, next-intl, next-themes, lucide-react, next/image
-- **LOC**: ~9,274 lines (TypeScript/TSX/CSS/JSON)
-- **Pages**: 2 main + 10 project detail (5 projects × 2 locales) + 2 not-found = 14 static pages
-- **Content**: ~20,000+ words bilingual content (Korean + English, 5 projects)
+- **Tech Stack**: Next.js 16 (App Router), TypeScript, Tailwind CSS v4, next-intl, next-themes, shiki, lucide-react, next/image
+- **LOC**: ~2,871 lines (TypeScript/TSX/CSS) + i18n JSON
+- **Pages**: 2 main + 12 project detail (6 projects × 2 locales) + 2 not-found = 18 static pages
+- **Content**: 6 projects × 2-3 engineering challenges × 2 locales = 13 challenges bilingual
+- **Components**: CodeBlock (shiki RSC), ChallengeSection (5-part narrative RSC), ProjectContent (challenges loop)
 - **Images**: 13 optimized WebP images (hero, architecture, thumbnail per project)
-- **Known Tech Debt**: Header logo plain `<a>`, hero.webp reused as architecture placeholder, unused Button component
+- **Known Tech Debt**: Header logo plain `<a>`, hero.webp reused as architecture placeholder, ChallengeSection `t` prop uses `string` instead of typed key union
 
 ### v2 추가 프로젝트 콘텐츠 소스
 
@@ -181,28 +183,21 @@ v3: /lab2에서 미디어아트 스타일 인터랙티브 포트폴리오. 스�
 | WebP 이미지 최적화 파이프라인 | 용도별 품질 단계 (hero 90, arch 75, thumb 60) | ✓ Good — 모든 이미지 200KB 이하 |
 | 제조 불량 인식/EMV/금융AI 제외 | 프론트엔드 작업 없음, CV/AI/컨설팅 프로젝트 | ✓ Good |
 | v2 디자인 방향 전환 scope 축소 | 애니메이션/3D/마이크로 인터랙션 추후 마일스톤으로 분리 | ✓ Good — v3.0으로 진행 |
-| /lab2 별도 라우트로 인터랙티브 구현 | 기존 메인 사이트 보존하면서 새로운 인터랙티브 경험 추가 | ⚠️ Revisit — v3.0 아카이브, lab2 삭제 결정 |
+| /lab2 별도 라우트로 인터랙티브 구현 | 기존 메인 사이트 보존하면서 새로운 인터랙티브 경험 추가 | ⚠️ Revisit — v3.0 아카이브, v4.0에서 lab2 완전 삭제 |
 | 데스크톱 전용 | 3D 성능 고려, 모바일 대응 불필요 | ⚠️ Revisit — v3.0 아카이브 |
-| 프로젝트 상세를 엔지니어링 챌린지 중심으로 재구조화 | 채용 담당자에게 문제 해결 능력 증명 | — Pending |
-
-## Current Milestone: v4.0 Project Detail Enhancement
-
-**Goal:** 프로젝트 상세 페이지를 "핵심 엔지니어링 챌린지" 중심으로 재구조화하여, 채용 담당자에게 프론트엔드 엔지니어로서의 문제 해결 능력과 기술적 깊이를 증명한다.
-
-**Target features:**
-- lab2 관련 코드/라우트/패키지 완전 삭제
-- 프로젝트 상세 페이지 구조 재설계 (엔지니어링 챌린지 중심)
-- 대안 분석, 트레이드오프 비교, 정량적 성과 포함
-- 리서치 기반 콘텐츠 고도화 (사용자와 상의)
-- 한국어/영어 양언어 동시 업데이트
+| 프로젝트 상세를 엔지니어링 챌린지 중심으로 재구조화 | 채용 담당자에게 문제 해결 능력 증명 | ✓ Good — 5-part narrative + shiki code |
+| Shiki singleton + CSS variable dark mode | Node.js RSC에서 단일 highlighter로 빌드 성능 보장, CSS만으로 다크모드 전환 | ✓ Good — 번들 사이즈 최소화 |
+| t.has() 가드 패턴으로 옵셔널 i18n 필드 | 코드 필드 있는 챌린지만 CodeBlock 렌더링 | ✓ Good — ArtWar 제외 유연하게 동작 |
+| ArtWar에 3개 챌린지 (나머지 2개) | LLM+상태머신+스마트컨트랙트 복합 엔지니어링 | ✓ Good — 가장 풍부한 기술적 깊이 |
 
 ## Milestone History
 
 - **v1.0 Portfolio MVP** — shipped 2026-02-12 (Phases 1-4)
 - **v2.0 Content Expansion** — shipped 2026-02-13 (Phase 5)
 - **v3.0 Interactive Portfolio** — archived 2026-03-02 (Phases 6-8 complete, 9-11 cancelled)
+- **v4.0 Project Detail Enhancement** — shipped 2026-03-02 (Phases 12-14)
 
 See `.planning/MILESTONES.md` for full details.
 
 ---
-*Last updated: 2026-03-02 after v4.0 milestone start*
+*Last updated: 2026-03-02 after v4.0 milestone completion*
