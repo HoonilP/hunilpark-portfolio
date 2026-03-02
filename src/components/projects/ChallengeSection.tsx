@@ -1,3 +1,5 @@
+import CodeBlock from './CodeBlock';
+
 interface ChallengeSectionProps {
   translationKey: string;
   challengeKey: string;
@@ -7,7 +9,7 @@ interface ChallengeSectionProps {
   };
 }
 
-export default function ChallengeSection({ translationKey, challengeKey, t }: ChallengeSectionProps) {
+export default async function ChallengeSection({ translationKey, challengeKey, t }: ChallengeSectionProps) {
   const prefix = `${translationKey}.challenges.${challengeKey}`;
 
   // Sub-fields in narrative order
@@ -18,6 +20,9 @@ export default function ChallengeSection({ translationKey, challengeKey, t }: Ch
     { key: 'implementation', labelKo: '구현', labelEn: 'Implementation' },
     { key: 'outcome', labelKo: '성과', labelEn: 'Outcome' },
   ];
+
+  // Check for optional code snippet
+  const hasCode = t.has(`${prefix}.code`);
 
   return (
     <div className="space-y-4 border-l-2 border-neutral-200 dark:border-neutral-700 pl-6">
@@ -34,6 +39,12 @@ export default function ChallengeSection({ translationKey, challengeKey, t }: Ch
           </div>
         );
       })}
+      {hasCode && (
+        <CodeBlock
+          code={t(`${prefix}.code`)}
+          lang={t.has(`${prefix}.codeLang`) ? t(`${prefix}.codeLang`) : undefined}
+        />
+      )}
     </div>
   );
 }
