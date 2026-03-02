@@ -1,17 +1,16 @@
 import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
+import ChallengeSection from './ChallengeSection';
 
 interface ProjectContentProps {
   translationKey: string;
   projectId: string;
 }
 
+const CHALLENGE_KEYS = ['challenge1', 'challenge2', 'challenge3'];
+
 export default async function ProjectContent({ translationKey, projectId }: ProjectContentProps) {
   const t = await getTranslations('ProjectDetail');
-
-  // Feature keys to check for implementation section
-  const featureKeys = ['feature1', 'feature2', 'feature3', 'feature4', 'feature5'];
-  const issueKeys = ['issue1', 'issue2', 'issue3', 'issue4', 'issue5'];
 
   return (
     <main className="space-y-12">
@@ -47,75 +46,21 @@ export default async function ProjectContent({ translationKey, projectId }: Proj
         />
       </div>
 
-      {/* Implementation Section */}
-      {t.has(`${translationKey}.implementation.title`) && (
-        <section className="space-y-6">
+      {/* Engineering Challenges Section */}
+      {t.has(`${translationKey}.challenges.title`) && (
+        <section className="space-y-10">
           <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-            {t(`${translationKey}.implementation.title`)}
+            {t(`${translationKey}.challenges.title`)}
           </h2>
-
-          {featureKeys.map((featureKey) => {
-            const hasFeature = t.has(`${translationKey}.implementation.${featureKey}.title`);
-            if (!hasFeature) return null;
-
+          {CHALLENGE_KEYS.map((key) => {
+            if (!t.has(`${translationKey}.challenges.${key}.title`)) return null;
             return (
-              <div key={featureKey} className="space-y-3">
-                <h3 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-                  {t(`${translationKey}.implementation.${featureKey}.title`)}
-                </h3>
-                {t.has(`${translationKey}.implementation.${featureKey}.problem`) && (
-                  <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed">
-                    {t(`${translationKey}.implementation.${featureKey}.problem`)}
-                  </p>
-                )}
-                {t.has(`${translationKey}.implementation.${featureKey}.solution`) && (
-                  <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed">
-                    {t(`${translationKey}.implementation.${featureKey}.solution`)}
-                  </p>
-                )}
-                {t.has(`${translationKey}.implementation.${featureKey}.result`) && (
-                  <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed">
-                    {t(`${translationKey}.implementation.${featureKey}.result`)}
-                  </p>
-                )}
-              </div>
-            );
-          })}
-        </section>
-      )}
-
-      {/* Troubleshooting Section */}
-      {t.has(`${translationKey}.troubleshooting.title`) && (
-        <section className="space-y-6">
-          <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-            {t(`${translationKey}.troubleshooting.title`)}
-          </h2>
-
-          {issueKeys.map((issueKey) => {
-            const hasIssue = t.has(`${translationKey}.troubleshooting.${issueKey}.title`);
-            if (!hasIssue) return null;
-
-            return (
-              <div key={issueKey} className="space-y-3">
-                <h3 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-                  {t(`${translationKey}.troubleshooting.${issueKey}.title`)}
-                </h3>
-                {t.has(`${translationKey}.troubleshooting.${issueKey}.problem`) && (
-                  <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed">
-                    {t(`${translationKey}.troubleshooting.${issueKey}.problem`)}
-                  </p>
-                )}
-                {t.has(`${translationKey}.troubleshooting.${issueKey}.solution`) && (
-                  <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed">
-                    {t(`${translationKey}.troubleshooting.${issueKey}.solution`)}
-                  </p>
-                )}
-                {t.has(`${translationKey}.troubleshooting.${issueKey}.result`) && (
-                  <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed">
-                    {t(`${translationKey}.troubleshooting.${issueKey}.result`)}
-                  </p>
-                )}
-              </div>
+              <ChallengeSection
+                key={key}
+                translationKey={translationKey}
+                challengeKey={key}
+                t={t}
+              />
             );
           })}
         </section>
