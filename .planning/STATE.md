@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v4.0
 milestone_name: Project Detail Enhancement
 status: unknown
-last_updated: "2026-03-02T04:56:40Z"
+last_updated: "2026-03-02T05:36:00Z"
 progress:
   total_phases: 9
   completed_phases: 9
-  total_plans: 19
-  completed_plans: 19
+  total_plans: 20
+  completed_plans: 20
 ---
 
 # Project State
@@ -23,9 +23,9 @@ See: .planning/PROJECT.md (updated 2026-03-02)
 ## Current Position
 
 Phase: 13 of 14 (Component Infrastructure)
-Plan: 2 of 2 (complete)
-Status: Phase 13 complete — Ready for Phase 14 (content authoring)
-Last activity: 2026-03-02 — 13-02 executed (i18n schema migration + ChallengeSection component)
+Plan: 3 of 3 (complete)
+Status: Phase 13 complete (gap closure done) — Ready for Phase 14 (content authoring)
+Last activity: 2026-03-02 — 13-03 executed (CodeBlock wired into ChallengeSection, i18n optional code fields)
 
 Progress: [██░░░░░░░░] 20%
 
@@ -65,6 +65,9 @@ Recent decisions affecting current work:
 - [13-02]: ChallengeSection receives t as prop (not getTranslations internally) — parent owns translation context
 - [13-02]: No sub-field labels rendered as headings — five-part narrative flow implicit from content structure
 - [13-02]: CodeBlock not wired in ChallengeSection this phase — text-only; Phase 14 may add optional code rendering
+- [13-03]: CodeBlock renders after narrative fields (outcome) — supplementary evidence, not primary narrative
+- [13-03]: t.has() guard pattern for optional i18n fields — challenges without code render text-only unchanged
+- [13-03]: Async ChallengeSection requires no changes to ProjectContent.tsx caller
 
 ### Pending Todos
 
@@ -77,5 +80,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-03-02
-Stopped at: Completed 13-02-PLAN.md (i18n schema migration + ChallengeSection component — all tasks done, build passing)
+Stopped at: Completed 13-03-PLAN.md (CodeBlock wired into ChallengeSection, STRC-01 through STRC-06 complete — build passing)
 Resume file: None
