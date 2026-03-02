@@ -161,7 +161,9 @@
           "alternatives": "Approaches tried (to be replaced with real content in Phase 14)",
           "decision": "Comparison and decision rationale (to be replaced with real content in Phase 14)",
           "implementation": "Implementation details (to be replaced with real content in Phase 14)",
-          "outcome": "Quantitative results (to be replaced with real content in Phase 14)"
+          "outcome": "Quantitative results (to be replaced with real content in Phase 14)",
+          "code": "// Example: KoGPT-2 inference pipeline\nconst response = await model.generate({\n  prompt: userInput,\n  maxTokens: 256,\n  temperature: 0.7,\n});",
+          "codeLang": "typescript"
         }
       }
     },

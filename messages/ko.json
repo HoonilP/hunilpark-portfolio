@@ -161,7 +161,9 @@
           "alternatives": "시도한 접근법 (Phase 14에서 실제 콘텐츠로 교체 예정)",
           "decision": "비교/결정 근거 (Phase 14에서 실제 콘텐츠로 교체 예정)",
           "implementation": "구현 상세 (Phase 14에서 실제 콘텐츠로 교체 예정)",
-          "outcome": "정량적 성과 (Phase 14에서 실제 콘텐츠로 교체 예정)"
+          "outcome": "정량적 성과 (Phase 14에서 실제 콘텐츠로 교체 예정)",
+          "code": "// Example: KoGPT-2 inference pipeline\nconst response = await model.generate({\n  prompt: userInput,\n  maxTokens: 256,\n  temperature: 0.7,\n});",
+          "codeLang": "typescript"
         }
       }
     },
