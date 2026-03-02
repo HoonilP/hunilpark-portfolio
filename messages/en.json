@@ -230,12 +230,20 @@
       "challenges": {
         "title": "Engineering Challenges",
         "challenge1": {
-          "title": "Core Technical Challenge",
-          "context": "Problem definition (to be replaced with real content in Phase 14)",
-          "alternatives": "Approaches tried (to be replaced with real content in Phase 14)",
-          "decision": "Comparison and decision rationale (to be replaced with real content in Phase 14)",
-          "implementation": "Implementation details (to be replaced with real content in Phase 14)",
-          "outcome": "Quantitative results (to be replaced with real content in Phase 14)"
+          "title": "VanillaJS Real-Time Data Visualization Architecture",
+          "context": "I needed to visualize customer movement paths, dwell time, and congestion data extracted by YOLO from store CCTV footage in real-time on a dashboard. Data refreshed every second, and the rendering pipeline had to simultaneously handle Canvas/SVG heatmaps and WebSocket streaming under high-performance requirements.",
+          "alternatives": "React was rejected because virtual DOM diffing overhead causes unnecessary re-renders during second-level real-time Canvas updates, and the framework abstraction interferes with directly drawing YOLO analysis results to Canvas. Bundle size also grows unnecessarily in an on-premise environment. Using D3.js alone was rejected because while it excels at heatmap visualization, handling WebSocket real-time data ingestion and state management through D3 alone would sharply increase code complexity.",
+          "decision": "I chose VanillaJS to implement visualization directly with Canvas API and SVG heatmaps, using the Observer pattern for state management and WebSocket for real-time data ingestion. Rendering was optimized with requestAnimationFrame and debouncing, and external dependencies were minimized to ensure stable operation on the on-premise store server environment.",
+          "implementation": "A WebSocket connection received real-time customer coordinate and behavior data from the YOLO analysis server. The Observer pattern propagated data changes to subscribing view components. Customer movement paths were drawn to Canvas, and dwell time was color-mapped to an SVG heatmap. requestAnimationFrame targeted 60fps rendering, while debouncing throttled excessive WebSocket event processing.",
+          "outcome": "Implemented a real-time dashboard visualizing 3 key behavioral metrics — customer movement paths, dwell time, and congestion — providing stakeholders with a data-driven environment to optimize store layout and product placement strategy."
+        },
+        "challenge2": {
+          "title": "YOLO-Based On-Premise Video Analysis Pipeline",
+          "context": "I needed to identify and track customers in existing CCTV footage from Malaysian retail stores to extract behavioral data. The store environment (lighting, camera angles, customer density) differed significantly from standard YOLO training data, so the baseline model had insufficient recognition accuracy. Fully on-premise analysis without cloud dependency was required.",
+          "alternatives": "Cloud Vision APIs (AWS Rekognition, Google Vision) were rejected because streaming live CCTV footage to the cloud in real-time incurs bandwidth costs and latency, making stable real-time analysis infeasible on Malaysian store network conditions. Using a pre-trained model without adaptation was rejected because recognition accuracy was too low in the store-specific environment (high camera angles, varied lighting conditions) to be usable in practice.",
+          "decision": "I fine-tuned the YOLO model on store-specific CCTV data and deployed a bare-metal Linux server on-site at the store. This created a fully self-contained pipeline from video capture through analysis to result delivery, with no cloud dependency.",
+          "implementation": "The YOLO model was additionally trained on footage collected from the store's CCTV cameras to achieve store-specific recognition accuracy. On the Linux server, I implemented a sequential pipeline: video capture → YOLO inference → customer ID assignment → tracking → behavioral metric extraction. Extracted data was delivered in real-time to the VanillaJS dashboard via WebSocket.",
+          "outcome": "Delivered a fully on-premise analysis architecture with no cloud dependency, completing a stable real-time video capture and analysis system tailored to the store environment. A 3-person team successfully built and operated the CCTV-based customer behavior analysis system."
         }
       }
     },
