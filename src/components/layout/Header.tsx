@@ -1,17 +1,13 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { FlaskConical } from 'lucide-react';
-import { Link } from '@/i18n/navigation';
 import LanguageToggle from '@/components/LanguageToggle';
 import ThemeToggle from '@/components/layout/ThemeToggle';
-import { useHorizontalScroll } from '@/components/HorizontalScrollContext';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const t = useTranslations('Navigation');
-  const { scrollToSection } = useHorizontalScroll();
 
   const navLinks = [
     { href: '#about', label: t('about') },
@@ -21,18 +17,6 @@ export default function Header() {
     { href: '#education', label: t('education') },
     { href: '#contact', label: t('contact') },
   ];
-
-  const handleNavClick = useCallback(
-    (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-      const sectionId = href.replace('#', '');
-      const handled = scrollToSection(sectionId);
-      if (handled) {
-        e.preventDefault();
-      }
-      setIsMenuOpen(false);
-    },
-    [scrollToSection]
-  );
 
   return (
     <header className="sticky top-0 z-50 bg-white/60 dark:bg-neutral-950/60 backdrop-blur-md">
@@ -51,7 +35,7 @@ export default function Header() {
             <a
               key={link.href}
               href={link.href}
-              onClick={(e) => handleNavClick(e, link.href)}
+              onClick={() => setIsMenuOpen(false)}
               className="relative text-xs uppercase tracking-[0.08em] text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors after:absolute after:bottom-[-2px] after:left-0 after:w-0 after:h-px after:bg-current after:transition-all hover:after:w-full"
             >
               {link.label}
@@ -62,13 +46,6 @@ export default function Header() {
         {/* Actions */}
         <div className="flex items-center gap-3">
           <ThemeToggle />
-          <Link
-            href="/lab"
-            className="rounded-lg p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100"
-            title={t('lab')}
-          >
-            <FlaskConical className="w-4 h-4" />
-          </Link>
           <LanguageToggle />
 
           {/* Mobile hamburger */}
@@ -122,7 +99,7 @@ export default function Header() {
               <a
                 key={link.href}
                 href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
+                onClick={() => setIsMenuOpen(false)}
                 className="block py-3 text-xs uppercase tracking-[0.08em] text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors border-b border-neutral-100 dark:border-neutral-800/50 last:border-0"
               >
                 {link.label}

@@ -5,7 +5,6 @@ import type {Metadata} from 'next';
 import ThemeProvider from '@/components/layout/ThemeProvider';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { HorizontalScrollProvider } from '@/components/HorizontalScrollContext';
 import '../globals.css';
 
 export const metadata: Metadata = {
@@ -37,11 +36,9 @@ export default async function LocaleLayout({
       <body className="font-sans bg-surface-light dark:bg-surface-dark text-neutral-900 dark:text-neutral-100 antialiased min-h-screen flex flex-col">
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider>
-            <HorizontalScrollProvider>
-              <Header />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </HorizontalScrollProvider>
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>
