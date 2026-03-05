@@ -28,17 +28,17 @@ export default function ProjectNavigation({ currentId }: ProjectNavigationProps)
 
   return (
     <nav
-      className="flex justify-between items-center py-8 mt-12 border-t border-neutral-200 dark:border-neutral-800"
+      className="flex justify-between items-center py-8 mt-12 border-t border-slate-200 dark:border-slate-800"
       aria-label="Project navigation"
     >
       {prevId ? (
         <Link
           href={`/projects/${prevId}`}
-          className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors group"
+          className="flex items-center gap-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors group"
         >
           <ChevronLeft className="w-4 h-4" />
           <div className="text-left">
-            <div className="text-xs text-neutral-500 dark:text-neutral-500">Previous</div>
+            <div className="text-xs text-slate-500">Previous</div>
             <div className="text-sm font-medium">{t(`${PROJECT_KEYS[prevId]}.title`)}</div>
           </div>
         </Link>
@@ -49,10 +49,10 @@ export default function ProjectNavigation({ currentId }: ProjectNavigationProps)
       {nextId ? (
         <Link
           href={`/projects/${nextId}`}
-          className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors group"
+          className="flex items-center gap-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors group"
         >
           <div className="text-right">
-            <div className="text-xs text-neutral-500 dark:text-neutral-500">Next</div>
+            <div className="text-xs text-slate-500">Next</div>
             <div className="text-sm font-medium">{t(`${PROJECT_KEYS[nextId]}.title`)}</div>
           </div>
           <ChevronRight className="w-4 h-4" />

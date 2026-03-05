@@ -6,7 +6,7 @@ export default function Footer() {
   const t = useTranslations('Footer');
 
   return (
-    <footer className="bg-neutral-900 dark:bg-neutral-950 border-t border-neutral-800">
+    <footer className="bg-slate-100 dark:bg-neutral-950 border-t border-slate-200 dark:border-neutral-800">
       <div className="max-w-6xl mx-auto px-6 py-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm font-semibold tracking-[0.15em] uppercase text-neutral-400">

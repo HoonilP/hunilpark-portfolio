@@ -28,15 +28,28 @@
     "name": "Hunil Park",
     "title": "Frontend Developer",
     "intro": "Crafting clean and refined web experiences",
-    "resumeLink": "View Resume"
+    "resumeLink": "View Resume",
+    "badge": "Available for projects",
+    "titleLine1": "Hunil Park",
+    "titleAccent": "Developer",
+    "subtitle": "",
+    "ctaPrimary": "View Selected Works",
+    "ctaSecondary": "Get in Touch",
+    "scroll": "Scroll"
   },
   "About": {
     "sectionTitle": "About",
+    "heading": "Engineering with\nan artist's eye.",
     "paragraph1": "I'm a frontend developer who designs and implements user-centric web interfaces. With hands-on experience building dashboards and management systems using React, Next.js, and TypeScript, I focus on translating complex business logic into intuitive UIs.",
-    "paragraph2": "Having lived and worked in France, Myanmar, and Malaysia, I bring cross-cultural collaboration skills to every project. With strong English proficiency (TOEIC 930) and business-level French, I communicate effectively in global team settings."
+    "paragraph2": "Having lived and worked in France, Myanmar, and Malaysia, I bring cross-cultural collaboration skills to every project. With strong English proficiency (TOEIC 930) and business-level French, I communicate effectively in global team settings.",
+    "coreTech": "Core Tech",
+    "backend": "Backend & Infra",
+    "statProjects": "Production Projects",
+    "statLanguages": "Languages Spoken"
   },
   "Contact": {
     "sectionTitle": "Contact",
+    "thanks": "Thank you.",
     "email": "Email",
     "phone": "Phone",
     "github": "GitHub",
@@ -51,14 +64,16 @@
   },
   "Projects": {
     "sectionTitle": "Projects",
+    "sectionSubtitle": "A collection of projects exploring 3D, motion, and interaction.",
     "viewDetails": "View Details",
+    "moreProjects": "More Projects",
     "joshua": {
       "title": "Joshua AI Agent",
       "description": "AI copywriting agent powered by KoGPT-2. Built a cross-platform desktop app with Electron and Angular, integrated Stripe payments.",
       "period": "Jun 2022 - Mar 2023"
     },
     "dyCms": {
-      "title": "DY Microfinance CMS",
+      "title": "DY Microfinance ERP",
       "description": "Customer management system built with Next.js and NestJS. Implemented an admin dashboard and automated ~90% of accounting processes.",
       "period": "Jul 2024 - Jun 2025"
     },
@@ -87,13 +102,13 @@
     "sectionTitle": "Experience",
     "paymentInApp": {
       "date": "May 2022 - Mar 2024",
-      "title": "Payment In-App Inc. — Business Planning Lead",
+      "title": "Payment In-App Inc. — Business Planning & Development Lead",
       "company": "Payment In-App Inc.",
       "description": "Led planning and execution of multiple projects including Joshua AI Agent (Electron/Angular), manufacturing defect detection (YOLO), retail customer behavior analysis (VanillaJS dashboard), and EMV Seoul transit feasibility study."
     },
     "dyAccounting": {
-      "date": "Jan 2017 - Dec 2018 / Jul 2024 - Jun 2025",
-      "title": "DY Microfinance — Accounting & Finance Operations / CMS Development",
+      "date": "Jan 2017 - Dec 2018",
+      "title": "DY Microfinance — Accounting & Finance Operations / ERP Development",
       "company": "DY Microfinance (Myanmar)",
       "description": "1st period (2017-2018): Managed accounting and finance operations, built automated BS/PL generation spreadsheets. 2nd period (2024-2025): Developed a customer management system using Next.js, NestJS, and PostgreSQL, built an admin dashboard, and automated ~90% of accounting processes."
     }
@@ -170,14 +185,14 @@
       }
     },
     "dyCms": {
-      "title": "DY Microfinance CMS",
+      "title": "DY Microfinance ERP",
       "subtitle": "Customer Management System",
       "role": "Full-stack Development",
       "teamSize": "1 member (Solo)",
       "duration": "Jul 2024 - Jun 2025",
       "overview": {
         "title": "Project Overview",
-        "background": "DY Microfinance CMS is a web-based management system designed to automate customer management and accounting operations for a Myanmar-based microfinance institution. Previously, customer information, loan records, and accounting ledgers were managed manually using Excel spreadsheets, leading to frequent data integrity issues and requiring dozens of hours of manual work during month-end closing. To address this, I adopted a separated architecture connecting a Next.js frontend with a NestJS backend via PostgreSQL database. As a solo developer handling both frontend and backend, I focused on admin dashboard UI/UX design and implementation, complex accounting data table management, and form validation logic on the frontend side.",
+        "background": "DY Microfinance ERP is a web-based management system designed to automate customer management and accounting operations for a Myanmar-based microfinance institution. Previously, customer information, loan records, and accounting ledgers were managed manually using Excel spreadsheets, leading to frequent data integrity issues and requiring dozens of hours of manual work during month-end closing. To address this, I adopted a separated architecture connecting a Next.js frontend with a NestJS backend via PostgreSQL database. As a solo developer handling both frontend and backend, I focused on admin dashboard UI/UX design and implementation, complex accounting data table management, and form validation logic on the frontend side.",
         "contribution": "I was responsible for the entire process from system architecture design to deployment. From a frontend perspective, I implemented an admin dashboard based on Next.js App Router, form processing using Server Actions, accounting data table rendering optimization, and bilingual support (Burmese/English). The dashboard visualizes key metrics like customer count, loan balance, and monthly revenue in real-time, enabling management to grasp the current situation at a glance. Through accounting process automation, I built an interface that auto-generates BS (Balance Sheet) and PL (Profit & Loss) statements, eliminating approximately 90% of manual work and reducing month-end closing time from dozens of hours to just a few hours. I also implemented Role-Based Access Control at the frontend routing level, ensuring users (loan officers, accounting staff, administrators) can only access screens and features relevant to their roles."
       },
       "retrospective": {

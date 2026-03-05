@@ -13,11 +13,11 @@ export default function Breadcrumbs({ projectTitle }: BreadcrumbsProps) {
 
   return (
     <nav aria-label="Breadcrumb" className="mb-6">
-      <ol className="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
+      <ol className="flex items-center gap-2 text-sm text-slate-500">
         <li>
           <Link
             href="/"
-            className="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+            className="hover:text-slate-900 dark:hover:text-white transition-colors"
           >
             {t('home')}
           </Link>
@@ -28,7 +28,7 @@ export default function Breadcrumbs({ projectTitle }: BreadcrumbsProps) {
         <li>
           <Link
             href="/#projects"
-            className="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+            className="hover:text-slate-900 dark:hover:text-white transition-colors"
           >
             {t('projects')}
           </Link>
@@ -37,7 +37,7 @@ export default function Breadcrumbs({ projectTitle }: BreadcrumbsProps) {
           <ChevronRight className="w-4 h-4" aria-hidden="true" />
         </li>
         <li
-          className="text-neutral-900 dark:text-neutral-100 font-medium"
+          className="text-slate-900 dark:text-white font-medium"
           aria-current="page"
         >
           {projectTitle}

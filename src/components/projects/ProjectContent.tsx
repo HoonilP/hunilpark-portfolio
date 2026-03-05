@@ -17,16 +17,16 @@ export default async function ProjectContent({ translationKey, projectId }: Proj
       {/* Overview Section */}
       {t.has(`${translationKey}.overview.title`) && (
         <section className="space-y-6">
-          <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
             {t(`${translationKey}.overview.title`)}
           </h2>
           {t.has(`${translationKey}.overview.background`) && (
-            <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed">
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
               {t(`${translationKey}.overview.background`)}
             </p>
           )}
           {t.has(`${translationKey}.overview.contribution`) && (
-            <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed">
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
               {t(`${translationKey}.overview.contribution`)}
             </p>
           )}
@@ -34,7 +34,7 @@ export default async function ProjectContent({ translationKey, projectId }: Proj
       )}
 
       {/* Architecture/Content Image */}
-      <div className="w-full aspect-video relative overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-800">
+      <div className="w-full aspect-video relative overflow-hidden rounded-lg border border-slate-200 dark:border-slate-800">
         <Image
           src={`/projects/${projectId}/hero.webp`}
           alt={`${t(`${translationKey}.title`)} architecture`}
@@ -49,7 +49,7 @@ export default async function ProjectContent({ translationKey, projectId }: Proj
       {/* Engineering Challenges Section */}
       {t.has(`${translationKey}.challenges.title`) && (
         <section className="space-y-10">
-          <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
             {t(`${translationKey}.challenges.title`)}
           </h2>
           {CHALLENGE_KEYS.map((key) => {
@@ -69,16 +69,16 @@ export default async function ProjectContent({ translationKey, projectId }: Proj
       {/* Retrospective Section */}
       {t.has(`${translationKey}.retrospective.title`) && (
         <section className="space-y-6">
-          <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
             {t(`${translationKey}.retrospective.title`)}
           </h2>
           {t.has(`${translationKey}.retrospective.growth`) && (
-            <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed">
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
               {t(`${translationKey}.retrospective.growth`)}
             </p>
           )}
           {t.has(`${translationKey}.retrospective.improvement`) && (
-            <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed">
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
               {t(`${translationKey}.retrospective.improvement`)}
             </p>
           )}

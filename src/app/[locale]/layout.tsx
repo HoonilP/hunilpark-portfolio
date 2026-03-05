@@ -4,11 +4,10 @@ import {routing} from '@/i18n/routing';
 import type {Metadata} from 'next';
 import ThemeProvider from '@/components/layout/ThemeProvider';
 import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
 import '../globals.css';
 
 export const metadata: Metadata = {
-  title: '박훈일 | Frontend Developer',
+  title: '박훈일 | Developer',
   description: '깔끔하고 정교한 웹 경험을 만드는 프론트엔드 개발자',
 };
 
@@ -33,12 +32,11 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className="font-sans bg-surface-light dark:bg-surface-dark text-neutral-900 dark:text-neutral-100 antialiased min-h-screen flex flex-col">
+      <body className="font-sans bg-white dark:bg-[#0f1923] text-slate-900 dark:text-slate-100 antialiased min-h-screen flex flex-col selection:bg-blue-500/30 transition-colors duration-300">
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider>
             <Header />
             <main className="flex-1">{children}</main>
-            <Footer />
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

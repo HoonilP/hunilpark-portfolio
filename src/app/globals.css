@@ -7,32 +7,29 @@
   /* Font Family */
   --font-sans: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
 
-  /* Neutral Color Palette */
-  --color-neutral-50: oklch(0.98 0 0);
-  --color-neutral-100: oklch(0.96 0 0);
-  --color-neutral-200: oklch(0.90 0 0);
-  --color-neutral-300: oklch(0.83 0 0);
-  --color-neutral-400: oklch(0.68 0 0);
-  --color-neutral-500: oklch(0.55 0 0);
-  --color-neutral-600: oklch(0.45 0 0);
-  --color-neutral-700: oklch(0.38 0 0);
-  --color-neutral-800: oklch(0.27 0 0);
-  --color-neutral-900: oklch(0.19 0 0);
-  --color-neutral-950: oklch(0.13 0 0);
+  /* Neutral Color Palette — Cool-tinted for dark mode depth */
+  --color-neutral-50: oklch(0.98 0.005 250);
+  --color-neutral-100: oklch(0.96 0.005 250);
+  --color-neutral-200: oklch(0.90 0.008 250);
+  --color-neutral-300: oklch(0.83 0.01 250);
+  --color-neutral-400: oklch(0.68 0.01 250);
+  --color-neutral-500: oklch(0.55 0.01 250);
+  --color-neutral-600: oklch(0.45 0.01 250);
+  --color-neutral-700: oklch(0.35 0.015 250);
+  --color-neutral-800: oklch(0.25 0.02 250);
+  --color-neutral-900: oklch(0.17 0.02 250);
+  --color-neutral-950: oklch(0.12 0.025 250);
 
-  /* Primary Color (Subtle Blue Accent) */
-  --color-primary-400: oklch(0.62 0.14 250);
-  --color-primary-500: oklch(0.55 0.15 250);
-  --color-primary-600: oklch(0.48 0.16 250);
-  --color-primary-700: oklch(0.42 0.16 250);
+  /* Primary Color — Vivid Blue */
+  --color-primary-300: oklch(0.72 0.15 250);
+  --color-primary-400: oklch(0.65 0.18 250);
+  --color-primary-500: oklch(0.58 0.20 250);
+  --color-primary-600: oklch(0.50 0.20 250);
+  --color-primary-700: oklch(0.42 0.18 250);
 
-  /* Museum Surface Colors */
-  --color-surface-light: #f7f5f2;
-  --color-surface-dark: #0f0f0f;
-
-  /* Accent Gold */
-  --color-accent-gold: #b8960c;
-  --color-accent-gold-light: #d4af37;
+  /* Surface Colors — Deep Space Navy */
+  --color-surface-light: #f0eee9;
+  --color-surface-dark: #0a0f1a;
 
   /* Animations */
   --animate-fade-in-up: fade-in-up 0.5s ease-out forwards;
@@ -43,7 +40,7 @@
   --animate-reveal-line: reveal-line 0.8s ease-out forwards;
 }
 
-/* ===== Shiki Code Block Dark Mode ===== */
+/* ===== Shiki Code Block Theming ===== */
 .shiki {
   padding: 1rem;
   border-radius: 0.5rem;
@@ -55,7 +52,13 @@
   background-color: var(--shiki-dark-bg) !important;
 }
 
-/* ===== Hero Staggered Slide-Up (Modo Museum style) ===== */
+:not([data-theme='dark']) .shiki,
+:not([data-theme='dark']) .shiki span {
+  color: var(--shiki-light, inherit) !important;
+  background-color: var(--shiki-light-bg, #fff) !important;
+}
+
+/* ===== Hero Staggered Slide-Up ===== */
 @keyframes hero-reveal {
   from {
     opacity: 0;
@@ -81,6 +84,7 @@
 .hero-reveal-delay-2 { animation-delay: 0.25s; }
 .hero-reveal-delay-3 { animation-delay: 0.45s; }
 .hero-reveal-delay-4 { animation-delay: 0.65s; }
+.hero-reveal-delay-5 { animation-delay: 0.85s; }
 
 @keyframes hero-image-reveal {
   from {
@@ -163,13 +167,9 @@
 }
 
 /* ===== Sticky Stacking Cards ===== */
-.stack-cards {
-  /* wrapper: no special styles needed, just contains sticky children */
-}
-
 .stack-card {
   position: sticky;
-  top: 5rem; /* below the header */
+  top: 5rem;
 }
 
 .stack-card:nth-child(2) { top: 5.5rem; }
@@ -202,11 +202,6 @@
   animation: slide-in-right 0.4s ease-out;
 }
 
-@keyframes slide-in-right {
-  from { opacity: 0; transform: translateX(30px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
 @keyframes scale-in {
   from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
@@ -215,6 +210,56 @@
 @keyframes reveal-line {
   from { width: 0; }
   to { width: 100%; }
+}
+
+/* ===== Pulsing Dot ===== */
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+.pulse-dot {
+  position: relative;
+}
+
+.pulse-dot::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 9999px;
+  background: currentColor;
+  animation: pulse-ring 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ===== Dot Grid Background ===== */
+.dot-grid-bg {
+  background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ===== Glass Card ===== */
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+[data-theme='dark'] .glass-card {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+:not([data-theme='dark']) .glass-card {
+  background: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+/* ===== Glow Utilities ===== */
+.glow-blue {
+  box-shadow: 0 0 40px rgba(6, 127, 249, 0.15), 0 0 80px rgba(6, 127, 249, 0.05);
+}
+
+.glow-blue-text {
+  text-shadow: 0 0 30px rgba(6, 127, 249, 0.3);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -241,28 +286,31 @@
   .marquee__track {
     animation: none !important;
   }
+  .pulse-dot::before {
+    animation: none !important;
+  }
 }
 
 /* Typography Utilities */
 .heading-display {
-  font-size: clamp(2.5rem, 6vw, 5rem);
-  font-weight: 700;
+  font-size: clamp(2.5rem, 7vw, 6rem);
+  font-weight: 900;
   line-height: 1.05;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
 }
 
 .heading-section {
   font-size: clamp(1.75rem, 3vw, 2.5rem);
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.15;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
-.label-museum {
-  font-size: 0.6875rem;
-  font-weight: 500;
+.label-upper {
+  font-size: 0.75rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
 }
 
 /* Section Divider */
@@ -270,6 +318,16 @@
   height: 1px;
   background: linear-gradient(to right, transparent, currentColor 20%, currentColor 80%, transparent);
   opacity: 0.15;
+}
+
+/* ===== Scroll Indicator Bounce ===== */
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+.scroll-indicator {
+  animation: scroll-bounce 2s ease-in-out infinite;
 }
 
 * {

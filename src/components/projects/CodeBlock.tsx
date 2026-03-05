@@ -13,7 +13,7 @@ export default async function CodeBlock({ code, lang = 'typescript' }: CodeBlock
       light: 'github-light',
       dark: 'github-dark',
     },
-    defaultColor: 'light',
+    defaultColor: 'dark',
   });
 
   return (
