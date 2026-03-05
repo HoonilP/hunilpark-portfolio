@@ -199,8 +199,8 @@ export default function FluidSimulation({
           // Ambient flow — gentle drifting force
           const nx = cell.x / w;
           const ny = cell.y / h;
-          cell.xv += Math.sin(time + ny * 4) * 0.05;
-          cell.yv += Math.cos(time * 0.7 + nx * 4) * 0.05;
+          cell.xv += Math.sin(time + ny * 4) * 0.005;
+          cell.yv += Math.cos(time * 0.7 + nx * 4) * 0.005;
 
           // Touch velocity
           touchesRef.current.forEach((touch) => {

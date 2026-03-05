@@ -50,7 +50,7 @@ export default function HeroClient({
       {/* Fluid Simulation */}
       <div className="absolute inset-0 z-0 pointer-events-auto" aria-hidden="true">
         <FluidSimulation
-          particleCount={5000}
+          particleCount={20000}
           particleColor={fluidColor}
           penSize={50}
           resolution={10}
