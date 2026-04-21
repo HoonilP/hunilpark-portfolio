@@ -121,6 +121,10 @@ export default function ReelCarousel({ projects, viewDetailsLabel }: ReelCarouse
                       </span>
                     ))}
                   </div>
+                  <span className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-blue-400/30 bg-blue-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-blue-400 backdrop-blur-sm transition-colors hover:bg-blue-500/20">
+                    {viewDetailsLabel}
+                    <ChevronRight className="h-3.5 w-3.5" />
+                  </span>
                 </motion.div>
               </div>
             </Link>

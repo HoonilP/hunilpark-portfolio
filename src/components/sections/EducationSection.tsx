@@ -7,6 +7,8 @@ export default async function EducationSection() {
   const education = [
     { key: 'sangmyung' },
     { key: 'yangon' },
+    { key: 'yangjeong' },
+    { key: 'stjohn' },
   ];
 
   const certifications = [
@@ -14,6 +16,7 @@ export default async function EducationSection() {
     t('certifications.accounting'),
     t('certifications.fsi'),
     t('certifications.toeic'),
+    t('certifications.opic'),
   ];
 
   const activities = [

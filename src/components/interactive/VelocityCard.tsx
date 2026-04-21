@@ -77,7 +77,10 @@ export default function VelocityCard({ project, viewDetailsLabel, index = 0 }: V
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">{project.title}</h3>
             <p className="text-sm text-slate-500">{project.techStack.slice(0, 3).join(' · ')}</p>
           </div>
-          <ArrowUpRight className="h-5 w-5 -translate-x-4 text-blue-500 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" />
+          <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-blue-500/20 bg-blue-500/5 px-3 py-1 text-xs font-semibold text-blue-500 transition-colors group-hover:bg-blue-500/10 dark:border-blue-400/20 dark:text-blue-400">
+            {viewDetailsLabel}
+            <ArrowUpRight className="h-3.5 w-3.5" />
+          </span>
         </div>
       </Link>
     </motion.div>

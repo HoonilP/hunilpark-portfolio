@@ -68,14 +68,24 @@ export default async function AboutSection() {
             </ScrollReveal>
 
             <ScrollReveal delay={0.25}>
-              <div className="grid grid-cols-2 gap-6 pt-4">
+              <div className="space-y-6 pt-4">
+                {/* Languages */}
                 <div>
-                  <p className="text-3xl font-black text-slate-900 dark:text-white">4</p>
-                  <p className="mt-1 text-sm text-slate-500">{t('statLanguages')}</p>
+                  <h4 className="font-bold text-slate-900 dark:text-white">{t('statLanguages')}</h4>
+                  <ul className="mt-2 space-y-1 text-sm text-slate-500">
+                    <li>{t('langEnglish')}</li>
+                    <li>{t('langFrench')}</li>
+                    <li>{t('langMyanmar')}</li>
+                  </ul>
                 </div>
+
+                {/* Certifications */}
                 <div>
-                  <p className="text-3xl font-black text-slate-900 dark:text-white">930</p>
-                  <p className="mt-1 text-sm text-slate-500">TOEIC</p>
+                  <h4 className="font-bold text-slate-900 dark:text-white">{t('statCertifications')}</h4>
+                  <ul className="mt-2 space-y-1 text-sm text-slate-500">
+                    <li>TOEIC 970</li>
+                    <li>OPIc IH</li>
+                  </ul>
                 </div>
               </div>
             </ScrollReveal>

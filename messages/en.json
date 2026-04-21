@@ -41,11 +41,15 @@
     "sectionTitle": "About",
     "heading": "Engineering with\nan artist's eye.",
     "paragraph1": "I'm a frontend developer who designs and implements user-centric web interfaces. With hands-on experience building dashboards and management systems using React, Next.js, and TypeScript, I focus on translating complex business logic into intuitive UIs.",
-    "paragraph2": "Having lived and worked in France, Myanmar, and Malaysia, I bring cross-cultural collaboration skills to every project. With strong English proficiency (TOEIC 930) and business-level French, I communicate effectively in global team settings.",
+    "paragraph2": "Having lived and worked in France, Myanmar, and Malaysia, I bring cross-cultural collaboration skills to every project. With strong English proficiency (TOEIC 970, OPIc IH) and business-level French and Burmese, I communicate effectively in global team settings.",
     "coreTech": "Core Tech",
     "backend": "Backend & Infra",
     "statProjects": "Production Projects",
-    "statLanguages": "Languages Spoken"
+    "statLanguages": "Languages",
+    "langEnglish": "English — Business Level",
+    "langFrench": "French — Business Level",
+    "langMyanmar": "Burmese — Business Level",
+    "statCertifications": "Language Certifications"
   },
   "Contact": {
     "sectionTitle": "Contact",
@@ -65,7 +69,7 @@
   "Projects": {
     "sectionTitle": "Projects",
     "sectionSubtitle": "A collection of projects exploring 3D, motion, and interaction.",
-    "viewDetails": "View Details",
+    "viewDetails": "View Details 👆",
     "moreProjects": "More Projects",
     "joshua": {
       "title": "Joshua AI Agent",
@@ -118,19 +122,30 @@
     "sangmyung": {
       "date": "Mar 2024 - Feb 2026",
       "title": "Sangmyung University, Dept. of Big Data Convergence",
-      "description": "Expected Graduation | GPA 4.33 / 4.5"
+      "description": "Seoul Campus | Transfer (Junior) | GPA 4.32 / 4.5"
     },
     "yangon": {
-      "date": "Jan 2017 - Dec 2018",
+      "date": "Dec 2016 - Nov 2018",
       "title": "Yangon University of Foreign Languages, Myanmar Studies",
-      "description": "Withdrawn"
+      "description": "Yangon, Myanmar | Withdrawn after 2 years"
+    },
+    "yangjeong": {
+      "date": "Feb 2014 - Feb 2017",
+      "title": "Yangjeong High School",
+      "description": "Seoul, Mokdong | Graduated"
+    },
+    "stjohn": {
+      "date": "Mar 2010 - Feb 2013",
+      "title": "St. Joseph School",
+      "description": "Le Havre, France | Middle School"
     },
     "certificationsTitle": "Certifications & Awards",
     "certifications": {
       "computerSkills": "Computer Skills Level 1 (Nov 2020)",
       "accounting": "Computerized Accounting Level 1 (Mar 2021)",
       "fsi": "FSI AIxData Challenge 2024 Excellence Award",
-      "toeic": "TOEIC 930 (Nov 2025)"
+      "toeic": "TOEIC 970 (Oct 2023)",
+      "opic": "OPIc IH (Mar 2026)"
     },
     "activitiesTitle": "Activities",
     "activities": {

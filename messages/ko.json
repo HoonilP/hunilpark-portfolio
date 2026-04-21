@@ -41,11 +41,15 @@
     "sectionTitle": "소개",
     "heading": "엔지니어의 정밀함,\n디자이너의 감각.",
     "paragraph1": "사용자 중심의 웹 인터페이스를 설계하고 구현하는 프론트엔드 개발자입니다. React, Next.js, TypeScript를 활용한 대시보드 및 관리 시스템 개발 경험을 보유하고 있으며, 복잡한 비즈니스 로직을 직관적인 UI로 풀어내는 데 관심이 있습니다.",
-    "paragraph2": "프랑스, 미얀마, 말레이시아에서의 해외 경험을 통해 다국어·다문화 환경에서의 협업 역량을 갖추었습니다. 영어(TOEIC 930)와 프랑스어 비즈니스 레벨의 언어 능력을 바탕으로 글로벌 팀과의 원활한 커뮤니케이션이 가능합니다.",
+    "paragraph2": "프랑스, 미얀마, 말레이시아에서의 해외 경험을 통해 다국어·다문화 환경에서의 협업 역량을 갖추었습니다. 영어(TOEIC 970, OPIc IH)와 프랑스어·미얀마어 비즈니스 레벨의 언어 능력을 바탕으로 글로벌 팀과의 원활한 커뮤니케이션이 가능합니다.",
     "coreTech": "Core Tech",
     "backend": "Backend & Infra",
     "statProjects": "프로덕션 프로젝트",
-    "statLanguages": "구사 언어"
+    "statLanguages": "구사 언어",
+    "langEnglish": "영어 — 비즈니스 회화 가능",
+    "langFrench": "프랑스어 — 비즈니스 회화 가능",
+    "langMyanmar": "미얀마어 — 비즈니스 회화 가능",
+    "statCertifications": "어학 자격"
   },
   "Contact": {
     "sectionTitle": "연락처",
@@ -65,7 +69,7 @@
   "Projects": {
     "sectionTitle": "프로젝트",
     "sectionSubtitle": "3D, 모션, 인터랙션을 탐구하는 프로젝트 컬렉션",
-    "viewDetails": "자세히 보기",
+    "viewDetails": "자세히 보기 👆",
     "moreProjects": "더 많은 프로젝트",
     "joshua": {
       "title": "Joshua AI Agent",
@@ -118,19 +122,30 @@
     "sangmyung": {
       "date": "2024.03 - 2026.02",
       "title": "상명대학교 빅데이터융합학과",
-      "description": "졸업 예정 | GPA 4.33 / 4.5"
+      "description": "서울 캠퍼스 | 3년 편입 | 졸업학점 4.32 / 4.5"
     },
     "yangon": {
-      "date": "2017.01 - 2018.12",
+      "date": "2016.12 - 2018.11",
       "title": "양곤외국어대학교 미얀마어과",
-      "description": "중퇴"
+      "description": "미얀마 양곤 캠퍼스 | 2년 중퇴"
+    },
+    "yangjeong": {
+      "date": "2014.02 - 2017.02",
+      "title": "양정고등학교",
+      "description": "서울 목동 소재 | 졸업"
+    },
+    "stjohn": {
+      "date": "2010.03 - 2013.02",
+      "title": "St. Joseph School",
+      "description": "프랑스 Le Havre 소재 중학교"
     },
     "certificationsTitle": "자격증 · 수상",
     "certifications": {
       "computerSkills": "컴퓨터활용능력 1급 (2020.11)",
       "accounting": "전산회계 1급 (2021.03)",
       "fsi": "FSI AIxData Challenge 2024 우수상",
-      "toeic": "TOEIC 930 (2025.11)"
+      "toeic": "TOEIC 970 (2023.10)",
+      "opic": "OPIc IH (2026.03)"
     },
     "activitiesTitle": "활동",
     "activities": {
