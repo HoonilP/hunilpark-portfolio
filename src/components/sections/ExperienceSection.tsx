@@ -7,7 +7,7 @@ interface ExperienceItem {
 }
 
 const experiences: ExperienceItem[] = [
-  { translationKey: 'dyAccounting', type: 'Fullstack' },
+  { translationKey: 'dyAccounting', type: 'Full-stack' },
   { translationKey: 'paymentInApp', type: 'Project Management' },
 ];
 

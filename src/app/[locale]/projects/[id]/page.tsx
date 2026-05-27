@@ -8,7 +8,7 @@ import ProjectSidebar from '@/components/projects/ProjectSidebar';
 import ProjectContent from '@/components/projects/ProjectContent';
 import ProjectNavigation from '@/components/projects/ProjectNavigation';
 
-const PROJECT_IDS = ['1', '2', '3', '4', '5', '6'] as const;
+const PROJECT_IDS = ['1', '2', '3', '4', '5', '6', '7', '8'] as const;
 type ProjectId = typeof PROJECT_IDS[number];
 
 function isValidProjectId(id: string): id is ProjectId {
@@ -50,6 +50,14 @@ const PROJECT_META: Record<ProjectId, ProjectMeta> = {
     translationKey: 'artWar',
     techStack: ['Next.js', 'NestJS', 'Solidity', 'OpenClaw', 'Monad', 'Supabase'],
     githubUrl: 'https://github.com/Moltiverse-MonArt',
+  },
+  '7': {
+    translationKey: 'manufacturing',
+    techStack: ['Python', 'YOLOv7', 'OAK-D', 'OpenCV', 'Firebase', 'Anomalib'],
+  },
+  '8': {
+    translationKey: 'fsiAi',
+    techStack: ['Python', 'GPT-4', 'Twilio', 'aiohttp', 'WebSocket', 'asyncio'],
   },
 };
 

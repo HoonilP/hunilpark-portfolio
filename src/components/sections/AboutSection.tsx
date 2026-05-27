@@ -9,7 +9,7 @@ export default async function AboutSection() {
     <section id="about" className="bg-slate-50 dark:bg-slate-900/30">
       <div className="mx-auto max-w-7xl px-6 py-12 md:px-12 lg:py-16">
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
-          {/* Left — Profile + Heading + Description + Skills */}
+          {/* Left — Profile + Heading + Description */}
           <div className="space-y-8">
             <ScrollReveal>
               <div className="mb-8 h-32 w-32 shrink-0 md:h-40 md:w-40">
@@ -36,39 +36,16 @@ export default async function AboutSection() {
             </ScrollReveal>
 
             <ScrollReveal delay={0.3}>
-              <div className="grid grid-cols-2 gap-8 pt-4">
-                <div>
-                  <h4 className="font-bold text-slate-900 dark:text-white">{t('coreTech')}</h4>
-                  <ul className="mt-2 space-y-1 text-sm text-slate-500">
-                    <li>React / Next.js</li>
-                    <li>TypeScript</li>
-                    <li>Three.js / WebGL</li>
-                    <li>Tailwind CSS</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-bold text-slate-900 dark:text-white">{t('backend')}</h4>
-                  <ul className="mt-2 space-y-1 text-sm text-slate-500">
-                    <li>NestJS / FastAPI</li>
-                    <li>PostgreSQL</li>
-                    <li>Solidity / Move</li>
-                    <li>Docker / AWS</li>
-                  </ul>
-                </div>
-              </div>
-            </ScrollReveal>
-          </div>
-
-          {/* Right — About Text */}
-          <div className="space-y-8 lg:pt-16">
-            <ScrollReveal delay={0.15}>
               <p className="text-lg leading-relaxed text-slate-600 dark:text-slate-400">
                 {t('paragraph2')}
               </p>
             </ScrollReveal>
+          </div>
 
-            <ScrollReveal delay={0.25}>
-              <div className="space-y-6 pt-4">
+          {/* Right — Languages + Certifications */}
+          <div className="space-y-8 lg:pt-16">
+            <ScrollReveal delay={0.15}>
+              <div className="grid grid-cols-2 gap-8">
                 {/* Languages */}
                 <div>
                   <h4 className="font-bold text-slate-900 dark:text-white">{t('statLanguages')}</h4>

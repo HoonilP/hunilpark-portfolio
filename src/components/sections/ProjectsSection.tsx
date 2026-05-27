@@ -46,6 +46,18 @@ const projects: Project[] = [
     techStack: ['Pytorch', 'YOLO', 'VanillaJS'],
     featured: false,
   },
+  {
+    id: '7',
+    translationKey: 'manufacturing',
+    techStack: ['Python', 'YOLOv7', 'OAK-D', 'OpenCV', 'Firebase', 'Anomalib'],
+    featured: false,
+  },
+  {
+    id: '8',
+    translationKey: 'fsiAi',
+    techStack: ['Python', 'GPT-4', 'Twilio', 'aiohttp', 'WebSocket', 'asyncio'],
+    featured: false,
+  },
 ];
 
 export default async function ProjectsSection() {
@@ -61,7 +73,9 @@ export default async function ProjectsSection() {
   });
 
   const featured = projects.filter((p) => p.featured).map(toCarouselProject);
-  const others = projects.filter((p) => !p.featured).map(toCarouselProject);
+  const others = [...projects]
+    .sort((a, b) => (a.featured === b.featured ? 0 : a.featured ? -1 : 1))
+    .map(toCarouselProject);
 
   return (
     <section id="projects" className="mx-auto max-w-7xl px-6 py-12 md:px-12 lg:py-16">

@@ -31,7 +31,7 @@
     "resumeLink": "View Resume",
     "badge": "Available for projects",
     "titleLine1": "Hunil Park",
-    "titleAccent": "Developer",
+    "titleAccent": "Plan. Build. Ship.",
     "subtitle": "",
     "ctaPrimary": "View Selected Works",
     "ctaSecondary": "Get in Touch",
@@ -39,11 +39,9 @@
   },
   "About": {
     "sectionTitle": "About",
-    "heading": "Engineering with\nan artist's eye.",
-    "paragraph1": "I'm a frontend developer who designs and implements user-centric web interfaces. With hands-on experience building dashboards and management systems using React, Next.js, and TypeScript, I focus on translating complex business logic into intuitive UIs.",
-    "paragraph2": "Having lived and worked in France, Myanmar, and Malaysia, I bring cross-cultural collaboration skills to every project. With strong English proficiency (TOEIC 970, OPIc IH) and business-level French and Burmese, I communicate effectively in global team settings.",
-    "coreTech": "Core Tech",
-    "backend": "Backend & Infra",
+    "heading": "From planning to deployment,\nI build it myself.",
+    "paragraph1": "I define business problems, design architecture, and implement solutions in code. I've led entire project lifecycles — planning, design, development, and deployment — combining technical judgment with hands-on execution. I'm strongest at turning complex business requirements into working systems.",
+    "paragraph2": "Having worked in France, Myanmar, and Malaysia, I've directly led projects across multilingual, cross-cultural environments. From client meetings and requirements definition to technical decisions and on-site deployment — I drive projects to completion without language barriers.",
     "statProjects": "Production Projects",
     "statLanguages": "Languages",
     "langEnglish": "English — Business Level",
@@ -73,33 +71,43 @@
     "moreProjects": "More Projects",
     "joshua": {
       "title": "Joshua AI Agent",
-      "description": "AI copywriting agent powered by KoGPT-2. Built a cross-platform desktop app with Electron and Angular, integrated Stripe payments.",
+      "description": "AI copywriting agent powered by KoGPT-2 fine-tuning. Cross-platform desktop app with Electron + Angular, Stripe payment integration.",
       "period": "Jun 2022 - Mar 2023"
     },
     "dyCms": {
       "title": "DY Microfinance ERP",
-      "description": "Customer management system built with Next.js and NestJS. Implemented an admin dashboard and automated ~90% of accounting processes.",
+      "description": "Myanmar microfinance customer/loan/accounting management system. Solo full-stack, 90% accounting automation, $12/mo operation.",
       "period": "Jul 2024 - Jun 2025"
     },
     "retailAnalysis": {
       "title": "Retail Store Customer Analysis",
-      "description": "Visual intelligence system using YOLO for in-store customer tracking, with a VanillaJS dashboard for analytics visualization.",
+      "description": "Real-time customer tracking with YOLOv7 + StrongSORT. On-premise server, 6-mode visualization dashboard.",
       "period": "Nov 2022 - Apr 2023"
     },
     "scholarlyChain": {
       "title": "Scholarly Chain",
-      "description": "Hyperledger Fabric blockchain-based student fee transparency system. Built 15+ pages with Next.js and shadcn/ui, implementing role-based UI and FCM push notifications.",
+      "description": "Hyperledger Fabric blockchain student fee transparency system. JWT auto-renewal, FCM role-based push notifications.",
       "period": "Mar 2025 - Jun 2025"
     },
     "dinoGo": {
       "title": "Dino Go",
-      "description": "Sui blockchain location-based NFT collection game. Built 3D maps with Next.js and Three.js, integrating Walrus decentralized storage and Seal encryption.",
+      "description": "Sui blockchain location-based NFT collection game. Google Maps + Three.js 3D map, Walrus decentralized storage.",
       "period": "Sep 19-21, 2025"
     },
     "artWar": {
       "title": "Ministry of Truth",
-      "description": "AI agent autonomous art tournament platform. OpenClaw-based agents run autonomously on AWS EC2, with the $MOT token launched directly on nad.fun and a betting system on the Monad blockchain.",
+      "description": "AI agent autonomous art tournament. OpenClaw multi-agent, Monad on-chain betting, $MOT token.",
       "period": "Feb 9-16, 2026"
+    },
+    "manufacturing": {
+      "title": "Manufacturing Defect Detection",
+      "description": "Indonesia shoe factory defect detection. YOLOv7 custom model, OAK-D 3D camera, L/R comparison algorithm.",
+      "period": "Nov 2022 - Feb 2023"
+    },
+    "fsiAi": {
+      "title": "Financial Consulting AI",
+      "description": "Real-time voice financial consulting AI. GPT-4 + STT/TTS async streaming, prompt injection defense. FSI Excellence Award.",
+      "period": "Jul 2024 - Sep 2024"
     }
   },
   "Experience": {
@@ -111,10 +119,10 @@
       "description": "Led planning and execution of multiple projects including Joshua AI Agent (Electron/Angular), manufacturing defect detection (YOLO), retail customer behavior analysis (VanillaJS dashboard), and EMV Seoul transit feasibility study."
     },
     "dyAccounting": {
-      "date": "Jan 2017 - Dec 2018",
-      "title": "DY Microfinance — Accounting & Finance Operations / ERP Development",
+      "date": "Jul 2024 - Present",
+      "title": "DY Microfinance — ERP Development",
       "company": "DY Microfinance (Myanmar)",
-      "description": "1st period (2017-2018): Managed accounting and finance operations, built automated BS/PL generation spreadsheets. 2nd period (2024-2025): Developed a customer management system using Next.js, NestJS, and PostgreSQL, built an admin dashboard, and automated ~90% of accounting processes."
+      "description": "Solo full-stack development of a customer/loan/accounting management system (ERP) using Next.js, NestJS, and PostgreSQL. RBAC 3-role auth, dual caching, cursor pagination. ~90% accounting process automation, $12/mo operation."
     }
   },
   "Education": {
@@ -142,7 +150,6 @@
     "certificationsTitle": "Certifications & Awards",
     "certifications": {
       "computerSkills": "Computer Skills Level 1 (Nov 2020)",
-      "accounting": "Computerized Accounting Level 1 (Mar 2021)",
       "fsi": "FSI AIxData Challenge 2024 Excellence Award",
       "toeic": "TOEIC 970 (Oct 2023)",
       "opic": "OPIc IH (Mar 2026)"
@@ -161,231 +168,331 @@
       "techStack": "Tech Stack",
       "links": "Links"
     },
+    "sectionLabels": {
+      "overview": "Project Overview",
+      "challenges": "Technical Challenges",
+      "achievements": "Key Achievements",
+      "gallery": "Project Images"
+    },
     "joshua": {
       "title": "Joshua AI Agent",
       "subtitle": "AI Copywriting Agent powered by KoGPT-2",
-      "role": "Frontend Development",
-      "teamSize": "4 members",
+      "role": "Frontend/Backend Development (50%)",
+      "teamSize": "2 members",
       "duration": "Jun 2022 - Mar 2023",
       "overview": {
-        "title": "Project Overview",
-        "background": "Joshua AI Agent is an AI-powered copywriting service built on the KoGPT-2 language model. It's a subscription-based desktop application that generates marketing content and advertising copy, supporting both Windows and macOS through a cross-platform architecture. The project required integrating a FastAPI backend with PostgreSQL database for AI model serving, where I was responsible for the frontend development. The key technical challenges included integrating Angular framework within Electron environment, implementing real-time streaming rendering of AI responses, and adapting the Stripe payment flow for desktop application context.",
-        "contribution": "I led all aspects of frontend development, from designing the Electron + Angular desktop application architecture to implementing the AI response interface and Stripe payment integration. I designed the IPC (Inter-Process Communication) structure between Electron's Main and Renderer processes, handling backend API communication in the Main process while keeping the Angular-based Renderer process focused purely on UI rendering and user interaction. For progressive streaming display of AI-generated content, I built an asynchronous data processing pipeline using RxJS. I also customized Stripe's Checkout session-based payment flow to fit the desktop environment."
-      },
-      "retrospective": {
-        "title": "Retrospective",
-        "growth": "Developing a cross-platform desktop application combining Electron and Angular deepened my understanding of architecture for building native apps with web technology stacks. I learned a great deal solving unique problems that arise when combining web frameworks with desktop environments, including IPC communication structure design, Main/Renderer process role separation, and Angular Zone.js interaction with Electron's event loop. Experience with RxJS-based asynchronous data streaming proved valuable in subsequent projects. Stripe payment integration gave me capabilities for implementing SaaS business model frontends. Implementing an interface that renders AI model responses in real-time streaming made me realize the importance of UX design that transforms 'waiting' into 'experiencing' beyond simply displaying data.",
-        "improvement": "Early in the project, I struggled with limited references for Electron-Angular integration through much trial and error. More thorough technical validation (POC) upfront would have accelerated development. Insufficient test code for the IPC communication layer consumed considerable debugging time—systematic unit and integration tests for Main-Renderer communication logic would have improved stability. From a performance optimization perspective, more thorough bundle size optimization (tree-shaking, lazy loading) and memory profiling could have improved app launch speed and resource usage. In future similar projects, I plan to clearly establish testing strategy and performance goals during initial design, with continuous monitoring and improvement."
+        "summary": "AI copy generation service for ad agency copywriters. Keyword input → KoGPT-2 generates ad copy → auto-classified into 4 tones → tone-matched font pairing.",
+        "highlights": [
+          "KoGPT-2 Fine-tuning: trained on ad copy dataset, keyword-based prompt structure design",
+          "2-stage generation: batch generation → user selection → refined generation",
+          "Tone classification & font matching: 4 tones (emotional/challenge/playful/trust), 12 auto-matched fonts",
+          "Electron cross-platform: Windows/macOS simultaneous support, IPC communication architecture",
+          "Stripe subscription: web portal-based payment → desktop app integration",
+          "GPU bare-metal server: self-hosted infrastructure to cut cloud GPU costs",
+          "10-month weekly client meetings (~25 sessions): service architecture, dashboard mockups, deliverables"
+        ]
       },
       "challenges": {
-        "title": "Engineering Challenges",
         "challenge1": {
           "title": "Electron IPC Architecture Design",
-          "context": "In Electron's separated Main↔Renderer process model, I needed to safely synchronize AI inference requests, Stripe payment events, and UI state. Unlike a browser app where a simple fetch suffices, IPC channel design in a desktop app directly determines overall application stability.",
-          "alternatives": "Making external API calls directly from the Renderer was rejected due to security vulnerabilities (API key exposure) and CORS issues. A single-process Node.js CLI app was rejected because it couldn't incorporate the UI/UX designed with the team's designers and failed to meet the SI delivery requirement for a GUI application.",
-          "decision": "I chose Electron + Angular, with a strict IPC separation where the Main process handles all external communication (FastAPI, Stripe) while the Renderer focuses purely on UI. Angular's DI system and RxJS streaming were well-suited for real-time AI response rendering, and the client required cross-platform support for both Windows and macOS.",
-          "implementation": "The ipcMain relays inference requests to the FastAPI server, and the ipcRenderer subscribes to AI responses as an RxJS Observable stream. Stripe webhook events are also processed in the Main process, propagating payment status changes (feature lock/unlock) to the UI.",
-          "outcome": "Successfully delivered the SI project on schedule and launched a Windows/macOS cross-platform desktop application. The full development cycle was completed by a 3-person team (2 designers, 1 planning & development).",
-          "code": "// Main process: relay inference request and stream response via IPC\nipcMain.handle('ai:generate', async (event, prompt) => {\n  const res = await fetch('http://localhost:8000/generate', {\n    method: 'POST',\n    body: JSON.stringify({ prompt }),\n  });\n  const reader = res.body.getReader();\n  for await (const chunk of readChunks(reader)) {\n    event.sender.send('ai:chunk', chunk);\n  }\n});\n\n// Renderer process (Angular service): subscribe via RxJS\ngenerate(prompt: string): Observable<string> {\n  ipcRenderer.invoke('ai:generate', prompt);\n  return fromEvent<string>(ipcRenderer, 'ai:chunk');\n}",
+          "problem": "Needed to safely synchronize AI inference requests, Stripe payment events, and UI state between Main↔Renderer processes. Direct API calls from Renderer exposed security vulnerabilities (API key exposure) + CORS issues.",
+          "solution": "Main process handles all external communication (FastAPI, Stripe), Renderer is UI-only. ipcMain → FastAPI inference relay, ipcRenderer → RxJS Observable streaming. Stripe webhooks processed in Main → payment state propagated to UI.",
+          "result": "SI project delivered on schedule. Windows/macOS cross-platform desktop app shipped.",
+          "code": "// Main: AI inference relay + IPC streaming\nipcMain.handle('ai:generate', async (event, prompt) => {\n  const res = await fetch('http://localhost:8000/generate', {\n    method: 'POST',\n    body: JSON.stringify({ prompt }),\n  });\n  const reader = res.body.getReader();\n  for await (const chunk of readChunks(reader)) {\n    event.sender.send('ai:chunk', chunk);\n  }\n});\n\n// Renderer (Angular): RxJS streaming subscription\ngenerate(prompt: string): Observable<string> {\n  ipcRenderer.invoke('ai:generate', prompt);\n  return fromEvent<string>(ipcRenderer, 'ai:chunk');\n}",
           "codeLang": "typescript"
         },
         "challenge2": {
           "title": "KoGPT-2 Inference Pipeline Optimization",
-          "context": "I fine-tuned KoGPT-2 to auto-generate Korean copywriting text, but the default generation settings produced excessive unnecessary tokens, causing response latency and quality degradation. Fast response was a critical requirement for the SI delivery environment.",
-          "alternatives": "Using GPT-3/ChatGPT API was rejected because Korean copywriting quality was unstable in 2022, reliance on an external API made offline support impossible, and the cost structure was incompatible with the SI delivery model. Rule-based template generation was rejected for lacking keyword combination diversity and being unable to produce the creative copy marketers expected.",
-          "decision": "I chose KoGPT-2 fine-tuning on a self-configured GPU bare-metal server. I designed a keyword-centric prompt structure and applied generation parameter tuning to reduce unnecessary token output. The internal GPU server was used like an inference-serving platform to handle requests reliably.",
-          "implementation": "I structured prompts around input keywords so the model focused on relevant context. Generation parameters such as top-k and temperature were experimentally adjusted to balance output quality and speed. A FastAPI server exposed the inference endpoint, which the Electron Main process called via IPC.",
-          "outcome": "Tuning top-k and temperature parameters reduced unnecessary token generation and achieved a response speed suitable for real-time production use. A 3-person team delivered the SI project on schedule and shipped the app simultaneously on 2 platforms (Windows and macOS)."
+          "problem": "Default generation settings produced excessive unnecessary tokens → response latency + quality degradation. Fast response was critical for production use.",
+          "solution": "Keyword-centric prompt structure to focus model context. Experimental top-k/temperature tuning. GPU bare-metal server serving FastAPI inference endpoint.",
+          "result": "Reduced unnecessary token generation, achieved production-grade inference speed. Windows/macOS simultaneous launch."
         }
-      }
+      },
+      "achievements": [
+        "KoGPT-2 fine-tuned ad copy generation model",
+        "4-tone classification + 12-font auto-matching",
+        "Electron cross-platform (Windows/macOS) SI delivery",
+        "Stripe web payment integration for subscription SaaS",
+        "Self-hosted GPU bare-metal infrastructure"
+      ]
     },
     "dyCms": {
       "title": "DY Microfinance ERP",
-      "subtitle": "Customer Management System",
-      "role": "Full-stack Development",
-      "teamSize": "1 member (Solo)",
+      "subtitle": "Myanmar Microfinance Customer Management System",
+      "role": "Full-stack Solo Development",
+      "teamSize": "1 (Solo)",
       "duration": "Jul 2024 - Jun 2025",
       "overview": {
-        "title": "Project Overview",
-        "background": "DY Microfinance ERP is a web-based management system designed to automate customer management and accounting operations for a Myanmar-based microfinance institution. Previously, customer information, loan records, and accounting ledgers were managed manually using Excel spreadsheets, leading to frequent data integrity issues and requiring dozens of hours of manual work during month-end closing. To address this, I adopted a separated architecture connecting a Next.js frontend with a NestJS backend via PostgreSQL database. As a solo developer handling both frontend and backend, I focused on admin dashboard UI/UX design and implementation, complex accounting data table management, and form validation logic on the frontend side.",
-        "contribution": "I was responsible for the entire process from system architecture design to deployment. From a frontend perspective, I implemented an admin dashboard based on Next.js App Router, form processing using Server Actions, accounting data table rendering optimization, and bilingual support (Burmese/English). The dashboard visualizes key metrics like customer count, loan balance, and monthly revenue in real-time, enabling management to grasp the current situation at a glance. Through accounting process automation, I built an interface that auto-generates BS (Balance Sheet) and PL (Profit & Loss) statements, eliminating approximately 90% of manual work and reducing month-end closing time from dozens of hours to just a few hours. I also implemented Role-Based Access Control at the frontend routing level, ensuring users (loan officers, accounting staff, administrators) can only access screens and features relevant to their roles."
-      },
-      "retrospective": {
-        "title": "Retrospective",
-        "growth": "As a solo full-stack developer designing and implementing both frontend and backend, I deepened my understanding of overall web application architecture. Particularly using Next.js App Router, Server Components, and Server Actions in production helped me experience the pros and cons of SSR and CSR firsthand, enabling me to judge which rendering strategy to choose in different situations. Configuring a separated frontend-backend architecture built practical skills essential for real-world work: API design, ensuring type safety, and handling authentication/authorization. Implementing dashboard and data visualization UI improved my UX design ability to translate complex business logic into user-friendly interfaces. Through accounting process automation, I experienced the value of development that creates 'business impact' beyond mere 'feature implementation,' finding great satisfaction in continuously improving based on user feedback.",
-        "improvement": "Delaying test code writing early in the project led to occasional regression issues where new features broke existing ones. Especially for critical accuracy areas like accounting logic, unit and integration tests are essential—skipping them due to schedule pressure was regrettable. In the future, I want to adopt TDD (Test-Driven Development) or at least ensure test coverage for core business logic. CI/CD pipeline setup was also insufficient. Manual SSH deployment to servers could have been faster and more stable with automated deployment pipelines using GitHub Actions. For performance monitoring, introducing tools like Sentry or LogRocket to track production errors and performance bottlenecks in real-time would have enabled faster problem resolution. In my next project, I plan to establish testing, CI/CD, and monitoring from the start to build more stable and maintainable systems."
+        "summary": "Web-based ERP digitalizing customer/loan/repayment/delinquency management and accounting for a Myanmar microfinance institution. Excel manual work → system migration, 90% accounting automation.",
+        "highlights": [
+          "Loan interest engine: 7/14/28/30-day non-monthly cycles + 3 repayment methods (equal P&I/equal P/bullet) + local currency rounding to 100s",
+          "JWT auth + auto-renewal: Next.js Middleware detects Access Token expiry → auto Refresh Token renewal, Redis blacklist logout",
+          "RBAC 3 roles: Admin/Officer/Staff — frontend menu filtering + backend API Guard dual protection",
+          "Cursor Pagination: Offset 800ms → Cursor 35ms (95% improvement), Infinite Scroll",
+          "Dual Caching (L1+L2): In-Memory ~5ms + Redis ~35ms → 70% API response improvement",
+          "$12/mo operation: AWS Lightsail ($10) + Vercel (free), Docker Compose, PM2 cluster"
+        ]
       },
       "challenges": {
-        "title": "Engineering Challenges",
         "challenge1": {
-          "title": "Frontend-Backend Separated Architecture Design",
-          "context": "DY Microfinance's existing workflow relied on Excel spreadsheets and manual processes, requiring dozens of hours for month-end closing and causing frequent data integrity errors. I needed to migrate to a systematic digital system while maintaining maintainability and scalability as a solo full-stack developer.",
-          "alternatives": "A monolithic full-stack framework (e.g., Django) was rejected because it offered lower frontend flexibility and made implementing a modern SPA-style admin dashboard difficult. Firebase/Supabase BaaS was rejected because the complex accounting calculation logic unique to microfinance is hard to implement serverlessly, and real-time DB dependency was unsuitable for Myanmar's local network conditions.",
-          "decision": "I selected a separated architecture: Next.js App Router (frontend) + NestJS (backend) + PostgreSQL. Server Actions simplified form handling, and NestJS's module system allowed accounting logic to be organized by domain. Even as a solo developer, establishing a clear frontend/backend boundary enabled a structure ready for team division if the system later expanded into an ERP.",
-          "implementation": "I implemented loan/repayment transaction CRUD and automatic BS/PL calculation APIs in NestJS, and applied RBAC-based routing (3 roles: loan officer, accountant, admin) in the Next.js dashboard. Server Actions validated form submissions server-side before calling NestJS APIs.",
-          "outcome": "Achieved approximately 90% automation of the overall accounting process. Reduced month-end closing time from dozens of hours to just a few hours. The system stability was sufficient to prompt ongoing discussions about ERP expansion."
+          "title": "Frontend-Backend Separated Architecture",
+          "problem": "Excel dependency → dozens of hours for month-end closing, frequent data integrity errors. Needed maintainability and scalability under solo development constraints.",
+          "solution": "Next.js App Router + NestJS + PostgreSQL separated architecture. Server Actions for form handling, NestJS module system for domain-separated accounting logic. RBAC 3-role routing.",
+          "result": "~90% accounting process automation. Month-end closing reduced from dozens of hours to a few hours."
         },
         "challenge2": {
-          "title": "RBAC Role-Based Access Control Implementation",
-          "context": "In microfinance operations, loan officers, accountants, and administrators have clearly distinct responsibilities. If a loan officer could modify accounting data or a non-admin could change system settings, financial data integrity would be at risk. Role-based access control was a core business requirement.",
-          "alternatives": "Applying only simple page-level route guards was rejected because guarding only the frontend without API-level validation allows bypassing via direct API calls. External auth services (Auth0, Clerk) were rejected due to the need to minimize external service dependency in Myanmar's local internet environment, and the cost structure was excessive for a small user base of dozens of accounts.",
-          "decision": "I implemented a self-built JWT-based RBAC system. NestJS Guards handle role validation, and Next.js middleware provides route-level access control — creating a dual-layer enforcement. I defined the role-based permission matrix directly, drawing on real microfinance accounting and operations experience.",
-          "implementation": "NestJS includes a role claim in JWT tokens, and custom Guard decorators enforce role validation per API endpoint. The Next.js frontend filters route access via middleware and renders different dashboard layouts based on role. Separate menus and data access scopes were defined for each of the 3 roles (loan officer / accountant / admin).",
-          "outcome": "Enforced role-based access control at both frontend routing and backend API layers, securing data integrity and protecting financial records previously managed manually and in scattered spreadsheets. Established a safe multi-user environment underpinning ~90% accounting automation."
+          "title": "RBAC + JWT Authentication System",
+          "problem": "Loan officers/accountants/admins have different scopes. Without role-based access control, financial data integrity at risk.",
+          "solution": "JWT with role claim, NestJS Guard decorator for per-API role verification. Next.js middleware route filtering + role-based dashboard layout separation. Frontend + backend dual validation.",
+          "result": "3-role dual-layer access control securing data integrity. 99.5% uptime over 6+ months."
         }
-      }
+      },
+      "achievements": [
+        "15+ frontend pages, 30+ reusable components, 45+ backend APIs, 14 DB entities",
+        "API response: 120ms → 35ms (70% improvement)",
+        "Pagination: Offset 800ms → Cursor 35ms (95% improvement)",
+        "$12/mo operation cost, 99.5%+ uptime (6+ months)",
+        "~90% accounting process automation"
+      ]
     },
     "retailAnalysis": {
       "title": "Retail Store Customer Analysis",
-      "subtitle": "Visual Intelligence-based Customer Tracking System",
-      "role": "Data Visualization Development",
-      "teamSize": "3 members",
+      "subtitle": "Visual Intelligence-based Real-time Customer Tracking System",
+      "role": "PM + AI/Backend/Infra (100% Solo)",
+      "teamSize": "1 (Freelance Solo)",
       "duration": "Nov 2022 - Apr 2023",
       "overview": {
-        "title": "Project Overview",
-        "background": "A system deployed in retail stores in Malaysia that uses YOLO object detection models to track customer movement in real-time. It recognizes customer positions and movement paths from CCTV footage, collecting data on how long customers stay at which displays and what routes they take through the store. This enables store managers to understand customer behavior patterns and gain insights for optimizing display positioning and improving traffic flow. On the backend, a PyTorch-implemented YOLO model performs real-time video processing, while the frontend receives this data and visualizes it in dashboard form. For the frontend tech stack, VanillaJS (pure JavaScript) was deliberately chosen to validate whether complex real-time data visualization could be implemented without frameworks like React or Vue, and to optimize bundle size and performance.",
-        "contribution": "I was responsible for all frontend data visualization aspects, building a real-time dashboard with VanillaJS. I implemented heatmap and movement tracking visualizations using Canvas API and SVG, receiving customer location data transmitted via WebSocket from the backend team. I displayed customers' current positions in real-time on the store floor plan, created heatmaps using color gradients to show customer density by time period, and connected individual customer movement paths with lines for tracking. I also implemented statistical charts (visitor count by time, dwell time by zone, etc.) using the Chart.js library. Since I had to perform state management and DOM manipulation without a framework, I designed simple state management patterns (Observer pattern) and component separation structure myself. I applied rendering optimizations (RequestAnimationFrame, Debouncing) to efficiently process incoming real-time data and implemented event listener cleanup logic to prevent memory leaks."
-      },
-      "retrospective": {
-        "title": "Retrospective",
-        "growth": "Implementing a complex real-time dashboard without frameworks using VanillaJS deepened my understanding of JavaScript's fundamental operation principles and browser rendering mechanisms. Directly handling Canvas API and SVG built low-level graphics rendering experience, strengthening crucial real-world frontend development capabilities like real-time data processing via WebSocket, memory management, and performance optimization. Particularly designing and implementing state management patterns myself helped me understand how state management libraries provided by React or Vue work internally, enabling deeper utilization when later using Redux or Vuex. Solving memory leak and rendering performance issues taught me profiling techniques using Chrome DevTools, and I gained valuable experience applying optimization patterns frequently used in practice like requestAnimationFrame, Debouncing, and Observer pattern. Through Canvas-based data visualization, I learned efficient methods for representing large datasets, which greatly helped when implementing charts or graphs in subsequent projects.",
-        "improvement": "Developing with VanillaJS made me acutely feel the necessity of frameworks. Without convenience features modern frameworks provide—component reusability, declarative UI, virtual DOM—implementing everything manually was slow and created much code duplication. Particularly manually managing data synchronization across modules and DOM update logic was cumbersome and frequently caused bugs from mistakes. Had I used React, state management could have been simply handled with useState or useReducer, and Canvas rendering managed with useEffect for much more concise code. Also, component-based structure could have separated charts, heatmaps, and movements into independent components for improved reusability and testability. In the project's latter half, I thought 'React would have been right for this scale.' I realized VanillaJS is suitable for small-scale interactive elements or legacy system maintenance, but has limits for building complex SPAs. In future similar projects, I learned the importance of considering project scale and complexity when choosing technology to select appropriate frameworks. Next time, I want to build a better structured data visualization dashboard using a React + D3.js combination."
+        "summary": "On-premise system connecting 4 CCTVs at Malaysia Parkson department store SPAO outlet, tracking customers in real-time with YOLOv7 + StrongSORT to analyze movement paths, dwell time, and congestion.",
+        "highlights": [
+          "YOLOv7 Fine-tuning: additional training on 2,000+ store CCTV frames, mAP 78.2% → 92.4%. 95% reduction in mannequin false positives (ROI masking)",
+          "StrongSORT Tracking: OSNet Re-ID + Kalman Filter for persistent customer ID tracking, MOTA 87.3%, ID Switch <50/hr",
+          "CCW entry counting: Counter-Clockwise algorithm for entry direction detection, Track ID dedup, 96.2% accuracy",
+          "Coordinate transform: 2D Homography mapping CCTV distortion → store floor plan, error <15cm",
+          "P1~P13 zone dwell analysis: Shapely Polygon-based customer location classification, popular zone/time-of-day pattern analysis",
+          "On-premise server: Ubuntu + RTX 3060, RTSP connection, $0 cloud cost, 99.5% uptime",
+          "Real-time dashboard: 6 visualization modes (In/Out, Detection, Tracking, Heatmap %, Heatmap count, Movement), Canvas API, Firebase sync <1s"
+        ]
       },
       "challenges": {
-        "title": "Engineering Challenges",
         "challenge1": {
-          "title": "VanillaJS Real-Time Data Visualization Architecture",
-          "context": "I needed to visualize customer movement paths, dwell time, and congestion data extracted by YOLO from store CCTV footage in real-time on a dashboard. Data refreshed every second, and the rendering pipeline had to simultaneously handle Canvas/SVG heatmaps and WebSocket streaming under high-performance requirements.",
-          "alternatives": "React was rejected because virtual DOM diffing overhead causes unnecessary re-renders during second-level real-time Canvas updates, and the framework abstraction interferes with directly drawing YOLO analysis results to Canvas. Bundle size also grows unnecessarily in an on-premise environment. Using D3.js alone was rejected because while it excels at heatmap visualization, handling WebSocket real-time data ingestion and state management through D3 alone would sharply increase code complexity.",
-          "decision": "I chose VanillaJS to implement visualization directly with Canvas API and SVG heatmaps, using the Observer pattern for state management and WebSocket for real-time data ingestion. Rendering was optimized with requestAnimationFrame and debouncing, and external dependencies were minimized to ensure stable operation on the on-premise store server environment.",
-          "implementation": "A WebSocket connection received real-time customer coordinate and behavior data from the YOLO analysis server. The Observer pattern propagated data changes to subscribing view components. Customer movement paths were drawn to Canvas, and dwell time was color-mapped to an SVG heatmap. requestAnimationFrame targeted 60fps rendering, while debouncing throttled excessive WebSocket event processing.",
-          "outcome": "Implemented a real-time dashboard visualizing 3 key behavioral metrics — customer movement paths, dwell time, and congestion — providing stakeholders with a data-driven environment to optimize store layout and product placement strategy."
+          "title": "Store-specific YOLOv7 Fine-tuning",
+          "problem": "COCO pretrained model misidentified mannequins/posters as people → 95% false positive rate. Store-specific fine-tuning required.",
+          "solution": "Additional training on 2,000+ store CCTV frames + ROI masking to exclude mannequin-dense zones. mAP 78.2% → 92.4%.",
+          "result": "95% reduction in mannequin false positives. Capable of analyzing 3,000+ customers daily."
         },
         "challenge2": {
-          "title": "YOLO-Based On-Premise Video Analysis Pipeline",
-          "context": "I needed to identify and track customers in existing CCTV footage from Malaysian retail stores to extract behavioral data. The store environment (lighting, camera angles, customer density) differed significantly from standard YOLO training data, so the baseline model had insufficient recognition accuracy. Fully on-premise analysis without cloud dependency was required.",
-          "alternatives": "Cloud Vision APIs (AWS Rekognition, Google Vision) were rejected because streaming live CCTV footage to the cloud in real-time incurs bandwidth costs and latency, making stable real-time analysis infeasible on Malaysian store network conditions. Using a pre-trained model without adaptation was rejected because recognition accuracy was too low in the store-specific environment (high camera angles, varied lighting conditions) to be usable in practice.",
-          "decision": "I fine-tuned the YOLO model on store-specific CCTV data and deployed a bare-metal Linux server on-site at the store. This created a fully self-contained pipeline from video capture through analysis to result delivery, with no cloud dependency.",
-          "implementation": "The YOLO model was additionally trained on footage collected from the store's CCTV cameras to achieve store-specific recognition accuracy. On the Linux server, I implemented a sequential pipeline: video capture → YOLO inference → customer ID assignment → tracking → behavioral metric extraction. Extracted data was delivered in real-time to the VanillaJS dashboard via WebSocket.",
-          "outcome": "Delivered a fully on-premise analysis architecture with no cloud dependency, completing a stable real-time video capture and analysis system tailored to the store environment. A 3-person team successfully built and operated the CCTV-based customer behavior analysis system."
+          "title": "VanillaJS Real-time Dashboard",
+          "problem": "High-performance rendering requirements: per-second data refresh + Canvas/SVG heatmaps + WebSocket streaming simultaneously.",
+          "solution": "Observer pattern state management + requestAnimationFrame 60fps target + Debouncing for WebSocket event throttling. Chart.js for statistical charts.",
+          "result": "6-mode real-time visualization dashboard enabling store layout optimization and product placement strategy."
         }
-      }
+      },
+      "achievements": [
+        "Detection mAP 92.4%, Tracking MOTA 87.3%, Entry counting 96.2%",
+        "Coordinate transform error <15cm, processing 24 FPS",
+        "4 simultaneous CCTVs, 3,000+ daily customers",
+        "$0 cloud cost, 99.5% uptime",
+        "6-mode real-time visualization dashboard"
+      ]
     },
     "scholarlyChain": {
       "title": "Scholarly Chain",
-      "subtitle": "Hyperledger Fabric Blockchain-based Student Fee Management System",
+      "subtitle": "Hyperledger Fabric Blockchain Student Fee Management",
       "role": "Frontend Development (100%)",
       "teamSize": "4 members",
       "duration": "Mar 2025 - Jun 2025",
       "overview": {
-        "title": "Project Overview",
-        "background": "Scholarly Chain is a Hyperledger Fabric blockchain-based student fee transparency management system developed as a capstone design project. The goal was to record student fee revenue and expenditure on the blockchain to ensure transparency, allowing students to check fee usage in real-time. I was 100% responsible for the frontend built with Next.js, React, TypeScript, Tailwind CSS, and shadcn/ui, implementing role-based push notifications using Firebase Cloud Messaging and JWT-based authentication. The backend was integrated with a Hyperledger Fabric blockchain network, and the frontend called backend APIs to provide blockchain data to users.",
-        "contribution": "In a 4-member team, I was solely responsible for all frontend development, creating over 15 pages and 30+ reusable components. I implemented a JWT automatic token refresh middleware to prevent user session disconnection, and designed a role-based UI system providing different dashboards and features for students, committee members, and administrators. Using the shadcn/ui component library, I built a consistent design system and integrated Firebase Cloud Messaging to implement a push notification system that selectively sends notifications (payment confirmation, expenditure approval, etc.) based on roles. I utilized Next.js API Routes as a proxy to relay backend API calls and deployed on Vercel to configure the actual service environment."
-      },
-      "retrospective": {
-        "title": "Retrospective",
-        "growth": "Leading a large-scale frontend project using Next.js and shadcn/ui from start to finish greatly strengthened my practical capabilities with modern frontend development stacks. Implementing JWT authentication middleware and role-based access control gave me deep understanding of web application security and permission management, and building a push notification system through Firebase Cloud Messaging built real-time communication technology experience. Particularly as the sole frontend developer in a 4-member team creating over 15 pages and 30+ reusable components, the experience of independently designing and implementing a large-scale project greatly helped develop capabilities. Design system building experience using shadcn/ui and Tailwind CSS taught me how to maintain component reusability and consistency, and designing frontend-backend communication architecture through API Route proxy patterns also improved capabilities.",
-        "improvement": "Not writing test code early in the project led to frequent regression bugs as features were added. Especially for complex logic like authentication or role-based UI where unit tests are essential, skipping them due to schedule pressure was regrettable. Next time I want to secure test coverage at least for core business logic to improve stability. Also, handling state management only with Context API caused prop drilling issues as component depth increased. Had I introduced a lightweight state management library like Zustand or Jotai, code would have been more concise and maintainable. Not sufficiently considering reusability during initial component design meant having to create similar components multiple times later. In the next project, I want to systematically design component structure from the design stage and consider testing and state management from the beginning to build a more robust system."
+        "summary": "Capstone design project recording student fee income/expenses on Hyperledger Fabric blockchain for transparency. 3-role access control: student/committee/admin.",
+        "highlights": [
+          "JWT auto-renewal middleware: Next.js Middleware auto-refreshes via Refresh Token on approaching expiry → prevents session disconnection",
+          "FCM role-based push: Firestore stores FCM tokens by role, targeted multicast (deposit confirmation → committee, vote results → students)",
+          "Context API role-based UI: JWT decode → role extraction → useUser() hook for global role management, conditional rendering",
+          "API Route proxy: Next.js API Routes relay to backend, server-side cookie → Authorization header auto-attach, CORS resolved",
+          "15+ pages, 30+ reusable components, shadcn/ui design system"
+        ]
       },
       "challenges": {
-        "title": "Engineering Challenges",
         "challenge1": {
-          "title": "JWT Auto-Renewal Middleware and Auth Architecture Design",
-          "context": "In the blockchain-integrated student fee management system, 3 roles (student/committee/admin) each required different dashboards and permissions. Pages for reviewing fee history and verifying blockchain transactions required long sessions, but JWT expiration causing session disconnection would severely degrade user experience.",
-          "alternatives": "Session-based authentication (express-session) was rejected due to server state dependency making it incompatible with Vercel's serverless environment. NextAuth.js was rejected because its App Router support was unstable at the time and it was difficult to flexibly implement the custom authentication flow (API Routes proxy) needed for the blockchain backend.",
-          "decision": "I implemented JWT with a custom middleware approach. Next.js middleware automatically renews tokens before expiration to prevent session disconnection, API Routes proxy backend authentication requests, and route access is controlled based on the role claim in the JWT token.",
-          "implementation": "Next.js middleware checks JWT expiry on every request and auto-refreshes via refresh token when within threshold. API Routes proxy requests to the Hyperledger Fabric backend while passing the token. Role-based route guards (student/committee/admin) are enforced at the middleware level, redirecting on unauthorized access attempts.",
-          "outcome": "Implemented 15+ pages and 30+ reusable components, deploying successfully on Vercel. As the sole frontend developer in a 4-person team, built a 3-role authentication system with JWT auto-renewal that eliminates session disconnection."
+          "title": "JWT Auto-Renewal Middleware Design",
+          "problem": "Blockchain transaction verification requires long sessions, but JWT expiry causes session disconnection → UX degradation. Vercel serverless prevents session-based auth.",
+          "solution": "Next.js middleware checks JWT expiry on every request → auto-refreshes within threshold via Refresh Token. API Routes proxy to blockchain backend, role-based route guards applied.",
+          "result": "3-role auth system with zero session disconnection. 15+ pages, 30+ components deployed on Vercel."
         },
         "challenge2": {
-          "title": "Hyperledger Fabric Blockchain Integration Proxy Design",
-          "context": "All transactions needed to be recorded on the Hyperledger Fabric blockchain for transparent student fee management. However, direct frontend access to blockchain nodes would expose complex SDK logic — including certificate management and network configuration — to the client side, creating security vulnerabilities.",
-          "alternatives": "Directly calling the Hyperledger SDK from the frontend was rejected because certificates and network configuration would be exposed to the client, posing security risks and significantly increasing bundle size. Adding a GraphQL layer was rejected because the blockchain query patterns were simple (recording/retrieving transactions), making a GraphQL schema unnecessarily over-engineered.",
-          "decision": "I used Next.js API Routes as a proxy layer. The frontend only calls internal API Routes, which relay requests to the blockchain backend server, encapsulating SDK complexity on the server side and keeping frontend code simple.",
-          "implementation": "API Routes validate JWT before forwarding requests to the backend blockchain server. FCM push notifications were integrated to send real-time role-specific alerts on fee deposits and expenditures. Blockchain transaction history was visualized in table and card formats using shadcn/ui components, providing a transparency dashboard accessible to all students.",
-          "outcome": "All blockchain-integrated UI was implemented using the API Routes proxy pattern across 30+ reusable components, completely eliminating blockchain SDK dependencies from the frontend code. As the sole frontend developer in a 4-person team, built 15+ pages and deployed successfully on Vercel."
+          "title": "Blockchain Integration Proxy Architecture",
+          "problem": "Direct Hyperledger SDK calls from frontend would expose certificates/network config → security risk + bundle size increase.",
+          "solution": "Next.js API Routes as proxy. Frontend → API Routes → blockchain backend relay. FCM push integration, shadcn/ui transaction history visualization.",
+          "result": "Complete elimination of blockchain SDK dependencies from frontend. Transparency dashboard built."
         }
-      }
+      },
+      "achievements": [
+        "100% frontend ownership (4-person team)",
+        "15+ pages, 30+ reusable components",
+        "JWT auto-renewal middleware + 3-role RBAC",
+        "FCM role-targeted push notifications",
+        "Vercel deployment complete"
+      ]
     },
     "dinoGo": {
       "title": "Dino Go",
       "subtitle": "Sui Blockchain Location-based NFT Collection Game",
-      "role": "Frontend Development",
+      "role": "Move Contract + Frontend",
       "teamSize": "4 members",
       "duration": "Sep 19-21, 2025 (Hackathon)",
       "overview": {
-        "title": "Project Overview",
-        "background": "Dino Go is a Sui blockchain-based location-based NFT collection game project conducted during a 3-day hackathon. It's a game where users collect virtual dinosaur NFTs by moving to actual locations and can trade collected NFTs on a marketplace. Google Maps API and Three.js were combined to implement a 3D map interface, NFT metadata is stored on Walrus decentralized storage, and data is protected with Seal threshold encryption. The frontend consists of Next.js, TypeScript, Three.js, and Tailwind CSS, while the backend comprises 4 Move smart contract modules and a Sui SDK-based Web3 communication layer.",
-        "contribution": "In a 4-member team, I was responsible for the entire frontend, implementing over 10 pages including NFT Studio (minting interface), Marketplace UI, and 3D map interface. I integrated Google Maps API with Three.js to overlay 3D dinosaur characters and interactive elements on the map, implementing coordinate transformation logic so 3D objects render at accurate positions even when users drag or zoom the map. In NFT Studio, I provided a UI where users can mint NFTs and upload metadata to Walrus, while Marketplace implemented NFT list viewing, search, filtering, and trading features. I developed 3 custom Web3 client libraries integrating Sui SDK, Walrus, Seal, and Kiosk SDK to abstract communication with blockchain and decentralized storage on the frontend."
-      },
-      "retrospective": {
-        "title": "Retrospective",
-        "growth": "Developing the entire frontend under extreme time constraints of a 3-day hackathon made me experience the importance of quick decision-making and priority setting. Through 3D graphics implementation using Three.js and Google Maps API integration experience, I could handle a unique tech stack combining WebGL rendering with map services, and gained blockchain frontend development capabilities by utilizing Web3 tech stacks (Sui SDK, Move, Walrus, Seal) in practice. Particularly while designing and implementing custom Web3 client libraries, I developed architecture design capabilities to create frontend developer-friendly interfaces by abstracting complex external SDKs. Through solving synchronization problems between two rendering systems during Google Maps and Three.js integration, I gained low-level rendering optimization and performance tuning experience. Completing features and demoing within hackathon's fast development pace was thanks to clear priority setting and smooth team collaboration.",
-        "improvement": "Limited 3-day time forced compromising code quality. No test code was written at all, and error handling was implemented minimally leaving high bug possibility in edge cases. If developing into a production environment, thorough refactoring and securing test coverage are essential. Mobile optimization was also insufficient. Three.js rendering consumed much battery on mobile causing heating issues, but fundamental optimization wasn't done due to time shortage. Future work needs optimization like reducing WebGL rendering frequency or scaling back 3D effects on mobile. Much room for Three.js performance optimization remains. Applying advanced optimization techniques like model compression, texture atlases, and instancing could further improve performance. Hackathon experience made me clearly understand the difference between 'quickly making prototypes' and 'writing stable production code,' and in future projects I want to invest more time in initial design to build solid foundations."
+        "summary": "Sui blockchain game where players collect dinosaur NFTs by visiting real locations. Checkpoint visit → on-chain random alphabet → sentence NFT minting → Kiosk marketplace trading.",
+        "highlights": [
+          "On-Chain Random: sui::random API for cryptographically fair alphabet distribution, epoch-based dedup prevention",
+          "Atomic NFT Minting: inventory check → alphabet consumption → NFT minting in single atomic transaction, rollback on failure",
+          "Walrus decentralized storage: 90% cost reduction vs on-chain, blob_id metadata embedding",
+          "Seal threshold encryption: GPS spoofing prevention, distributed key server threshold decryption, Google Maps API key protection",
+          "Escrow marketplace: smart contract escrow, atomic exchange, 2.5% fee auto-distribution, Sui Kiosk compatible",
+          "Move smart contracts 4 modules: user, checkpoint, nft, marketplace",
+          "3 custom Web3 clients: Walrus/Seal/Kiosk SDK abstraction layer"
+        ]
       },
       "challenges": {
-        "title": "Engineering Challenges",
         "challenge1": {
-          "title": "Google Maps + Three.js Coordinate Synchronization System",
-          "context": "In the Sui blockchain location-based NFT collection game, 3D dinosaur models needed to be overlaid on Google Maps. When users drag or zoom the map, 3D objects must follow their exact geographic positions — but Google Maps' latitude/longitude coordinate system and Three.js's 3D world coordinate system are entirely different, making real-time synchronization the core technical challenge.",
-          "alternatives": "Using 2D images as map markers was rejected because 3D interactions (rotation, animation) would be impossible, eliminating the core game experience. Implementing a custom map renderer with Three.js alone was rejected as impractical within the 3-day hackathon timeline — tile rendering, zoom levels, and satellite imagery processing would take far too long to build from scratch.",
-          "decision": "I separated Google Maps and Three.js into distinct layers. Google Maps handles the map rendering, and Three.js overlays a transparent Canvas on top. I implemented latitude/longitude ↔ pixel ↔ 3D world coordinate transformation logic directly to synchronize real-time with drag and zoom events.",
-          "implementation": "Extended Google Maps' OverlayView API to mount the Three.js Scene as an overlay. Whenever map events (drag, zoom_changed) fire, a coordinate transformation function converts lat/lng → pixel → Three.js world coordinates and updates positions of all 3D dinosaur objects. 3D model scale is also adjusted dynamically based on zoom level.",
-          "outcome": "Completed a coordinate synchronization system where 3D dinosaur objects render at accurate positions during map drag and zoom, across 10+ pages (NFT Studio, Marketplace, 3D Map, etc.) delivered in a 3-day hackathon. Led all frontend development as the sole frontend engineer in a 4-person team."
+          "title": "Google Maps + Three.js Coordinate Synchronization",
+          "problem": "Google Maps lat/lng coordinate system and Three.js 3D world coordinate system are entirely different. 3D dinosaur objects must follow accurate positions during drag/zoom.",
+          "solution": "OverlayView API extension → Three.js Scene mounted as transparent Canvas overlay. Lat/lng → pixel → 3D world coordinate transform function, dynamic scale adjustment by zoom level.",
+          "result": "Coordinate synchronization system with accurate 3D object positioning during map drag/zoom."
         },
         "challenge2": {
-          "title": "Web3 Client Library Abstraction Layer",
-          "context": "Multiple services in the Sui blockchain ecosystem (Sui SDK, Walrus decentralized storage, Seal threshold encryption, Kiosk SDK) needed to be used on the frontend, but each SDK had different interfaces and inconsistent wallet connection and transaction signing patterns, rapidly increasing code complexity. Handling each SDK individually during a 3-day hackathon would have severely slowed development speed.",
-          "alternatives": "Calling each SDK directly from components was rejected because SDK updates would require modifying every usage site, and distributed wallet connection state management increases bug potential. Using existing Web3 integration libraries (e.g., wagmi) was rejected due to insufficient Sui chain support and no coverage for ecosystem-specific SDKs like Walrus and Seal.",
-          "decision": "I implemented 3 custom Web3 client libraries from scratch. Each abstracts one SDK — Sui SDK, Walrus, and Seal/Kiosk — and exposes a unified interface so that wallet connection, transaction signing, and storage uploads follow a consistent calling pattern across the codebase.",
-          "implementation": "Each library exposes shared methods such as connect(), signAndExecute(), and upload() through a unified interface. The Walrus library handles decentralized NFT image storage, the Seal library protects NFT metadata with threshold encryption, and the Kiosk SDK wrapper encapsulates NFT marketplace transaction logic.",
-          "outcome": "Abstracted Sui SDK, Walrus, and Seal/Kiosk integrations through 3 custom client libraries, enabling consistent Web3 interface calls from 10+ pages. Delivered NFT minting, marketplace trading, and decentralized storage all within the 3-day hackathon timeline."
+          "title": "Web3 Client Library Abstraction",
+          "problem": "Sui SDK, Walrus, Seal, Kiosk SDK each have different interfaces and inconsistent wallet connection/transaction signing patterns → code complexity explosion.",
+          "solution": "3 custom client libraries with unified connect()/signAndExecute()/upload() interface. Walrus=NFT image distributed storage, Seal=metadata encryption, Kiosk=marketplace transaction encapsulation.",
+          "result": "Consistent Web3 interface calls across 10+ pages. NFT minting + marketplace + distributed storage delivered in 3 days."
         }
-      }
+      },
+      "achievements": [
+        "Move smart contracts 4 modules (user/checkpoint/nft/marketplace)",
+        "Frontend 10+ pages (NFT Studio, Marketplace, 3D Map)",
+        "3 custom Web3 clients (Walrus/Seal/Kiosk)",
+        "Seal threshold encryption for GPS spoofing prevention",
+        "Walrus storage: 90% cost reduction vs on-chain"
+      ]
     },
     "artWar": {
       "title": "Ministry of Truth",
-      "subtitle": "AI Autonomous Agent Art Tournament",
+      "subtitle": "AI Autonomous Agent Art Tournament Platform",
       "role": "Full-stack Development",
       "teamSize": "4 members (2 Planning, 2 Development)",
       "duration": "Feb 9-16, 2026 (Hackathon)",
       "overview": {
-        "title": "Project Overview",
-        "background": "Ministry of Truth is a project conducted over one week during the Moltiverse Hackathon's Agent+Token Track—an AI art tournament platform where AI agents participate autonomously. An MC (host) agent runs the tournament, AI artists submit artwork matching given topics, two AI judges score submissions, and spectators (users) bet on winners on the Monad blockchain. We launched the $MOT token directly on nad.fun to establish the project's token economy. The tournament follows a bracket structure (quarterfinals→semifinals→finals), with all state transitions performed autonomously by agents. The backend uses NestJS + TypeORM + Supabase PostgreSQL, frontend uses Next.js, and agents run on the OpenClaw framework deployed on AWS EC2.",
-        "contribution": "As one of two developers in a 4-member team, I handled full-stack development. This included designing and implementing the NestJS backend API (tournament state machine, betting system, judging system), building 5 Next.js frontend pages (Home, Chamber, Betting, Leaderboard, Admin), developing the Solidity smart contract (MOTBetting.sol) and deploying it to Monad mainnet, launching the $MOT token directly on nad.fun, and designing behavior rules for 3 OpenClaw agents (MC, Judge A, Judge B) along with their EC2 deployment and operations."
-      },
-      "retrospective": {
-        "title": "Retrospective",
-        "growth": "Building an on-chain tournament platform operated by autonomous AI agents from scratch during a one-week hackathon significantly developed my full-stack architecture design capabilities spanning multiple domains. Designing AI agent behavior rules with the OpenClaw framework and enabling autonomous operation was a completely different paradigm from conventional web development, teaching me the perspective of designing 'systems where agents judge and act on their own.' Deploying smart contracts on Monad, a new blockchain ecosystem, and integrating with nad.fun tokens developed my ability to adapt quickly in environments lacking documentation. Integrating NestJS backend, Next.js frontend, Solidity smart contracts, and OpenClaw agents into a single system improved my interface design and data flow management capabilities across technology stacks.",
-        "improvement": "Limited one-week time resulted in insufficient test code and inadequate edge case handling for agent behavior. The recovery logic for unexpected API responses was incomplete, leading to situations requiring manual intervention during the hackathon. Additionally, insufficient time invested in frontend UI/UX left the design polish lacking. In future similar projects, I want to design agent error recovery scenarios more thoroughly and write integration tests for both frontend and agent systems to improve stability."
+        "summary": "AI art tournament autonomously operated by AI agents. MC agent hosts, AI artists submit, 2 AI judges score, spectators bet on Monad blockchain.",
+        "highlights": [
+          "3 multi-agent types: MC (host), Judge A (technical aesthetics), Judge B (thematic consistency) — OpenClaw framework, 24/7 autonomous operation",
+          "6-phase round state machine: topic → submission → betting → judging → results → preview, timer + participant action-based auto-transition",
+          "LLM cost optimization: Kimi (free) → Gemini Flash fallback, vision model capped at 1/round",
+          "Solidity betting contract: openRound/placeBet/closeBetting/resolveRound/claimWinnings, 5% fee",
+          "nad.fun $MOT token launch + Monad mainnet deployment",
+          "NestJS backend + Next.js frontend 5 pages + AWS EC2 agent operations"
+        ]
       },
       "challenges": {
-        "title": "Engineering Challenges",
         "challenge1": {
-          "title": "LLM Cost-Optimized Agent Design",
-          "context": "In the Moltiverse hackathon, 3 agent types — MC (host), Judge A (technical aesthetics), Judge B (thematic consistency) — needed to run autonomously 24/7. With each agent calling LLMs on every round, API costs risked escalating rapidly over the one-week hackathon. Vision models (used for image critique) are significantly more expensive than text models, making cost control a critical engineering challenge.",
-          "alternatives": "Using a single OpenAI GPT-4 model was rejected because, while it handles both vision and text, the cost of 24/7 autonomous operation was projected to exceed the hackathon budget. Self-hosting open-source LLMs was rejected because the GPU server cost and setup time for hosting vision models would be unrealistic within a one-week hackathon timeline.",
-          "decision": "I applied a Kimi (free credits) → Gemini Flash fallback strategy for the MC Agent using the OpenClaw framework. When free credits are exhausted, the system automatically switches to a lower-cost model to minimize expenses. For Judge A and Judge B, Kimi/Gemini Flash vision models are used with image critique requests capped at 1 per round.",
-          "implementation": "Each agent was configured with an LLM call priority chain (Kimi primary → Gemini Flash fallback). The system includes automatic fallback on API call failure and retry logic on response errors. The NestJS REST API tracks per-agent call counts for cost monitoring.",
-          "outcome": "Using the Kimi free credits + Gemini Flash fallback strategy, operated all 3 agents autonomously 24/7 for a full week while minimizing LLM API costs. Built a fully autonomous agent system running the 8-team → 4-team → finals tournament within the hackathon timeline."
+          "title": "LLM Cost-Optimized Multi-Agent Design",
+          "problem": "3 agent types running 24/7 autonomously risks LLM API cost explosion. Vision models (image critique) are significantly more expensive than text.",
+          "solution": "MC Agent: Kimi (free credits) → Gemini Flash fallback priority chain. Judge A/B: vision model capped at 1 call/round. NestJS tracks per-agent call counts.",
+          "result": "Minimized LLM API costs across 1 week of 24/7 autonomous operation. Quarterfinals → semifinals → finals fully autonomous."
         },
         "challenge2": {
           "title": "6-Phase Autonomous Round State Machine",
-          "context": "The core of ArtWar is that the entire competition runs autonomously through agents. A 6-phase flow — topic announcement → submission → betting → judging → results → next round preview — needed to progress automatically based on timers and external events (agent submissions, user bets). A single phase failure could halt the entire round.",
-          "alternatives": "Simple cron-based scheduling was rejected because phase transition conditions depend not only on timers but also on participant actions (submission deadline, betting deadline), making pure timer-based scheduling insufficient. Event queues (RabbitMQ, Redis Streams) were rejected as over-engineered for a one-week hackathon and incompatible with the single AWS EC2 instance constraint.",
-          "decision": "I implemented a state machine pattern directly within NestJS. SQLite/JSON manages the world state (current round, phase, participants, betting status), and phase transitions trigger conditionally when each phase's completion criteria are met. Agent processes and the API server run together on a single AWS EC2 instance.",
-          "implementation": "Round state is defined as 6 phase enums, automatically advancing to the next phase when completion criteria (timer expiry OR participant action complete) are satisfied. The MC Agent handles topic generation (LLM call) → Moltbook posting → timer setup. Judge A/B handle judging (vision model call) → score calculation → result posting. Betting pool settlement and smart contract resolveRound calls execute automatically during the results phase.",
-          "outcome": "The 6-phase round flow ran completely autonomously through agents, running the 8-team → 4-team → finals tournament without human intervention. The scoring system combines Judge A (technique 40% + color 30% + interpretation 20% + emotion 10%) and Judge B (technique 10% + color 20% + interpretation 30% + emotion 40%) at equal final weight."
+          "problem": "6 phases (topic → submission → betting → judging → results → preview) must auto-progress via timer + participant actions. Single phase failure risks halting entire round.",
+          "solution": "NestJS state machine pattern. 6 phase enums + auto-transition on completion criteria (timer OR action). MC generates topics → posts → sets timer, Judges score → post results, betting settlement auto-executes in results phase.",
+          "result": "Quarterfinals → semifinals → finals run fully autonomously without human intervention. Judge A (technique 40% + color 30% + interpretation 20% + emotion 10%) + Judge B (technique 10% + color 20% + interpretation 30% + emotion 40%)."
         },
         "challenge3": {
-          "title": "Solidity Smart Contract Betting System",
-          "context": "The core of ArtWar's token economy is agents and users betting MON tokens to predict round winners. Prize distribution based on betting outcomes needed to be transparent and automated, with no possibility of manipulation. The project required launching the $MOT token on nad.fun and operating a betting contract on Monad mainnet.",
-          "alternatives": "Server-side betting (recorded in DB) was rejected due to trust issues — operators could manipulate results — and it conflicted with the decentralized philosophy of the agent economy. Forking an existing betting protocol (e.g., Polymarket) was rejected because Monad chain is unsupported and those protocols don't match ArtWar's specific round lifecycle (openRound→placeBet→closeBetting→resolveRound→claimWinnings).",
-          "decision": "I implemented ArtWarBetting.sol from scratch in Solidity 0.8.20. The functions openRound, placeBet, closeBetting, resolveRound, and claimWinnings manage the full round lifecycle on-chain, with a 5% fee structure for sustainable operations.",
-          "implementation": "openRound() creates a new round and opens betting, placeBet() records MON token bets (msg.value), closeBetting() closes the betting window, resolveRound() confirms the winner and enables settlement, and claimWinnings() distributes proportional payouts to winners (minus 5% fee). The agent API server automatically calls resolveRound after confirming round results.",
-          "outcome": "Deployed ArtWarBetting smart contract on Monad mainnet with 5 lifecycle functions and launched the $MOT token on nad.fun to establish the agent economy. Delivered a fully autonomous betting system where the entire flow — betting → settlement → claim — is handled transparently on-chain, all within a one-week hackathon."
+          "title": "Solidity On-chain Betting System",
+          "problem": "Betting result distribution must be transparent, automated, and manipulation-proof. ArtWar-specific round lifecycle contract needed.",
+          "solution": "ArtWarBetting.sol in Solidity 0.8.20. openRound → placeBet → closeBetting → resolveRound → claimWinnings 5-phase on-chain management, 5% fee structure.",
+          "result": "Monad mainnet deployment, nad.fun $MOT token launch. Full betting → settlement → claim flow handled transparently on-chain."
         }
-      }
+      },
+      "achievements": [
+        "OpenClaw 3-type multi-agent 24/7 autonomous operation",
+        "6-phase state machine for fully autonomous tournament",
+        "Solidity betting contract deployed on Monad mainnet",
+        "nad.fun $MOT token launch",
+        "NestJS + Next.js + Solidity + OpenClaw 4-stack integration"
+      ]
+    },
+    "manufacturing": {
+      "title": "Manufacturing Defect Detection",
+      "subtitle": "Indonesia Shoe Factory Video-based Defect Detection System",
+      "role": "Equipment Design/Build + AI Model + On-site Installation",
+      "teamSize": "2 members",
+      "duration": "Nov 2022 - Feb 2023",
+      "overview": {
+        "summary": "Video-based defect detection system directly installed on an Indonesian shoe factory production line. Inspection equipment design/build → OAK-D 3D camera → YOLOv7 defect detection → L/R comparison algorithm.",
+        "highlights": [
+          "OAK-D 3D multi-camera: front+back simultaneous capture, 1280x720, MxId-based device identification, Firebase Storage real-time upload",
+          "YOLOv7 custom training: defect detection model trained on factory floor images, FP16 Half Precision + AMP optimization",
+          "L/R comparison algorithm: background removal → left image flip → ORB Feature + Homography alignment → 100x100 window Cosine similarity → catches defects DL misses",
+          "Anomalib anomaly detection: unsupervised learning from normal samples only, ISR 2x upscaling, window-based anomaly region detection",
+          "Inspection equipment designed/built in-house → installed on-site in Indonesia"
+        ]
+      },
+      "challenges": {
+        "challenge1": {
+          "title": "DL + Rule-based Hybrid Defect Detection",
+          "problem": "DL alone cannot detect defect types absent from training data. Manufacturing environment has variable lighting, vibration, and conveyor speed.",
+          "solution": "YOLOv7 for trained defect patterns + Rule-based L/R comparison for untrained defects. ORB Feature + Homography alignment → 100x100 window Cosine similarity scoring.",
+          "result": "Hybrid system detecting manufacturing inconsistencies regardless of training data availability."
+        },
+        "challenge2": {
+          "title": "OAK-D 3D Camera Multi-stream Capture",
+          "problem": "Standard webcams are 2D only, multi-camera sync difficult. Real-time remote monitoring needed.",
+          "solution": "DepthAI OAK-D for simultaneous front+back capture. MxId-based device identification, Firebase Storage real-time upload for remote monitoring.",
+          "result": "Dual camera simultaneous capture + real-time remote monitoring system established."
+        }
+      },
+      "achievements": [
+        "Inspection equipment designed/built + installed on-site in Indonesia",
+        "YOLOv7 custom-trained defect detection model",
+        "Rule-based L/R comparison: Cosine similarity-based defect scoring",
+        "OAK-D 3D dual camera simultaneous capture",
+        "Anomalib unsupervised anomaly detection"
+      ]
+    },
+    "fsiAi": {
+      "title": "Financial Consulting AI",
+      "subtitle": "Real-time Voice Financial Consulting AI System",
+      "role": "Backend + AI Integration + Security",
+      "teamSize": "4 members",
+      "duration": "Jul 2024 - Sep 2024",
+      "overview": {
+        "summary": "Customer call → real-time STT → GPT-4 financial consulting response → TTS voice synthesis → delivered to customer. Won FSI AIxData Challenge 2024 Excellence Award.",
+        "highlights": [
+          "Async voice pipeline: asyncio parallel processing for simultaneous voice reception, STT conversion, AI response, TTS synthesis → minimum latency",
+          "Twilio ↔ Server ↔ Returnzero WebSocket streaming",
+          "Prompt injection defense: 80+ banned command/keyword list, real-time user input detection → instant block + warning",
+          "Conversation context retention: system prompt + user messages + AI response history accumulated → full context included in GPT-4 calls",
+          "Audio format compatibility: Twilio 8kHz MULAW → Returnzero MULAW direct support, zero conversion overhead"
+        ]
+      },
+      "challenges": {
+        "challenge1": {
+          "title": "Real-time Voice Async Pipeline",
+          "problem": "Sequential STT → AI → TTS processing causes cumulative latency. Voice is more latency-sensitive than text.",
+          "solution": "asyncio for parallel voice reception/STT/AI response/TTS synthesis. Twilio ↔ aiohttp server ↔ Returnzero WebSocket streaming architecture.",
+          "result": "Minimized cumulative latency. Natural real-time voice consulting flow achieved."
+        },
+        "challenge2": {
+          "title": "Financial Security — Prompt Injection Defense",
+          "problem": "Malicious prompts risk AI executing system commands or leaking sensitive information. Financial sector security requirements mandatory.",
+          "solution": "80+ banned command/keyword list-based real-time filtering. User input detection → instant block + warning message return.",
+          "result": "Real-time blocking of system commands and attack keywords. Won FSI AIxData Challenge 2024 Excellence Award."
+        }
+      },
+      "achievements": [
+        "FSI AIxData Challenge 2024 Excellence Award (Financial Security Institute)",
+        "GPT-4 + Returnzero STT + ElevenLabs TTS integration",
+        "asyncio real-time voice pipeline",
+        "80+ command/keyword prompt injection defense",
+        "Twilio voice call WebSocket integration"
+      ]
     }
   }
 }

@@ -4,7 +4,7 @@ import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-const PROJECT_ORDER = ['6', '2', '1', '3', '4', '5'] as const;
+const PROJECT_ORDER = ['6', '2', '1', '3', '7', '8', '4', '5'] as const;
 
 const PROJECT_KEYS: Record<string, string> = {
   '1': 'joshua',
@@ -13,6 +13,8 @@ const PROJECT_KEYS: Record<string, string> = {
   '4': 'scholarlyChain',
   '5': 'dinoGo',
   '6': 'artWar',
+  '7': 'manufacturing',
+  '8': 'fsiAi',
 };
 
 interface ProjectNavigationProps {

@@ -13,16 +13,12 @@ interface ChallengeSectionProps {
 export default async function ChallengeSection({ translationKey, challengeKey, t }: ChallengeSectionProps) {
   const prefix = `${translationKey}.challenges.${challengeKey}`;
 
-  // Sub-fields in narrative order
   const fields = [
-    { key: 'context', labelKo: '문제 정의', labelEn: 'Problem' },
-    { key: 'alternatives', labelKo: '시도한 접근법', labelEn: 'Approaches' },
-    { key: 'decision', labelKo: '비교/결정', labelEn: 'Decision' },
-    { key: 'implementation', labelKo: '구현', labelEn: 'Implementation' },
-    { key: 'outcome', labelKo: '성과', labelEn: 'Outcome' },
+    { key: 'problem', label: 'Problem' },
+    { key: 'solution', label: 'Solution' },
+    { key: 'result', label: 'Result' },
   ];
 
-  // Check for optional code snippet
   const hasCode = t.has(`${prefix}.code`);
 
   return (
@@ -30,10 +26,13 @@ export default async function ChallengeSection({ translationKey, challengeKey, t
       <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
         {t(`${prefix}.title`)}
       </h3>
-      {fields.map(({ key }) => {
+      {fields.map(({ key, label }) => {
         if (!t.has(`${prefix}.${key}`)) return null;
         return (
           <div key={key} className="space-y-1">
+            <h4 className="text-sm font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wide">
+              {label}
+            </h4>
             <p className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line">
               {t(`${prefix}.${key}`)}
             </p>
